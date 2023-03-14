@@ -42,7 +42,9 @@ typedef struct {
     size_t resmult;
     size_t fov;
     size_t nrays;
-    struct { bool up, down, left, right; } movement;
+    struct {
+        bool up, down, left, right;
+    } movement;
 } Camera;
 
 typedef struct {
@@ -63,10 +65,10 @@ typedef struct {
 
 void render_vector(const Game *const game, const int x, const int y, const Vector *const vec) {
     const float length = vector_length(vec);
-    SDL_RenderDrawLineF(game->renderer, 
-                        vec->x + (float) x, 
-                        vec->y + (float) y, 
-                        vec->x + (float) x + length, 
+    SDL_RenderDrawLineF(game->renderer,
+                        vec->x + (float) x,
+                        vec->y + (float) y,
+                        vec->x + (float) x + length,
                         vec->y + (float) y + length);
 }
 
@@ -98,8 +100,10 @@ void render_walls(const Game *const game) {
 }
 
 void render_hud(const Game *const game) {
-    render_printf(game, 10, 10, "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu", 
-            game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle, game->camera->fov, game->camera->resmult, game->camera->nrays);
+    render_printf(game, 10, 10,
+                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu",
+                  game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
+                  game->camera->fov, game->camera->resmult, game->camera->nrays);
 }
 
 void render_rays(const Game *const game) {
@@ -122,23 +126,23 @@ void render_3d(const Game *const game) {
             continue;
         }
 
-        const float height = map(1.0f / ray->intersection_dist, 0.0f,1.0f, 0.0f, (float) WALL_SIZE);
+        const float height = map(1.0f / ray->intersection_dist, 0.0f, 1.0f, 0.0f, (float) WALL_SIZE);
 
         const SDL_FRect stripe = {
-            .x = width * (float) i,
-            .y = game->center.y - height / 2.0f,
-            .h = height,
-            .w = width
+                .x = width * (float) i,
+                .y = game->center.y - height / 2.0f,
+                .h = height,
+                .w = width
         };
 
         SDL_RenderFillRectF(game->renderer, &stripe);
-    } 
+    }
 }
 
 void render_camera(const Game *const game) {
     filledCircleColor(game->renderer,
                       (int16_t) game->camera->pos.x,
-                      (int16_t) game->camera->pos.y, 
+                      (int16_t) game->camera->pos.y,
                       5,
                       0xFF0000FF);
     SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
@@ -159,12 +163,12 @@ void render(Game *const game) {
     render_walls(game);
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
-        render_rays(game);
+    render_rays(game);
 
     render_camera(game);
-    
+
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
-        render_3d(game);
+    render_3d(game);
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     render_hud(game);
@@ -179,7 +183,7 @@ void update(Game *const game) {
     newframes++;
 
     if (ticks - game->ticks > POLLINTERVAL) {
-        game->fps = (uint64_t)((float) newframes / (float) (ticks - game->ticks) * 1000.0);
+        game->fps = (uint64_t) ((float) newframes / (float) (ticks - game->ticks) * 1000.0);
         game->ticks = ticks;
         game->frames += newframes;
         newframes = 0;
@@ -193,7 +197,7 @@ void update(Game *const game) {
     Vector dirvect;
     vector_from_angle(&dirvect, game->camera->angle);
     vector_mul(&dirvect, 1);
-    
+
     if (game->camera->movement.up) {
         vector_add(&game->camera->pos, &dirvect);
     }
@@ -201,7 +205,7 @@ void update(Game *const game) {
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
         Ray ray;
-        ray.pos = (Vector) { .x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y };
+        ray.pos = (Vector) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
         ray.dir = *vector_from_angle((Vector[1]) {0}, radians((float) i / (float) game->camera->resmult));
         ray.has_intersection = false;
 
@@ -256,11 +260,13 @@ bool on_event(Game *const game, const SDL_Event *const event) {
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
                 case SDLK_INSERT:
-                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult + 1, RESMULT_MIN, RESMULT_MAX);
+                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult + 1, RESMULT_MIN,
+                                                               RESMULT_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
                 case SDLK_DELETE:
-                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult - 1, RESMULT_MIN, RESMULT_MAX);
+                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult - 1, RESMULT_MIN,
+                                                               RESMULT_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
                 case SDLK_r:
@@ -308,8 +314,8 @@ bool on_event(Game *const game, const SDL_Event *const event) {
 
 int init(Game *const game) {
     game->window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
-                              SCREEN_FLAGS);
+                                    SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    SCREEN_FLAGS);
     if (!game->window) {
         sdl_error("SDL_CreateWindow");
         return -1;
@@ -335,13 +341,13 @@ int main(unused int argc, unused char **argv) {
         sdl_error("SDL_Init");
         return EXIT_FAILURE;
     }
-    
+
     Game game;
 
-    game.center = (Vector) { (float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
-    game.icenter = (IVector) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    game.center = (Vector) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
+    game.icenter = (IVector) {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
 
-    
+
     game.walls = world_walls;
     game.nwalls = WORLD_NWALLS;
 
@@ -353,13 +359,13 @@ int main(unused int argc, unused char **argv) {
     game.camera->nrays = game.camera->fov * game.camera->resmult;
     game.camera->pos = game.center;
     game.camera->angle = 0;
-    game.camera->movement.up = false;    
-    game.camera->movement.down = false;    
-    game.camera->movement.left = false;    
-    game.camera->movement.right = false;    
+    game.camera->movement.up = false;
+    game.camera->movement.down = false;
+    game.camera->movement.left = false;
+    game.camera->movement.right = false;
 
     Ray rays[FOV_MAX * RESMULT_MAX];
-    game.camera->rays = rays; 
+    game.camera->rays = rays;
 
     game.textbuf = (char[TEXTBUFLEN]) {0};
 
@@ -382,7 +388,7 @@ int main(unused int argc, unused char **argv) {
         }
     }
 
-__cleanup:
+    __cleanup:
     cleanup(&game);
     SDL_Quit();
 
