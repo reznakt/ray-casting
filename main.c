@@ -63,17 +63,8 @@ typedef struct {
 } Game;
 
 
-void render_vector(const Game *const game, const int x, const int y, const Vector *const vec) {
-    const float length = vector_length(vec);
-    SDL_RenderDrawLineF(game->renderer,
-                        vec->x + (float) x,
-                        vec->y + (float) y,
-                        vec->x + (float) x + length,
-                        vec->y + (float) y + length);
-}
-
 void render_char(const Game *const game, const int x, const int y, const int chr) {
-    if (chr < 0 || chr > FONT_BASIC) {
+    if (chr < 0 || chr >= FONT_BASIC) {
         return;
     }
 
