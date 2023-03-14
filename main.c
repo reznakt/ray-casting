@@ -33,14 +33,14 @@
 
 struct camera_t {
     struct vector_t pos;
-    float angle;
     struct ray_t *rays;
-    size_t resmult;
-    size_t fov;
-    size_t nrays;
     struct {
         bool up, down, left, right;
     } movement;
+    float angle;
+    size_t resmult;
+    size_t fov;
+    size_t nrays;
 };
 
 struct game_t {
@@ -48,14 +48,13 @@ struct game_t {
     SDL_Window *window;
     struct camera_t *camera;
     const struct line_t *walls;
+    struct ivector_t mouse;
+    struct vector_t center;
+    char *textbuf;
     size_t nwalls;
     uint64_t fps;
     uint64_t frames;
     uint64_t ticks;
-    char *textbuf;
-    struct ivector_t mouse;
-    struct vector_t center;
-    struct ivector_t icenter;
 };
 
 
@@ -325,8 +324,6 @@ int main(unused int argc, unused char **argv) {
     struct game_t game;
 
     game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
-    game.icenter = (struct ivector_t) {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-
 
     game.walls = world_walls;
     game.nwalls = WORLD_NWALLS;
