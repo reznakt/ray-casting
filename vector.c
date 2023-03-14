@@ -7,7 +7,6 @@
 #include "vector.h"
 
 
-const struct vector_t vector_unit = {1, 1};
 const struct vector_t vector_zero = {0, 0};
 
 
