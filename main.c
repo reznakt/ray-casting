@@ -31,35 +31,35 @@
     } while (0)
 
 
-typedef struct {
-    Vector pos;
+struct camera_t {
+    struct vector_t pos;
     float angle;
-    Ray *rays;
+    struct ray_t *rays;
     size_t resmult;
     size_t fov;
     size_t nrays;
     struct {
         bool up, down, left, right;
     } movement;
-} Camera;
+};
 
-typedef struct {
+struct game_t {
     SDL_Renderer *renderer;
     SDL_Window *window;
-    Camera *camera;
-    const Line *walls;
+    struct camera_t *camera;
+    const struct line_t *walls;
     size_t nwalls;
     uint64_t fps;
     uint64_t frames;
     uint64_t ticks;
     char *textbuf;
-    IVector mouse;
-    Vector center;
-    IVector icenter;
-} Game;
+    struct ivector_t mouse;
+    struct vector_t center;
+    struct ivector_t icenter;
+};
 
 
-void render_char(const Game *const game, const int x, const int y, const int chr) {
+void render_char(const struct game_t *const game, const int x, const int y, const int chr) {
     if (chr < 0 || chr >= FONT_BASIC) {
         return;
     }
@@ -73,29 +73,29 @@ void render_char(const Game *const game, const int x, const int y, const int chr
     }
 }
 
-void render_string(const Game *const game, const int x, const int y, const char *const str) {
+void render_string(const struct game_t *const game, const int x, const int y, const char *const str) {
     for (size_t i = 0; i < strlen(str); i++) {
         render_char(game, x + 10 * (int) i, y, str[i]);
     }
 }
 
-void render_walls(const Game *const game) {
+void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {
-        const Line *const wall = game->walls + i;
+        const struct line_t *const wall = game->walls + i;
         SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
     }
 }
 
-void render_hud(const Game *const game) {
+void render_hud(const struct game_t *const game) {
     render_printf(game, 10, 10,
                   "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
                   game->camera->fov, game->camera->resmult, game->camera->nrays);
 }
 
-void render_rays(const Game *const game) {
+void render_rays(const struct game_t *const game) {
     for (size_t i = 0; i < game->camera->nrays; i++) {
-        const Ray *const ray = game->camera->rays + i;
+        const struct ray_t *const ray = game->camera->rays + i;
 
         if (ray->has_intersection) {
             SDL_RenderDrawLineF(game->renderer, ray->pos.x, ray->pos.y, ray->intersection.x, ray->intersection.y);
@@ -103,11 +103,11 @@ void render_rays(const Game *const game) {
     }
 }
 
-void render_3d(const Game *const game) {
+void render_3d(const struct game_t *const game) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
-        const Ray *const ray = game->camera->rays + i;
+        const struct ray_t *const ray = game->camera->rays + i;
 
         if (!ray->has_intersection) {
             continue;
@@ -126,7 +126,7 @@ void render_3d(const Game *const game) {
     }
 }
 
-void render_camera(const Game *const game) {
+void render_camera(const struct game_t *const game) {
     filledCircleColor(game->renderer,
                       (int16_t) game->camera->pos.x,
                       (int16_t) game->camera->pos.y,
@@ -135,7 +135,7 @@ void render_camera(const Game *const game) {
     SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
 }
 
-void render(Game *const game) {
+void render(struct game_t *const game) {
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->renderer);
 
@@ -156,7 +156,7 @@ void render(Game *const game) {
     SDL_RenderPresent(game->renderer);
 }
 
-void update(Game *const game) {
+void update(struct game_t *const game) {
     static uint64_t newframes;
     const uint64_t ticks = SDL_GetTicks64();
 
@@ -174,7 +174,7 @@ void update(Game *const game) {
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
 
-    Vector dirvect;
+    struct vector_t dirvect;
     vector_from_angle(&dirvect, game->camera->angle);
     vector_mul(&dirvect, 1);
 
@@ -184,16 +184,16 @@ void update(Game *const game) {
 
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
-        Ray ray;
-        ray.pos = (Vector) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vector_from_angle((Vector[1]) {0}, radians((float) i / (float) game->camera->resmult));
+        struct ray_t ray;
+        ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
+        ray.dir = *vector_from_angle((struct vector_t[1]) {0}, radians((float) i / (float) game->camera->resmult));
         ray.has_intersection = false;
 
         float min_dist = INFINITY;
 
         for (size_t j = 0; j < game->nwalls; j++) {
-            const Line *const wall = game->walls + j;
-            const Vector *const intersection = ray_intersection(&ray, wall, (Vector[1]) {0});
+            const struct line_t *const wall = game->walls + j;
+            const struct vector_t *const intersection = ray_intersection(&ray, wall, (struct vector_t[1]) {0});
 
             if (intersection == NULL) {
                 continue;
@@ -212,7 +212,7 @@ void update(Game *const game) {
     }
 }
 
-bool on_event(Game *const game, const SDL_Event *const event) {
+bool on_event(struct game_t *const game, const SDL_Event *const event) {
     switch (event->type) {
         case SDL_QUIT:
             return false;
@@ -292,7 +292,7 @@ bool on_event(Game *const game, const SDL_Event *const event) {
     return true;
 }
 
-int init(Game *const game) {
+int init(struct game_t *const game) {
     game->window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_UNDEFINED,
                                     SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
                                     SCREEN_FLAGS);
@@ -311,7 +311,7 @@ int init(Game *const game) {
     return 0;
 }
 
-void cleanup(const Game *const game) {
+void cleanup(const struct game_t *const game) {
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);
 }
@@ -322,16 +322,16 @@ int main(unused int argc, unused char **argv) {
         return EXIT_FAILURE;
     }
 
-    Game game;
+    struct game_t game;
 
-    game.center = (Vector) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
-    game.icenter = (IVector) {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
+    game.icenter = (struct ivector_t) {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
 
 
     game.walls = world_walls;
     game.nwalls = WORLD_NWALLS;
 
-    Camera camera;
+    struct camera_t camera;
     game.camera = &camera;
 
     game.camera->fov = CAMERA_FOV;
@@ -344,7 +344,7 @@ int main(unused int argc, unused char **argv) {
     game.camera->movement.left = false;
     game.camera->movement.right = false;
 
-    Ray rays[FOV_MAX * RESMULT_MAX];
+    struct ray_t rays[FOV_MAX * RESMULT_MAX];
     game.camera->rays = rays;
 
     game.textbuf = (char[TEXTBUFLEN]) {0};

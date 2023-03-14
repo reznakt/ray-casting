@@ -5,7 +5,7 @@
 #include "world.h"
 
 
-const Line world_walls[WORLD_NWALLS] = {
+const struct line_t world_walls[WORLD_NWALLS] = {
         {
                 {0,   0},
                 {SCREEN_WIDTH - 1, 0}

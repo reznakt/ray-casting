@@ -2,56 +2,56 @@
 #define RAY_VECTOR_H
 
 
-typedef struct {
+struct vector_t {
     float x;
     float y;
-} Vector;
+};
 
-typedef struct {
+struct ivector_t {
     long x;
     long y;
-} IVector;
+};
 
-typedef struct {
-    Vector a;
-    Vector b;
-} Line;
+struct line_t {
+    struct vector_t a;
+    struct vector_t b;
+};
 
-typedef struct {
-    IVector a;
-    IVector b;
-} ILine;
-
-
-extern const Vector vector_unit;
-extern const Vector vector_zero;
+struct iline_t {
+    struct ivector_t a;
+    struct ivector_t b;
+};
 
 
-Vector *vector_add(Vector *dst, const Vector *src);
+extern const struct vector_t vector_unit;
+extern const struct vector_t vector_zero;
 
-Vector *vector_mul(Vector *vec, float x);
 
-Vector *vector_div(Vector *vec, float x);
+struct vector_t *vector_add(struct vector_t *dst, const struct vector_t *src);
 
-float vector_product(const Vector *vec1, const Vector *vec2);
+struct vector_t *vector_mul(struct vector_t *vec, float x);
 
-float vector_length(const Vector *vec);
+struct vector_t *vector_div(struct vector_t *vec, float x);
 
-void print_vector(const Vector *vec);
+float vector_product(const struct vector_t *vec1, const struct vector_t *vec2);
 
-Vector *vector_from_angle(Vector *dst, float angle);
+float vector_length(const struct vector_t *vec);
 
-Vector *vector_normalize(Vector *vec);
+void print_vector(const struct vector_t *vec);
 
-Vector *vector_normalize_weak(Vector *vec);
+struct vector_t *vector_from_angle(struct vector_t *dst, float angle);
 
-float vector_distance(const Vector *vec1, const Vector *vec2);
+struct vector_t *vector_normalize(struct vector_t *vec);
 
-float vector_angle_to(const Vector *vec1, const Vector *vec2);
+struct vector_t *vector_normalize_weak(struct vector_t *vec);
 
-Vector *vector_copy(Vector *dst, const Vector *src);
+float vector_distance(const struct vector_t *vec1, const struct vector_t *vec2);
 
-Vector *vector_rotate(Vector *vec, float angle);
+float vector_angle_to(const struct vector_t *vec1, const struct vector_t *vec2);
+
+struct vector_t *vector_copy(struct vector_t *dst, const struct vector_t *src);
+
+struct vector_t *vector_rotate(struct vector_t *vec, float angle);
 
 #endif // RAY_VECTOR_H
 

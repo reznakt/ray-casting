@@ -8,16 +8,16 @@
 #include "vector.h"
 
 
-typedef struct {
-    Vector pos;
-    Vector dir;
-    Vector intersection;
+struct ray_t {
+    struct vector_t pos;
+    struct vector_t dir;
+    struct vector_t intersection;
     float intersection_dist;
     bool has_intersection;
-} Ray;
+};
 
 
-Vector *ray_intersection(const Ray *ray, const Line *wall, Vector *dst);
+struct vector_t *ray_intersection(const struct ray_t *ray, const struct line_t *wall, struct vector_t *dst);
 
 
 #endif // RAY_RAY_H

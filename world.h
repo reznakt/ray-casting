@@ -8,7 +8,7 @@
 #define WORLD_NWALLS 100
 
 
-extern const Line world_walls[WORLD_NWALLS];
+extern const struct line_t world_walls[WORLD_NWALLS];
 
 
 #endif // RAY_WORLD_H

@@ -7,7 +7,8 @@
 #include "ray.h"
 
 
-Vector *ray_intersection(const Ray *const ray, const Line *const wall, Vector *const dst) {
+struct vector_t *
+ray_intersection(const struct ray_t *const ray, const struct line_t *const wall, struct vector_t *const dst) {
     const float x1 = wall->a.x;
     const float y1 = wall->a.y;
     const float x2 = wall->b.x;
