@@ -133,13 +133,6 @@ void render_camera(const Game *const game) {
                       5,
                       0xFF0000FF);
     SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
-    /*
-    SDL_RenderDrawLineF(game->renderer, 
-            game->camera->pos.x, 
-            game->camera->pos.y, 
-            vector_add((vector_copy((Vector[1]) {0}, &game->camera->pos), game->camera->angle); 
-            game->camera->pos.y + 50);
-    */
 }
 
 void render(Game *const game) {
