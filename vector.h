@@ -131,7 +131,7 @@ float vector_length(const struct vector_t *vec);
  * @brief Prints the components of the vector @p vec to the standard output.
  *
  * This function prints the components of the vector @p vec to the standard output
- * in the format "[x, y]". The output is followed by a newline character.
+ * in the format "(x, y)". The output is followed by a newline character.
  *
  * @param vec Pointer to the input vector.
  */
