@@ -58,6 +58,18 @@ struct game_t {
 };
 
 
+/**
+ * Calculates the speed coefficient for the game based on the game's FPS and a given coefficient.
+ *
+ * @param game A pointer to the game_t struct representing the current game.
+ * @param coeff The coefficient to use in the speed calculation.
+ * @return The speed coefficient for the game.
+ */
+float speed_coeff(const struct game_t *const game, const float coeff) {
+    return coeff / (float) game->fps;
+}
+
+
 void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {
         const struct line_t *const wall = game->walls + i;
@@ -155,7 +167,7 @@ void update(struct game_t *const game) {
 
     struct vector_t dirvect;
     vector_from_angle(&dirvect, game->camera->angle);
-    vector_mul(&dirvect, 1);
+    vector_mul(&dirvect, speed_coeff(game, 300));
 
     if (game->camera->movement.up) {
         vector_add(&game->camera->pos, &dirvect);
