@@ -27,7 +27,7 @@
     do {                                                        \
         memset(game->textbuf, 0, TEXTBUFLEN);                   \
         snprintf(game->textbuf, TEXTBUFLEN, fmt, __VA_ARGS__);  \
-        render_string(game, x, y, game->textbuf);               \
+        render_string(game->renderer, x, y, game->textbuf);     \
     } while (0)
 
 
@@ -57,26 +57,6 @@ struct game_t {
     uint64_t ticks;
 };
 
-
-void render_char(const struct game_t *const game, const int x, const int y, const int chr) {
-    if (chr < 0 || chr >= FONT_BASIC) {
-        return;
-    }
-
-    for (int i = 0; i < FONT_BYTES; i++) {
-        for (int j = 0; j < FONT_BYTES; j++) {
-            if (font_basic[chr][i] & 1 << j) {
-                SDL_RenderDrawPoint(game->renderer, x + j, y + i);
-            }
-        }
-    }
-}
-
-void render_string(const struct game_t *const game, const int x, const int y, const char *const str) {
-    for (size_t i = 0; i < strlen(str); i++) {
-        render_char(game, x + 10 * (int) i, y, str[i]);
-    }
-}
 
 void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {

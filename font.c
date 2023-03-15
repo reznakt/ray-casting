@@ -132,3 +132,22 @@ const int font_basic[FONT_BASIC][FONT_BYTES] = {
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    // U+007F
 };
 
+void render_char(SDL_Renderer *const renderer, const int x, const int y, const int chr) {
+    if (chr < 0 || chr >= FONT_BASIC) {
+        return;
+    }
+
+    for (int i = 0; i < FONT_BYTES; i++) {
+        for (int j = 0; j < FONT_BYTES; j++) {
+            if (font_basic[chr][i] & 1 << j) {
+                SDL_RenderDrawPoint(renderer, x + j, y + i);
+            }
+        }
+    }
+}
+
+void render_string(SDL_Renderer *const renderer, const int x, const int y, const char *const str) {
+    for (size_t i = 0; i < strlen(str); i++) {
+        render_char(renderer, x + 10 * (int) i, y, str[i]);
+    }
+}
