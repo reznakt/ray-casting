@@ -17,6 +17,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Werror \
                     -pedantic \
                     -fverbose-asm \
+                    -fstack-protector-strong \
                     -Wfloat-equal \
                     -Wundef \
                     -Wshadow \
@@ -40,7 +41,7 @@ find_package(SDL2 REQUIRED)
 find_library(SDL2_GFX_LIBRARY NAMES SDL2_gfx)
 
 if (NOT SDL2_GFX_LIBRARY)
-    message(FATAL_ERROR "SDL2_gfx library not found")
+    message(FATAL_ERROR " SDL2_gfx library not found ")
 endif ()
 
 
@@ -51,4 +52,3 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} m)
-
