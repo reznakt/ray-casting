@@ -138,8 +138,10 @@ void render(struct game_t *const game) {
 
     render_camera(game);
 
+    /*
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
     render_3d(game);
+     */
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     render_hud(game);
@@ -165,26 +167,27 @@ void update(struct game_t *const game) {
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
 
-    struct vector_t dirvect;
-    vector_from_angle(&dirvect, game->camera->angle);
-    vector_mul(&dirvect, speed_coeff(game, 300));
+    const struct vector_t *const dirvect = vector_mul(
+            vector_from_angle(vector(), game->camera->angle),
+            speed_coeff(game, 300)
+    );
 
     if (game->camera->movement.up) {
-        vector_add(&game->camera->pos, &dirvect);
+        vector_add(&game->camera->pos, dirvect);
     }
 
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
         ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vector_from_angle((struct vector_t[1]) {0}, radians((float) i / (float) game->camera->resmult));
+        ray.dir = *vector_from_angle(vector(), radians((float) i / (float) game->camera->resmult));
         ray.has_intersection = false;
 
         float min_dist = INFINITY;
 
         for (size_t j = 0; j < game->nwalls; j++) {
             const struct line_t *const wall = game->walls + j;
-            const struct vector_t *const intersection = ray_intersection(&ray, wall, (struct vector_t[1]) {0});
+            const struct vector_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
                 continue;

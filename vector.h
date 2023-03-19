@@ -14,8 +14,32 @@
  */
 
 
+#include "util.h"
+
+
 #ifndef RAY_VECTOR_H
 #define RAY_VECTOR_H
+
+
+/**
+ * Create a new struct vector_t on the stack.
+ */
+#define vector() STACK_ALLOC(struct vector_t)
+
+/**
+ * Create a new struct ivector_t on the stack.
+ */
+#define ivector() STACK_ALLOC(struct ivector_t)
+
+/**
+ * Create a new struct line_t on the stack.
+ */
+#define line() STACK_ALLOC(struct line_t)
+
+/**
+ * Create a new struct iline_t on the stack.
+ */
+#define iline() STACK_ALLOC(struct iline_t)
 
 
 /**
