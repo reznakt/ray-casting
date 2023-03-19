@@ -16,6 +16,12 @@ struct vector_t *vector_add(struct vector_t *const dst, const struct vector_t *c
     return dst;
 }
 
+struct vector_t *vector_sub(struct vector_t *const dst, const struct vector_t *const src) {
+    dst->x -= src->x;
+    dst->y -= src->y;
+    return dst;
+}
+
 struct vector_t *vector_mul(struct vector_t *const vec, const float x) {
     vec->x *= x;
     vec->y *= x;

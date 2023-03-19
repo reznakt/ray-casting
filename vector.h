@@ -97,6 +97,21 @@ extern const struct vector_t vector_zero;
 struct vector_t *vector_add(struct vector_t *dst, const struct vector_t *src);
 
 /**
+ * @brief Subtracts the vector @p src from the vector @p dst.
+ *
+ * This function subtracts the components of the vector @p src from the corresponding components
+ * of the vector @p dst and stores the result in @p dst.
+ *
+ * @param dst Pointer to the destination vector.
+ * @param src Pointer to the source vector.
+ *
+ * @return Pointer to the resulting vector @p dst.
+ *
+ * @note This function modifies the vector pointed to by @p dst.
+ */
+struct vector_t *vector_sub(struct vector_t *dst, const struct vector_t *src);
+
+/**
  * @brief Multiplies the vector @p vec by the scalar @p x.
  *
  * This function multiplies each component of the vector @p vec by the scalar @p x and
