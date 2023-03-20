@@ -289,5 +289,41 @@ struct vector_t *vector_rotate(struct vector_t *vec, float angle);
  */
 struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, float t);
 
-#endif // RAY_VECTOR_H
+/**
+ * @brief Scale a vector to a specified length while preserving its direction.
+ *
+ * @param vec A pointer to the vector to be scaled.
+ * @param length The desired length of the scaled vector.
+ * @return A pointer to the scaled vector.
+ *
+ * This function first normalizes the input vector by calling `vector_normalize_weak()`,
+ * and then multiplies each component of the vector by the specified length using `vector_mul()`.
+ * The resulting vector has the same direction as the input vector but with a magnitude equal to `length`.
+ *
+ * @note This function modifies the input vector in place.
+ *
+ * @see vector_normalize_weak()
+ * @see vector_mul()
+ */
+struct vector_t *vector_scale(struct vector_t *vec, float length);
 
+/**
+ * Reflects a vector off a plane defined by a normal vector.
+ *
+ * @param vec The vector to reflect.
+ * @param normal The normal vector defining the plane to reflect off.
+ * @return The reflected vector.
+ */
+struct vector_t *vector_reflect(struct vector_t *vec, const struct vector_t *normal);
+
+/**
+ * Projects a vector onto a plane defined by a normal vector.
+ *
+ * @param normal The normal vector defining the plane to project onto.
+ * @param vec The vector to project.
+ * @return The projected vector.
+ */
+struct vector_t *vector_project(struct vector_t *normal, const struct vector_t *vec);
+
+
+#endif // RAY_VECTOR_H

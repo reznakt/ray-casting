@@ -102,3 +102,19 @@ struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, f
 
     return dst;
 }
+
+struct vector_t *vector_scale(struct vector_t *vec, float length) {
+    vector_normalize_weak(vec);
+    vector_mul(vec, length);
+
+    return vec;
+}
+
+struct vector_t *vector_reflect(struct vector_t *const vec, const struct vector_t *const normal) {
+    struct vector_t *const ncopy = vector_copy(vector(), normal);
+    return vector_sub(vec, vector_scale(ncopy, 2.0f * vector_product(vec, normal)));
+}
+
+struct vector_t *vector_project(struct vector_t *const normal, const struct vector_t *const vec) {
+    return vector_scale(normal, vector_product(vec, normal) / vector_product(normal, normal));
+}
