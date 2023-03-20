@@ -82,7 +82,7 @@ float vector_angle_to(const struct vector_t *const vec1, const struct vector_t *
 
 struct vector_t *vector_copy(struct vector_t *const dst, const struct vector_t *const src) {
     dst->x = src->x;
-    dst->y = dst->y;
+    dst->y = src->y;
     return dst;
 }
 
@@ -91,7 +91,7 @@ struct vector_t *vector_rotate(struct vector_t *const vec, const float angle) {
     const float cos_a = cosf(angle);
 
     vec->x = cos_a * vec->x - sin_a * vec->y;
-    vec->x = sin_a * vec->x + cos_a * vec->y;
+    vec->y = sin_a * vec->x + cos_a * vec->y;
 
     return vec;
 }
