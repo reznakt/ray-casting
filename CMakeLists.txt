@@ -16,6 +16,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wextra \
                     -Werror \
                     -pedantic \
+                    -pedantic-errors \
                     -fverbose-asm \
                     -fstack-protector-strong \
                     -Wfloat-equal \
