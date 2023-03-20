@@ -96,3 +96,9 @@ struct vector_t *vector_rotate(struct vector_t *const vec, const float angle) {
     return vec;
 }
 
+struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, float t) {
+    dst->x = lerp(dst->x, src->x, t);
+    dst->y = lerp(dst->y, src->y, t);
+
+    return dst;
+}

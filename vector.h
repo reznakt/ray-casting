@@ -274,5 +274,20 @@ struct vector_t *vector_copy(struct vector_t *dst, const struct vector_t *src);
  */
 struct vector_t *vector_rotate(struct vector_t *vec, float angle);
 
+/**
+ * @brief Linearly interpolate between two vectors.
+ *
+ * This function calculates the linear interpolation between two vectors based on a given parameter t.
+ *
+ * @param dst   Pointer to the destination vector. This is where the result of the interpolation will be stored.
+ * @param src   Pointer to the source vector. This is the vector to interpolate from.
+ * @param t     The interpolation parameter. Must be in the range [0, 1].
+ *
+ * @return      A pointer to the destination vector, which now holds the interpolated result.
+ *
+ * @note        If t is outside the range [0, 1], the result will be extrapolated beyond the range of src and dst.
+ */
+struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, float t);
+
 #endif // RAY_VECTOR_H
 

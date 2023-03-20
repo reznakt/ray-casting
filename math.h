@@ -66,6 +66,21 @@ float map(float value, float old_low, float old_high, float new_low, float new_h
 float constrain(float value, float low, float high);
 
 /**
+ * @brief Linearly interpolate between two float values.
+ *
+ * This function calculates the linear interpolation between two float values a and b based on a given parameter t.
+ *
+ * @param a     The starting value for the interpolation.
+ * @param b     The ending value for the interpolation.
+ * @param t     The interpolation parameter. Must be in the range [0, 1].
+ *
+ * @return      The interpolated float value between a and b.
+ *
+ * @note        If t is outside the range [0, 1], the result will be extrapolated beyond the range of a and b.
+ */
+float lerp(float a, float b, float t);
+
+/**
  * @brief Compares two floats for closeness.
  *
  * @param a The first value.

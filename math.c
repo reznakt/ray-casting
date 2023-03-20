@@ -22,6 +22,10 @@ float constrain(const float value, const float low, const float high) {
     return value;
 }
 
+float lerp(const float a, const float b, const float t) {
+    return a + (b - a) * t;
+}
+
 bool isclose(const float a, const float b, const float epsilon) {
     return fabsf(a - b) < epsilon;
 }
