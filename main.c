@@ -33,6 +33,7 @@
 
 struct camera_t {
     struct vector_t pos;
+    struct vector_t dir;
     struct ray_t *rays;
     struct {
         bool up, down, left, right;
@@ -124,6 +125,18 @@ void render_camera(const struct game_t *const game) {
                       5,
                       0xFF0000FF);
     SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
+
+    const struct vector_t *const endpoint = vector_add(
+            vector_copy(vector(), &game->camera->pos),
+            vector_mul(vector_copy(vector(), &game->camera->dir), 100)
+    );
+
+    SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
+}
+
+void camera_update_angle(struct game_t *const game, const float angle) {
+    game->camera->angle = fmodf(angle, 360.0f);
+    vector_from_angle(&game->camera->dir, radians(game->camera->angle));
 }
 
 void render(struct game_t *const game) {
@@ -138,10 +151,8 @@ void render(struct game_t *const game) {
 
     render_camera(game);
 
-    /*
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
     render_3d(game);
-     */
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     render_hud(game);
@@ -167,13 +178,24 @@ void update(struct game_t *const game) {
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
 
-    const struct vector_t *const dirvect = vector_mul(
-            vector_from_angle(vector(), game->camera->angle),
-            speed_coeff(game, 300)
-    );
+    struct vector_t *const dirvect = vector_mul(vector_copy(vector(), &game->camera->dir), speed_coeff(game, 300));
 
-    if (game->camera->movement.up) {
-        vector_add(&game->camera->pos, dirvect);
+    if (game->camera->movement.up ^ game->camera->movement.down) {
+        if (game->camera->movement.up) { /* up */
+            vector_add(&game->camera->pos, dirvect);
+        } else { /* down */
+            vector_sub(&game->camera->pos, dirvect);
+        }
+    }
+
+    if (game->camera->movement.left ^ game->camera->movement.right) {
+        vector_rotate(dirvect, radians(90));
+
+        if (game->camera->movement.left) { /* left */
+            vector_sub(&game->camera->pos, dirvect);
+        } else { /* right */
+            vector_add(&game->camera->pos, dirvect);
+        }
     }
 
 
@@ -276,7 +298,8 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
             break;
 
         case SDL_MOUSEMOTION:
-            game->camera->angle += (float) event->motion.xrel;
+            camera_update_angle(game,
+                                game->camera->angle + (float) event->motion.xrel * speed_coeff(game, 1000.0f));
             break;
 
         default:
@@ -301,6 +324,8 @@ int init(struct game_t *const game) {
         sdl_error("SDL_CreateRenderer");
         return -1;
     }
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 
     return 0;
 }
@@ -330,11 +355,12 @@ int main(unused int argc, unused char **argv) {
     game.camera->resmult = CAMERA_RESMULT;
     game.camera->nrays = game.camera->fov * game.camera->resmult;
     game.camera->pos = game.center;
-    game.camera->angle = 0;
     game.camera->movement.up = false;
     game.camera->movement.down = false;
     game.camera->movement.left = false;
     game.camera->movement.right = false;
+
+    camera_update_angle(&game, -90);
 
     struct ray_t rays[FOV_MAX * RESMULT_MAX];
     game.camera->rays = rays;
