@@ -202,7 +202,9 @@ void update(struct game_t *const game) {
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
         ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vector_from_angle(vector(), radians((float) i / (float) game->camera->resmult));
+        ray.dir = *vector_from_angle(vector(), radians(
+                ((float) i + game->camera->angle - (float) game->camera->fov / 2.0f) / (float) game->camera->resmult)
+        );
         ray.has_intersection = false;
 
         float min_dist = INFINITY;
