@@ -39,7 +39,11 @@ float vector_product(const struct vector_t *const vec1, const struct vector_t *c
 }
 
 float vector_length(const struct vector_t *const vec) {
-    return sqrtf(vector_product(vec, vec));
+    return sqrtf(vector_length_squared(vec));
+}
+
+float vector_length_squared(const struct vector_t *vec) {
+    return vector_product(vec, vec);
 }
 
 void print_vector(const struct vector_t *const vec) {

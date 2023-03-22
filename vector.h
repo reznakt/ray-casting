@@ -167,6 +167,18 @@ float vector_product(const struct vector_t *vec1, const struct vector_t *vec2);
 float vector_length(const struct vector_t *vec);
 
 /**
+ * @brief Computes the squared magnitude of the vector @p vec.
+ *
+ * This function computes the squared magnitude of the vector @p vec,
+ * which is equal to the sum of the squares of its components.
+ *
+ * @param vec Pointer to the input vector.
+ *
+ * @return The squared magnitude of the vector @p vec.
+ */
+float vector_length_squared(const struct vector_t *vec);
+
+/**
  * @brief Prints the components of the vector @p vec to the standard output.
  *
  * This function prints the components of the vector @p vec to the standard output
