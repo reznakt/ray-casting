@@ -91,11 +91,11 @@ struct vector_t *vector_copy(struct vector_t *const dst, const struct vector_t *
 }
 
 struct vector_t *vector_rotate(struct vector_t *const vec, const float angle) {
-    const float sin_a = sinf(angle);
-    const float cos_a = cosf(angle);
+    const float sin_a = sinf(angle), cos_a = cosf(angle);
+    const float x = vec->x, y = vec->y;
 
-    vec->x = cos_a * vec->x - sin_a * vec->y;
-    vec->y = sin_a * vec->x + cos_a * vec->y;
+    vec->x = x * cos_a - y * sin_a;
+    vec->y = x * sin_a + y * cos_a;
 
     return vec;
 }
