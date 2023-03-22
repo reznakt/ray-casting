@@ -44,6 +44,11 @@ struct camera_t {
     size_t nrays;
 };
 
+enum render_mode_t {
+    RENDER_MODE_NORMAL,
+    RENDER_MODE_FLAT
+};
+
 struct game_t {
     SDL_Renderer *renderer;
     SDL_Window *window;
@@ -56,6 +61,7 @@ struct game_t {
     uint64_t fps;
     uint64_t frames;
     uint64_t ticks;
+    enum render_mode_t render_mode;
 };
 
 
@@ -143,16 +149,17 @@ void render(struct game_t *const game) {
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->renderer);
 
-    SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
-    render_walls(game);
+    if (game->render_mode == RENDER_MODE_NORMAL) {
+        SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
+        render_3d(game);
+    } else if (game->render_mode == RENDER_MODE_FLAT) {
+        SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
+        render_walls(game);
 
-    SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
-    render_rays(game);
-
-    render_camera(game);
-
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
-    render_3d(game);
+        SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
+        render_rays(game);
+        render_camera(game);
+    }
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
     render_hud(game);
@@ -274,6 +281,9 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case SDLK_ESCAPE:
                 case SDLK_q:
                     return false;
+                case SDLK_TAB:
+                    game->render_mode = game->render_mode == RENDER_MODE_NORMAL ? RENDER_MODE_FLAT : RENDER_MODE_NORMAL;
+                    break;
 
                 default:
                     break;
@@ -346,9 +356,9 @@ int main(unused int argc, unused char **argv) {
     struct game_t game;
 
     game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};
-
     game.walls = world_walls;
     game.nwalls = WORLD_NWALLS;
+    game.render_mode = RENDER_MODE_NORMAL;
 
     struct camera_t camera;
     game.camera = &camera;
