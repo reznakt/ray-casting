@@ -114,16 +114,15 @@ void render(struct game_t *const game) {
 }
 
 void update(struct game_t *const game) {
-    static uint64_t newframes;
     const uint64_t ticks = SDL_GetTicks64();
 
-    newframes++;
+    game->newframes++;
 
     if (ticks - game->ticks > POLLINTERVAL) {
-        game->fps = (uint64_t) ((float) newframes / (float) (ticks - game->ticks) * 1000.0);
+        game->fps = (uint64_t) ((float) game->newframes / (float) (ticks - game->ticks) * 1000.0);
         game->ticks = ticks;
-        game->frames += newframes;
-        newframes = 0;
+        game->frames += game->newframes;
+        game->newframes = 0;
     }
 
     int mouseX, mouseY;

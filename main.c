@@ -45,9 +45,8 @@ int main(UNUSED int argc, UNUSED char **argv) {
         return EXIT_FAILURE;
     }
 
-    struct game_t game;
+    struct game_t game = {0};
     game_init(game);
-
 
     if (init(&game) != 0) {
         return EXIT_FAILURE;

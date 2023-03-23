@@ -66,6 +66,7 @@ struct game_t {
     size_t nwalls; /**< The number of walls in the game world. */
     uint64_t fps; /**< The current frames per second (FPS) of the game. */
     uint64_t frames; /**< The total number of frames rendered by the game. */
+    uint64_t newframes; /**< The number of frames rendered by the game since the last polling event. */
     uint64_t ticks; /**< The total number of ticks elapsed since the start of the game. */
     enum {
         RENDER_MODE_NORMAL, RENDER_MODE_FLAT
