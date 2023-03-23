@@ -69,7 +69,7 @@
 /**
  * @brief Default resolution multiplier for the camera.
  */
-#define CAMERA_RESMULT 1
+#define CAMERA_RESMULT 10
 
 /**
  * @brief Size of the walls in the game world.
