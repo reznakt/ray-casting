@@ -84,7 +84,7 @@
 /**
  * @brief Size of the walls in the game world.
  */
-#define WALL_SIZE (2 << 16)
+#define WALL_SIZE 1000
 
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX

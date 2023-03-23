@@ -1,10 +1,10 @@
+#include <SDL2/SDL2_gfxPrimitives.h>
+
+
 #include "math.h"
 #include "vector.h"
 #include "ray.h"
 #include "util.h"
-
-
-#include <SDL2/SDL2_gfxPrimitives.h>
 
 
 #include "game.h"
@@ -46,7 +46,7 @@ PRIVATE void render_rays(const struct game_t *const game) {
     }
 }
 
-PRIVATE void render_3d(const struct game_t *const game) {
+PRIVATE void render_3d(const struct game_t *const game, const SDL_Color *const wallcolor) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
@@ -56,7 +56,7 @@ PRIVATE void render_3d(const struct game_t *const game) {
             continue;
         }
 
-        const float height = map(1.0f / ray->intersection_dist, 0.0f, 1.0f, 0.0f, (float) WALL_SIZE);
+        const float height = map(1.0f / ray->intersection_dist, 0.0f, 0.005f, 0.0f, (float) WALL_SIZE);
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
@@ -65,6 +65,11 @@ PRIVATE void render_3d(const struct game_t *const game) {
                 .w = width
         };
 
+        SDL_Color color;
+        memcpy(&color, wallcolor, sizeof color);
+        change_brightness(&color, map(1.0f / powf(ray->intersection_dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
+
+        SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
         SDL_RenderFillRectF(game->renderer, &stripe);
     }
 }
@@ -97,7 +102,8 @@ void render(struct game_t *const game) {
 
     if (game->render_mode == RENDER_MODE_NORMAL) {
         SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
-        render_3d(game);
+        const SDL_Color wallcolor = {150, 150, 150, SDL_ALPHA_OPAQUE};
+        render_3d(game, &wallcolor);
     } else if (game->render_mode == RENDER_MODE_FLAT) {
         SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
         render_walls(game);

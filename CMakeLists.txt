@@ -46,7 +46,7 @@ if (NOT SDL2_GFX_LIBRARY)
 endif ()
 
 
-add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c)
+add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c util.c)
 
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})

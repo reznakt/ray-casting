@@ -44,4 +44,18 @@
     } while (0)
 
 
+/**
+ * @brief Changes the brightness of an SDL_Color object by a given factor.
+ *
+ * This function multiplies the RGB values of the given SDL_Color object by the given alpha factor
+ * and constrains the resulting values to be within the valid range of 0 to 255. The original
+ * SDL_Color object is modified in place.
+ *
+ * @param color A pointer to the SDL_Color object to modify.
+ * @param alpha The brightness factor to apply to the color.
+ *
+ * @return A pointer to the modified SDL_Color object.
+ */
+SDL_Color *change_brightness(SDL_Color *color, float alpha);
+
 #endif //RAY_UTIL_H

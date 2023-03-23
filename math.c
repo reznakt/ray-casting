@@ -7,7 +7,11 @@
 
 float map(const float value, const float old_low, const float old_high,
           const float new_low, const float new_high) {
-    return new_low + (value * (old_high - old_low) * (new_high - new_low));
+    if (value > old_high) {
+        return new_high;
+    }
+
+    return new_low + (value / (old_high - old_low)) * (new_high - new_low);
 }
 
 float constrain(const float value, const float low, const float high) {
