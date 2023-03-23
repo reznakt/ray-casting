@@ -255,8 +255,7 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
             break;
 
         case SDL_MOUSEMOTION:
-            camera_update_angle(game,
-                                game->camera->angle + (float) event->motion.xrel * speed_coeff(game, 1000.0f));
+            camera_update_angle(game, game->camera->angle + (float) event->motion.xrel);
             break;
 
         default:
