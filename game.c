@@ -130,7 +130,10 @@ void update(struct game_t *const game) {
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
 
-    struct vector_t *const dirvect = vector_mul(vector_copy(vector(), &game->camera->dir), speed_coeff(game, 300));
+    struct vector_t *const dirvect = vector_mul(
+            vector_copy(vector(), &game->camera->dir),
+            speed_coeff(game, CAMERA_MOVEMENT_SPEED)
+    );
 
     if (game->camera->movement.up ^ game->camera->movement.down) {
         if (game->camera->movement.up) { /* up */
@@ -255,7 +258,8 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
             break;
 
         case SDL_MOUSEMOTION:
-            camera_update_angle(game, game->camera->angle + (float) event->motion.xrel);
+            camera_update_angle(game,
+                                game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
             break;
 
         default:

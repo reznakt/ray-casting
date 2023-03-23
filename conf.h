@@ -72,6 +72,16 @@
 #define CAMERA_RESMULT 10
 
 /**
+ * @brief Rotation speed multiplier for the camera.
+ */
+#define CAMERA_ROTATION_SPEED 0.5
+
+/**
+ * @brief Movement speed multiplier for the camera.
+ */
+#define CAMERA_MOVEMENT_SPEED 400
+
+/**
  * @brief Size of the walls in the game world.
  */
 #define WALL_SIZE (2 << 16)
