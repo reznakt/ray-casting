@@ -10,6 +10,12 @@
 #define PRIVATE static
 
 
+#define RIGHT 0
+#define DOWN 90
+#define LEFT 180
+#define UP 270
+
+
 /**
  * Allocate a new object of type `type` on the stack.
  */

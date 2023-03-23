@@ -29,7 +29,7 @@
         game.camera->movement.down = false;                                                             \
         game.camera->movement.left = false;                                                             \
         game.camera->movement.right = false;                                                            \
-        camera_update_angle(&game, -90);                                                                \
+        camera_update_angle(&game, CAMERA_HEADING);                                                     \
         struct ray_t rays[FOV_MAX * RESMULT_MAX];                                                       \
         game.camera->rays = rays;                                                                       \
         game.textbuf = (char[TEXTBUFLEN]) {0};                                                          \

@@ -230,7 +230,7 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     break;
                 case SDLK_r:
                     game->camera->pos = game->center;
-                    game->camera->angle = 0;
+                    camera_update_angle(game, CAMERA_HEADING);
                     break;
                 case SDLK_ESCAPE:
                 case SDLK_q:

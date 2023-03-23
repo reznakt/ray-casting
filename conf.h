@@ -11,6 +11,9 @@
 #include <SDL2/SDL.h>
 
 
+#include "util.h"
+
+
 /**
  * @brief Width of the window in pixels.
  */
@@ -80,6 +83,11 @@
  * @brief Movement speed multiplier for the camera.
  */
 #define CAMERA_MOVEMENT_SPEED 400
+
+/**
+ * @brief Default orientation of the camera.
+ */
+#define CAMERA_HEADING UP
 
 /**
  * @brief Size of the walls in the game world.
