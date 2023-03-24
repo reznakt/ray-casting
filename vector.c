@@ -63,7 +63,7 @@ struct vector_t *vector_normalize(struct vector_t *const vec) {
 struct vector_t *vector_normalize_weak(struct vector_t *const vec) {
     const float length = vector_length(vec);
 
-    if (isclose(length, 0, ISCLOSE_8)) {
+    if (isclose(length, 0)) {
         vec->x = vec->y = 0;
         return vec;
     }

@@ -12,18 +12,6 @@
 #include <stdbool.h>
 
 
-#define ISCLOSE_1 0.1f
-#define ISCLOSE_2 0.01f
-#define ISCLOSE_3 0.001f
-#define ISCLOSE_4 0.0001f
-#define ISCLOSE_5 0.00001f
-#define ISCLOSE_6 0.000001f
-#define ISCLOSE_7 0.0000001f
-#define ISCLOSE_8 0.00000001f
-#define ISCLOSE_9 0.000000001f
-#define ISCLOSE_10 0.000000001f
-
-
 /**
  * @brief Returns the smaller of two values.
  *
@@ -85,10 +73,9 @@ float lerp(float a, float b, float t);
  *
  * @param a The first value.
  * @param b The second value.
- * @param epsilon The tolerance for closeness.
  * @return True if the values are close, false otherwise.
  */
-bool isclose(float a, float b, float epsilon);
+bool isclose(float a, float b);
 
 /**
  * @brief Converts an angle from degrees to radians.

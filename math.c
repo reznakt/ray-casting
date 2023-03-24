@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include <math.h>
+#include <stdlib.h>
+#include <float.h>
 
 
 #include "math.h"
@@ -30,8 +32,8 @@ float lerp(const float a, const float b, const float t) {
     return a + (b - a) * t;
 }
 
-bool isclose(const float a, const float b, const float epsilon) {
-    return fabsf(a - b) < epsilon;
+bool isclose(const float a, const float b) {
+    return fabsf(a - b) < FLT_EPSILON;
 }
 
 float degrees(float angle) {

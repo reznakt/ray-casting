@@ -21,7 +21,7 @@ ray_intersection(const struct ray_t *const ray, const struct wall_t *const wall,
 
     const float den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
-    if (isclose(den, 0, 4)) {
+    if (isclose(den, 0)) {
         return NULL;
     }
 
