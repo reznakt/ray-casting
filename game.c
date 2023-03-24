@@ -24,7 +24,7 @@ PRIVATE float speed_coeff(const struct game_t *const game, const float coeff) {
 
 PRIVATE void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {
-        const struct line_t *const wall = game->walls + i;
+        const struct wall_t *const wall = game->walls + i;
         SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
     }
 }
@@ -39,24 +39,26 @@ PRIVATE void render_hud(const struct game_t *const game) {
 PRIVATE void render_rays(const struct game_t *const game) {
     for (size_t i = 0; i < game->camera->nrays; i++) {
         const struct ray_t *const ray = game->camera->rays + i;
+        const struct intersection_t *const intersection = &ray->intersection;
 
-        if (ray->has_intersection) {
-            SDL_RenderDrawLineF(game->renderer, ray->pos.x, ray->pos.y, ray->intersection.x, ray->intersection.y);
+        if (intersection->wall != NULL) {
+            SDL_RenderDrawLineF(game->renderer, ray->pos.x, ray->pos.y,
+                                ray->intersection.pos.x, ray->intersection.pos.y);
         }
     }
 }
 
-PRIVATE void render_3d(const struct game_t *const game, const SDL_Color *const wallcolor) {
+PRIVATE void render_3d(const struct game_t *const game) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
         const struct ray_t *const ray = game->camera->rays + i;
 
-        if (!ray->has_intersection) {
+        if (ray->intersection.wall == NULL) {
             continue;
         }
 
-        const float height = map(1.0f / ray->intersection_dist, 0.0f, 0.005f, 0.0f, (float) WALL_SIZE);
+        const float height = map(1.0f / ray->intersection.dist, 0.0f, 0.005f, 0.0f, (float) WALL_SIZE);
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
@@ -66,8 +68,8 @@ PRIVATE void render_3d(const struct game_t *const game, const SDL_Color *const w
         };
 
         SDL_Color color;
-        memcpy(&color, wallcolor, sizeof color);
-        change_brightness(&color, map(1.0f / powf(ray->intersection_dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
+        memcpy(&color, &ray->intersection.wall->color, sizeof color);
+        change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
 
         SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
         SDL_RenderFillRectF(game->renderer, &stripe);
@@ -102,8 +104,7 @@ void render(struct game_t *const game) {
 
     if (game->render_mode == RENDER_MODE_NORMAL) {
         SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
-        const SDL_Color wallcolor = {150, 150, 150, SDL_ALPHA_OPAQUE};
-        render_3d(game, &wallcolor);
+        render_3d(game);
     } else if (game->render_mode == RENDER_MODE_FLAT) {
         SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
         render_walls(game);
@@ -162,16 +163,17 @@ void update(struct game_t *const game) {
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
+        struct intersection_t ray_int = {.wall = NULL};
+
         ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
         ray.dir = *vector_from_angle(vector(), radians(
                 (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0f)
         );
-        ray.has_intersection = false;
 
         float min_dist = INFINITY;
 
         for (size_t j = 0; j < game->nwalls; j++) {
-            const struct line_t *const wall = game->walls + j;
+            const struct wall_t *const wall = game->walls + j;
             const struct vector_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
@@ -181,12 +183,13 @@ void update(struct game_t *const game) {
             const float dist = vector_distance(&ray.pos, intersection);
 
             if (dist < min_dist) {
-                ray.intersection = *intersection;
-                ray.has_intersection = true;
-                min_dist = ray.intersection_dist = dist;
+                ray_int.pos = *intersection;
+                ray_int.wall = wall;
+                min_dist = ray_int.dist = dist;
             }
         }
 
+        ray.intersection = ray_int;
         game->camera->rays[i] = ray;
     }
 }

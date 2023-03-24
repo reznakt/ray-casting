@@ -8,7 +8,7 @@
 
 
 struct vector_t *
-ray_intersection(const struct ray_t *const ray, const struct line_t *const wall, struct vector_t *const dst) {
+ray_intersection(const struct ray_t *const ray, const struct wall_t *const wall, struct vector_t *const dst) {
     const float x1 = wall->a.x;
     const float y1 = wall->a.y;
     const float x2 = wall->b.x;

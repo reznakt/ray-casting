@@ -16,7 +16,22 @@
 
 
 #include "vector.h"
+#include "world.h"
+#include "ray.h"
 
+
+/**
+ * @struct intersection_t
+ * @bried A struct representing an intersection between a ray and a wall.
+ *
+ * The fields `wall` and `ray` are NULL if there is no intersection.
+ */
+struct intersection_t {
+    struct vector_t pos;
+    float dist;
+    const struct wall_t *wall;
+    const struct ray_t *ray;
+};
 
 /**
  * @struct ray_t
@@ -34,9 +49,7 @@
 struct ray_t {
     struct vector_t pos;
     struct vector_t dir;
-    struct vector_t intersection;
-    float intersection_dist;
-    bool has_intersection;
+    struct intersection_t intersection;
 };
 
 
@@ -49,7 +62,7 @@ struct ray_t {
  *
  * @return A pointer to the resulting intersection point, or NULL if there is no intersection.
  */
-struct vector_t *ray_intersection(const struct ray_t *ray, const struct line_t *wall, struct vector_t *dst);
+struct vector_t *ray_intersection(const struct ray_t *ray, const struct wall_t *wall, struct vector_t *dst);
 
 
 #endif // RAY_RAY_H

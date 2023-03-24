@@ -59,7 +59,7 @@ struct game_t {
     SDL_Renderer *renderer; /**< The SDL renderer for the game. */
     SDL_Window *window; /**< The SDL window for the game. */
     struct camera_t *camera; /**< The camera used for rendering the game. */
-    const struct line_t *walls; /**< The walls in the game world. */
+    const struct wall_t *walls; /**< The walls in the game world. */
     struct ivector_t mouse; /**< The current position of the mouse. */
     struct vector_t center; /**< The center of the game window. */
     char *textbuf; /**< The buffer used for rendering text to the game window. */
