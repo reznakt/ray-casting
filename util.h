@@ -16,6 +16,15 @@
 #define UP 270
 
 
+#define color_opaque(r, g, b) (SDL_Color) {(r), (g), (b), SDL_ALPHA_OPAQUE}
+
+#define RED color_opaque(255, 0, 0)
+#define GREEN color_opaque(0, 255, 0)
+#define BLUE color_opaque(0, 0, 255)
+#define WHITE color_opaque(255, 255, 255)
+#define BLACK color_opaque(0, 0, 0)
+
+
 /**
  * Allocate a new object of type `type` on the stack.
  */
