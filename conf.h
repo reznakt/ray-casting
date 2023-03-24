@@ -94,6 +94,19 @@
  */
 #define WALL_SIZE 1000
 
+#define KEY_FORWARD SDLK_UP
+#define KEY_BACKWARD SDLK_DOWN
+#define KEY_LEFT SDLK_LEFT
+#define KEY_RIGHT SDLK_RIGHT
+#define KEY_RESET SDLK_r
+#define KEY_SWITCH_MODE SDLK_TAB
+#define KEY_QUIT_1 SDLK_q
+#define KEY_QUIT_2 SDLK_ESCAPE
+#define KEY_FOV_INC SDLK_KP_PLUS
+#define KEY_FOV_DEC SDLK_KP_MINUS
+#define KEY_RESMULT_INC SDLK_INSERT
+#define KEY_RESMULT_DEC SDLK_DELETE
+
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX
 #error CAMERA_FOV: illegal value

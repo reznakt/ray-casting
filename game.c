@@ -198,44 +198,44 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
 
         case SDL_KEYDOWN:
             switch (event->key.keysym.sym) {
-                case SDLK_UP:
+                case KEY_FORWARD:
                     game->camera->movement.up = true;
                     break;
-                case SDLK_DOWN:
+                case KEY_BACKWARD:
                     game->camera->movement.down = true;
                     break;
-                case SDLK_LEFT:
+                case KEY_LEFT:
                     game->camera->movement.left = true;
                     break;
-                case SDLK_RIGHT:
+                case KEY_RIGHT:
                     game->camera->movement.right = true;
                     break;
-                case SDLK_KP_PLUS:
+                case KEY_FOV_INC:
                     game->camera->fov = (size_t) constrain((float) game->camera->fov + 1, FOV_MIN, FOV_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
-                case SDLK_KP_MINUS:
+                case KEY_FOV_DEC:
                     game->camera->fov = (size_t) constrain((float) game->camera->fov - 1, FOV_MIN, FOV_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
-                case SDLK_INSERT:
+                case KEY_RESMULT_INC:
                     game->camera->resmult = (size_t) constrain((float) game->camera->resmult + 1, RESMULT_MIN,
                                                                RESMULT_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
-                case SDLK_DELETE:
+                case KEY_RESMULT_DEC:
                     game->camera->resmult = (size_t) constrain((float) game->camera->resmult - 1, RESMULT_MIN,
                                                                RESMULT_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
                     break;
-                case SDLK_r:
+                case KEY_RESET:
                     game->camera->pos = game->center;
                     camera_update_angle(game, CAMERA_HEADING);
                     break;
-                case SDLK_ESCAPE:
-                case SDLK_q:
+                case KEY_QUIT_1:
+                case KEY_QUIT_2:
                     return false;
-                case SDLK_TAB:
+                case KEY_SWITCH_MODE:
                     game->render_mode = game->render_mode == RENDER_MODE_NORMAL ? RENDER_MODE_FLAT : RENDER_MODE_NORMAL;
                     break;
 
@@ -246,16 +246,16 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
 
         case SDL_KEYUP:
             switch (event->key.keysym.sym) {
-                case SDLK_UP:
+                case KEY_FORWARD:
                     game->camera->movement.up = false;
                     break;
-                case SDLK_DOWN:
+                case KEY_BACKWARD:
                     game->camera->movement.down = false;
                     break;
-                case SDLK_LEFT:
+                case KEY_LEFT:
                     game->camera->movement.left = false;
                     break;
-                case SDLK_RIGHT:
+                case KEY_RIGHT:
                     game->camera->movement.right = false;
                     break;
                 default:
