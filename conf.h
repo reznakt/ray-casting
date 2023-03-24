@@ -17,17 +17,17 @@
 /**
  * @brief Width of the window in pixels.
  */
-#define SCREEN_WIDTH 1280
+#define SCREEN_WIDTH 1920
 
 /**
  * @brief Height of the window in pixels.
  */
-#define SCREEN_HEIGHT 720
+#define SCREEN_HEIGHT 1080
 
 /**
  * @brief Flags used for creating the window.
  */
-#define SCREEN_FLAGS (SDL_WINDOW_SHOWN)
+#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN)
 
 /**
  * @brief Title of the window.
