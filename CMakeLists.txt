@@ -9,16 +9,16 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -std=c99 \
+                    -g \
                     -O0 \
                     -masm=intel \
-                    -g \
+                    -fverbose-asm \
+                    -fstack-protector-strong \
+                    -pedantic \
+                    -pedantic-errors \
                     -Wall \
                     -Wextra \
                     -Werror \
-                    -pedantic \
-                    -pedantic-errors \
-                    -fverbose-asm \
-                    -fstack-protector-strong \
                     -Wfloat-equal \
                     -Wundef \
                     -Wshadow \
