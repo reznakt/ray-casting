@@ -94,6 +94,16 @@
  */
 #define WALL_SIZE 1000
 
+/**
+ * @brief The default color of the ceiling/sky.
+ */
+#define CEIL_COLOR color_opaque(10, 10, 20)
+
+/**
+ * @brief The default color of the floor/ground.
+ */
+#define FLOOR_COLOR color_opaque(0, 0, 0)
+
 #define KEY_FORWARD SDLK_UP
 #define KEY_BACKWARD SDLK_DOWN
 #define KEY_LEFT SDLK_LEFT

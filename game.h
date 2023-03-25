@@ -33,6 +33,8 @@
         struct ray_t rays[FOV_MAX * RESMULT_MAX];                                                       \
         game.camera->rays = rays;                                                                       \
         game.textbuf = (char[TEXTBUFLEN]) {0};                                                          \
+        game.ceil_color = CEIL_COLOR;                                                                   \
+        game.floor_color = FLOOR_COLOR;                                                                 \
 } while (0)
 
 
@@ -68,6 +70,8 @@ struct game_t {
     uint64_t frames; /**< The total number of frames rendered by the game. */
     uint64_t newframes; /**< The number of frames rendered by the game since the last polling event. */
     uint64_t ticks; /**< The total number of ticks elapsed since the start of the game. */
+    SDL_Color ceil_color; /**< The color of the ceiling/sky. */
+    SDL_Color floor_color; /**< The color of the floor/ground. */
     enum {
         RENDER_MODE_NORMAL, RENDER_MODE_FLAT
     } render_mode; /**< The current render mode. */

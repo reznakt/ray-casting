@@ -21,6 +21,9 @@ PRIVATE float speed_coeff(const struct game_t *const game, const float coeff) {
     return coeff / (float) game->fps;
 }
 
+PRIVATE void set_color(const struct game_t *const game, const SDL_Color color) {
+    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, color.a);
+}
 
 PRIVATE void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {
@@ -82,7 +85,8 @@ PRIVATE void render_camera(const struct game_t *const game) {
                       (int16_t) game->camera->pos.y,
                       5,
                       0xFF0000FF);
-    SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
+
+    set_color(game, GREEN);
 
     const struct vector_t *const endpoint = vector_add(
             vector_copy(vector(), &game->camera->pos),
@@ -99,22 +103,41 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 }
 
 void render(struct game_t *const game) {
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(game->renderer);
+    switch (game->render_mode) {
+        case RENDER_MODE_NORMAL: {
+            set_color(game, game->ceil_color);
+            SDL_RenderClear(game->renderer);
 
-    if (game->render_mode == RENDER_MODE_NORMAL) {
-        SDL_SetRenderDrawColor(game->renderer, 0, 0, 255, 255);
-        render_3d(game);
-    } else if (game->render_mode == RENDER_MODE_FLAT) {
-        SDL_SetRenderDrawColor(game->renderer, 0, 255, 0, 255);
-        render_walls(game);
+            set_color(game, game->floor_color);
 
-        SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
-        render_rays(game);
-        render_camera(game);
+            SDL_FRect floor = {
+                    .x = 0,
+                    .y = game->center.y,
+                    .w = SCREEN_WIDTH,
+                    .h = game->center.y
+            };
+
+            SDL_RenderFillRectF(game->renderer, &floor);
+
+            render_3d(game);
+            break;
+        }
+
+        case RENDER_MODE_FLAT: {
+            set_color(game, BLACK);
+            SDL_RenderClear(game->renderer);
+            set_color(game, GREEN);
+            render_walls(game);
+
+            set_color(game, WHITE);
+            render_rays(game);
+
+            render_camera(game);
+            break;
+        }
     }
 
-    SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
+    set_color(game, WHITE);
     render_hud(game);
 
     SDL_RenderPresent(game->renderer);
