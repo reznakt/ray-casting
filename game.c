@@ -160,10 +160,8 @@ void update(struct game_t *const game) {
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
 
-    struct vector_t *const dirvect = vector_mul(
-            vector_copy(vector(), &game->camera->dir),
-            speed_coeff(game, CAMERA_MOVEMENT_SPEED)
-    );
+    struct vector_t *const dirvect = vector_mul(vector_copy(vector(), &game->camera->dir),
+                                                speed_coeff(game, game->camera->speed));
 
     if (game->camera->movement.forward ^ game->camera->movement.backward) {
         if (game->camera->movement.forward) { /* forward */
@@ -236,6 +234,9 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_RIGHT:
                     game->camera->movement.right = true;
                     break;
+                case KEY_SPRINT:
+                    game->camera->speed = CAMERA_SPRINT_MOVEMENT_SPEED;
+                    break;
                 case KEY_FOV_INC:
                     game->camera->fov = (size_t) constrain((float) game->camera->fov + 1, FOV_MIN, FOV_MAX);
                     game->camera->nrays = game->camera->fov * game->camera->resmult;
@@ -283,6 +284,9 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     break;
                 case KEY_RIGHT:
                     game->camera->movement.right = false;
+                    break;
+                case KEY_SPRINT:
+                    game->camera->speed = CAMERA_MOVEMENT_SPEED;
                     break;
                 default:
                     break;

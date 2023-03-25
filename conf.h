@@ -85,6 +85,11 @@
 #define CAMERA_MOVEMENT_SPEED 400
 
 /**
+ * @brief Movement speed multiplier for the camera while sprinting.
+ */
+#define CAMERA_SPRINT_MOVEMENT_SPEED (2 * CAMERA_MOVEMENT_SPEED)
+
+/**
  * @brief Default orientation of the camera.
  */
 #define CAMERA_HEADING NORTH
@@ -108,6 +113,7 @@
 #define KEY_BACKWARD SDLK_DOWN
 #define KEY_LEFT SDLK_LEFT
 #define KEY_RIGHT SDLK_RIGHT
+#define KEY_SPRINT SDLK_RSHIFT
 #define KEY_RESET SDLK_r
 #define KEY_SWITCH_MODE SDLK_TAB
 #define KEY_QUIT_1 SDLK_q

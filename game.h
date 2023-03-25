@@ -25,10 +25,7 @@
         game.camera->resmult = CAMERA_RESMULT;                                                          \
         game.camera->nrays = game.camera->fov * game.camera->resmult;                                   \
         game.camera->pos = game.center;                                                                 \
-        game.camera->movement.forward = false;                                                          \
-        game.camera->movement.backward = false;                                                         \
-        game.camera->movement.left = false;                                                             \
-        game.camera->movement.right = false;                                                            \
+        game.camera->speed = CAMERA_MOVEMENT_SPEED;                                                     \
         camera_update_angle(&game, CAMERA_HEADING);                                                     \
         struct ray_t rays[FOV_MAX * RESMULT_MAX];                                                       \
         game.camera->rays = rays;                                                                       \
@@ -49,6 +46,7 @@ struct camera_t {
         bool forward, backward, left, right; /**< Boolean flags indicating which movement keys are pressed. */
     } movement;
     float angle; /**< The angle (in degrees) that the camera is facing. */
+    float speed; /**< The current movement speed of the camera. */
     size_t resmult; /**< The resolution multiplier for the camera. */
     size_t fov; /**< The field of view (in degrees) for the camera. */
     size_t nrays; /**< The number of rays cast from the camera. */
