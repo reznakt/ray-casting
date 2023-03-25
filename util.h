@@ -10,10 +10,10 @@
 #define PRIVATE static
 
 
-#define RIGHT 0
-#define DOWN 90
-#define LEFT 180
-#define UP 270
+#define EAST 0
+#define SOUTH 90
+#define WEST 180
+#define NORTH 270
 
 
 #define color_opaque(r, g, b) (SDL_Color) {(r), (g), (b), SDL_ALPHA_OPAQUE}

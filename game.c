@@ -165,10 +165,10 @@ void update(struct game_t *const game) {
             speed_coeff(game, CAMERA_MOVEMENT_SPEED)
     );
 
-    if (game->camera->movement.up ^ game->camera->movement.down) {
-        if (game->camera->movement.up) { /* up */
+    if (game->camera->movement.forward ^ game->camera->movement.backward) {
+        if (game->camera->movement.forward) { /* forward */
             vector_add(&game->camera->pos, dirvect);
-        } else { /* down */
+        } else { /* backward */
             vector_sub(&game->camera->pos, dirvect);
         }
     }
@@ -225,10 +225,10 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
         case SDL_KEYDOWN:
             switch (event->key.keysym.sym) {
                 case KEY_FORWARD:
-                    game->camera->movement.up = true;
+                    game->camera->movement.forward = true;
                     break;
                 case KEY_BACKWARD:
-                    game->camera->movement.down = true;
+                    game->camera->movement.backward = true;
                     break;
                 case KEY_LEFT:
                     game->camera->movement.left = true;
@@ -273,10 +273,10 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
         case SDL_KEYUP:
             switch (event->key.keysym.sym) {
                 case KEY_FORWARD:
-                    game->camera->movement.up = false;
+                    game->camera->movement.forward = false;
                     break;
                 case KEY_BACKWARD:
-                    game->camera->movement.down = false;
+                    game->camera->movement.backward = false;
                     break;
                 case KEY_LEFT:
                     game->camera->movement.left = false;
