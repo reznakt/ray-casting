@@ -23,6 +23,9 @@
 #define BLUE color_opaque(0, 0, 255)
 #define WHITE color_opaque(255, 255, 255)
 #define BLACK color_opaque(0, 0, 0)
+#define YELLOW color_opaque(255, 255, 0)
+#define CYAN color_opaque(0, 255, 255)
+#define MAGENTA color_opaque(255, 0, 255)
 
 
 /**
