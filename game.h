@@ -25,8 +25,8 @@
         game.camera->resmult = CAMERA_RESMULT;                                                          \
         game.camera->nrays = game.camera->fov * game.camera->resmult;                                   \
         game.camera->pos = game.center;                                                                 \
-        game.camera->movement.up = false;                                                               \
-        game.camera->movement.down = false;                                                             \
+        game.camera->movement.forward = false;                                                          \
+        game.camera->movement.backward = false;                                                         \
         game.camera->movement.left = false;                                                             \
         game.camera->movement.right = false;                                                            \
         camera_update_angle(&game, CAMERA_HEADING);                                                     \

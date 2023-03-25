@@ -87,7 +87,7 @@
 /**
  * @brief Default orientation of the camera.
  */
-#define CAMERA_HEADING UP
+#define CAMERA_HEADING NORTH
 
 /**
  * @brief Size of the walls in the game world.
