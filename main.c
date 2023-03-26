@@ -39,7 +39,13 @@ void cleanup(const struct game_t *const game) {
     SDL_DestroyWindow(game->window);
 }
 
-int main(UNUSED int argc, UNUSED char **argv) {
+int main(int argc, char **argv) {
+    bool profile = false;
+
+    if (argc == 2 && (strcmp(argv[1], "--profile") == 0 || strcmp(argv[1], "-p") == 0)) {
+        profile = true;
+    }
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         sdl_error("SDL_Init");
         return EXIT_FAILURE;
@@ -53,6 +59,10 @@ int main(UNUSED int argc, UNUSED char **argv) {
     }
 
     while (true) {
+        if (profile && game.ticks >= 10000) {
+            goto __cleanup;
+        }
+
         update(&game);
         render(&game);
 
@@ -66,6 +76,10 @@ int main(UNUSED int argc, UNUSED char **argv) {
     }
 
     __cleanup:
+    if (profile) {
+        printf("ticks: %zu, frames: %zu, avg fps: %f\n",
+               game.ticks, game.frames, (float) game.frames / (float) game.ticks * 1000.0f);
+    }
     cleanup(&game);
     SDL_Quit();
 
