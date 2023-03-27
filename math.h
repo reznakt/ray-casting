@@ -60,7 +60,7 @@ float constrain(float value, float low, float high);
  *
  * @param a     The starting value for the interpolation.
  * @param b     The ending value for the interpolation.
- * @param t     The interpolation parameter. Must be in the range [0, 1].
+ * @param t     The interpolation parameter. Should be in the range [0, 1].
  *
  * @return      The interpolated float value between a and b.
  *
