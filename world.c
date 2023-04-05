@@ -62,7 +62,7 @@ const struct wall_t world_walls[WORLD_NWALLS] = {
                 {500, 1000},
                 {1000, 800},
                 COLOR_YELLOW,
-                WALL_TYPE_MIRROR
+                WALL_TYPE_NONSOLID
         }
 };
 
