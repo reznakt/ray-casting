@@ -97,7 +97,6 @@ PRIVATE void render_camera(const struct game_t *const game) {
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
 }
 
-
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0f);
     vector_from_angle(&game->camera->dir, radians(game->camera->angle));
