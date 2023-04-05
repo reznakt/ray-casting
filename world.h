@@ -30,7 +30,11 @@ struct wall_t {
 
 extern const struct wall_t world_walls[WORLD_NWALLS];
 
-
+/**
+ * Checks if all walls are valid.
+ * @return True if all walls are valid, false otherwise.
+ * @note if a wall is invalid, a message will be printed to stderr.
+ */
 bool check_walls(void);
 
 
