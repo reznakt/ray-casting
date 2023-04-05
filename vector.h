@@ -24,22 +24,22 @@
 /**
  * Create a new struct vector_t on the stack.
  */
-#define vector() STACK_ALLOC(struct vector_t)
+#define vector() stack_alloc(struct vector_t)
 
 /**
  * Create a new struct ivector_t on the stack.
  */
-#define ivector() STACK_ALLOC(struct ivector_t)
+#define ivector() stack_alloc(struct ivector_t)
 
 /**
  * Create a new struct line_t on the stack.
  */
-#define line() STACK_ALLOC(struct line_t)
+#define line() stack_alloc(struct line_t)
 
 /**
  * Create a new struct iline_t on the stack.
  */
-#define iline() STACK_ALLOC(struct iline_t)
+#define iline() stack_alloc(struct iline_t)
 
 
 /**
