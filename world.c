@@ -13,55 +13,55 @@ const struct wall_t world_walls[WORLD_NWALLS] = {
         {
                 {0,   0},
                 {SCREEN_WIDTH - 1, 0},
-                RED,
+                COLOR_RED,
                 WALL_TYPE_SOLID
         },
         {
                 {SCREEN_WIDTH - 1, 0},
                 {SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1},
-                GREEN,
+                COLOR_GREEN,
                 WALL_TYPE_SOLID
         },
         {
                 {SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1},
                 {0,                SCREEN_HEIGHT - 1},
-                BLUE,
+                COLOR_BLUE,
                 WALL_TYPE_SOLID
         },
         {
                 {0,   0},
                 {0,                SCREEN_HEIGHT - 1},
-                CYAN,
+                COLOR_CYAN,
                 WALL_TYPE_NONSOLID
         },
         {
                 {100, 100},
                 {200,  100},
-                BLUE,
+                COLOR_BLUE,
                 WALL_TYPE_NONSOLID
         },
         {
                 {100, 100},
                 {100,  200},
-                BLUE,
+                COLOR_BLUE,
                 WALL_TYPE_NONSOLID
         },
         {
                 {200, 100},
                 {200,  200},
-                MAGENTA,
+                COLOR_MAGENTA,
                 WALL_TYPE_NONSOLID
         },
         {
                 {200, 200},
                 {100,  200},
-                BLUE,
+                COLOR_BLUE,
                 WALL_TYPE_NONSOLID
         },
         {
                 {500, 1000},
                 {1000, 800},
-                YELLOW,
+                COLOR_YELLOW,
                 WALL_TYPE_MIRROR
         }
 };

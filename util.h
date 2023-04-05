@@ -18,14 +18,14 @@
 
 #define color_opaque(r, g, b) (SDL_Color) {(r), (g), (b), SDL_ALPHA_OPAQUE}
 
-#define RED color_opaque(255, 0, 0)
-#define GREEN color_opaque(0, 255, 0)
-#define BLUE color_opaque(0, 0, 255)
-#define WHITE color_opaque(255, 255, 255)
-#define BLACK color_opaque(0, 0, 0)
-#define YELLOW color_opaque(255, 255, 0)
-#define CYAN color_opaque(0, 255, 255)
-#define MAGENTA color_opaque(255, 0, 255)
+#define COLOR_RED color_opaque(255, 0, 0)
+#define COLOR_GREEN color_opaque(0, 255, 0)
+#define COLOR_BLUE color_opaque(0, 0, 255)
+#define COLOR_WHITE color_opaque(255, 255, 255)
+#define COLOR_BLACK color_opaque(0, 0, 0)
+#define COLOR_YELLOW color_opaque(255, 255, 0)
+#define COLOR_CYAN color_opaque(0, 255, 255)
+#define COLOR_MAGENTA color_opaque(255, 0, 255)
 
 
 /**
