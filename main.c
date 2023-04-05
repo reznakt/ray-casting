@@ -51,6 +51,11 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
+    if (!check_walls()) {
+        fprintf(stderr, "check_walls: invalid wall configuration\n");
+        return EXIT_FAILURE;
+    }
+
     struct game_t game = {0};
     game_init(game);
 

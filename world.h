@@ -31,5 +31,8 @@ struct wall_t {
 extern const struct wall_t world_walls[WORLD_NWALLS];
 
 
+bool check_walls(void);
+
+
 #endif // RAY_WORLD_H
 

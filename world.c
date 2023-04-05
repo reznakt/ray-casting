@@ -66,3 +66,22 @@ const struct wall_t world_walls[WORLD_NWALLS] = {
         }
 };
 
+
+bool check_walls(void) {
+    for (size_t i = 0; i < WORLD_NWALLS; i++) {
+        if (world_walls[i].a.x < 0 || world_walls[i].a.x > SCREEN_WIDTH ||
+            world_walls[i].a.y < 0 || world_walls[i].a.y > SCREEN_HEIGHT ||
+            world_walls[i].b.x < 0 || world_walls[i].b.x > SCREEN_WIDTH ||
+            world_walls[i].b.y < 0 || world_walls[i].b.y > SCREEN_HEIGHT) {
+            fprintf(stderr, "check_walls: wall %zu is out of bounds\n", i);
+            return false;
+        }
+
+        if (world_walls[i].type & WALL_TYPE_SOLID && world_walls[i].type & WALL_TYPE_NONSOLID) {
+            fprintf(stderr, "check_walls: wall %zu is both solid and nonsolid\n", i);
+            return false;
+        }
+    }
+
+    return true;
+}
