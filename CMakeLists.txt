@@ -10,6 +10,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
+                    -D_GNU_SOURCE \
                     -std=c99 \
                     -g \
                     -Ofast \
@@ -53,7 +54,7 @@ if (NOT SDL2_GFX_LIBRARY)
 endif ()
 
 
-add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c util.c)
+add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c util.c logger.c)
 
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})

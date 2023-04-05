@@ -11,6 +11,7 @@
 #include "world.h"
 #include "ray.h"
 #include "game.h"
+#include "logger.h"
 
 
 int init(struct game_t *const game) {
@@ -52,7 +53,7 @@ int main(int argc, char **argv) {
     }
 
     if (!check_walls()) {
-        fprintf(stderr, "check_walls: invalid wall configuration\n");
+        logger_print(LOG_LEVEL_FATAL, "invalid wall configuration");
         return EXIT_FAILURE;
     }
 
