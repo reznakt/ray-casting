@@ -12,10 +12,15 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -std=c99 \
                     -g \
-                    -O0 \
+                    -Ofast \
                     -masm=intel \
+                    -march=native \
+                    -mtune=native \
                     -fverbose-asm \
                     -fstack-protector-strong \
+                    -ffast-math \
+                    -funroll-loops \
+                    -fomit-frame-pointer \
                     -pedantic \
                     -pedantic-errors \
                     -Wall \
