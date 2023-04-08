@@ -215,6 +215,16 @@ void update(struct game_t *const game) {
     }
 }
 
+void camera_set_resmult(struct game_t *const game, const size_t resmult) {
+    game->camera->resmult = (size_t) constrain((float) resmult, RESMULT_MIN, RESMULT_MAX);
+    game->camera->nrays = game->camera->fov * game->camera->resmult;
+}
+
+void camera_set_fov(struct game_t *const game, const size_t fov) {
+    game->camera->fov = (size_t) constrain((float) fov, FOV_MIN, FOV_MAX);
+    game->camera->nrays = game->camera->fov * game->camera->resmult;
+}
+
 bool on_event(struct game_t *const game, const SDL_Event *const event) {
     switch (event->type) {
         case SDL_QUIT:
@@ -238,22 +248,16 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     game->camera->speed = CAMERA_SPRINT_MOVEMENT_SPEED;
                     break;
                 case KEY_FOV_INC:
-                    game->camera->fov = (size_t) constrain((float) game->camera->fov + 1, FOV_MIN, FOV_MAX);
-                    game->camera->nrays = game->camera->fov * game->camera->resmult;
+                    camera_set_fov(game, game->camera->fov + 1);
                     break;
                 case KEY_FOV_DEC:
-                    game->camera->fov = (size_t) constrain((float) game->camera->fov - 1, FOV_MIN, FOV_MAX);
-                    game->camera->nrays = game->camera->fov * game->camera->resmult;
+                    camera_set_fov(game, game->camera->fov - 1);
                     break;
                 case KEY_RESMULT_INC:
-                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult + 1, RESMULT_MIN,
-                                                               RESMULT_MAX);
-                    game->camera->nrays = game->camera->fov * game->camera->resmult;
+                    camera_set_resmult(game, game->camera->resmult + 1);
                     break;
                 case KEY_RESMULT_DEC:
-                    game->camera->resmult = (size_t) constrain((float) game->camera->resmult - 1, RESMULT_MIN,
-                                                               RESMULT_MAX);
-                    game->camera->nrays = game->camera->fov * game->camera->resmult;
+                    camera_set_resmult(game, game->camera->resmult - 1);
                     break;
                 case KEY_RESET:
                     game->camera->pos = game->center;
