@@ -1,0 +1,32 @@
+name: Build with CMake and SDL2
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake libsdl2-dev libsdl2-gfx-dev
+
+    - name: Build with CMake
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make -j $(nproc)
+
+    - name: Export executable
+      uses: actions/upload-artifact@v2
+      with:
+        name: RayCastingSDL
+        path: build/RayCastingSDL
+
