@@ -6,8 +6,8 @@
 #include "conf.h"
 
 
-#define UNUSED __attribute((unused))
-#define PRIVATE static
+#define unused __attribute((unused))
+#define private static
 
 
 #define EAST 0
@@ -15,17 +15,17 @@
 #define WEST 180
 #define NORTH 270
 
+#define rgba(r, g, b, a) (SDL_Color) {(r), (g), (b), (a)}
+#define rgb(r, g, b) rgba((r), (g), (b), 255)
 
-#define color_opaque(r, g, b) (SDL_Color) {(r), (g), (b), SDL_ALPHA_OPAQUE}
-
-#define COLOR_RED color_opaque(255, 0, 0)
-#define COLOR_GREEN color_opaque(0, 255, 0)
-#define COLOR_BLUE color_opaque(0, 0, 255)
-#define COLOR_WHITE color_opaque(255, 255, 255)
-#define COLOR_BLACK color_opaque(0, 0, 0)
-#define COLOR_YELLOW color_opaque(255, 255, 0)
-#define COLOR_CYAN color_opaque(0, 255, 255)
-#define COLOR_MAGENTA color_opaque(255, 0, 255)
+#define COLOR_RED rgb(255, 0, 0)
+#define COLOR_GREEN rgb(0, 255, 0)
+#define COLOR_BLUE rgb(0, 0, 255)
+#define COLOR_WHITE rgb(255, 255, 255)
+#define COLOR_BLACK rgb(0, 0, 0)
+#define COLOR_YELLOW rgb(255, 255, 0)
+#define COLOR_CYAN rgb(0, 255, 255)
+#define COLOR_MAGENTA rgb(255, 0, 255)
 
 
 /**

@@ -17,22 +17,22 @@
  * @param coeff The coefficient to use in the speed calculation.
  * @return The speed coefficient for the game.
  */
-PRIVATE float speed_coeff(const struct game_t *const game, const float coeff) {
+private float speed_coeff(const struct game_t *const game, const float coeff) {
     return coeff / (float) game->fps;
 }
 
-PRIVATE void set_color(const struct game_t *const game, const SDL_Color color) {
+private void set_color(const struct game_t *const game, const SDL_Color color) {
     SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, color.a);
 }
 
-PRIVATE void render_walls(const struct game_t *const game) {
+private void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nwalls; i++) {
         const struct wall_t *const wall = game->walls + i;
         SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
     }
 }
 
-PRIVATE void render_hud(const struct game_t *const game) {
+private void render_hud(const struct game_t *const game) {
     render_printf(game, 10, 10,
                   "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | ppr: %.4f",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
@@ -40,7 +40,7 @@ PRIVATE void render_hud(const struct game_t *const game) {
                   (float) SCREEN_WIDTH / (float) game->camera->nrays);
 }
 
-PRIVATE void render_rays(const struct game_t *const game) {
+private void render_rays(const struct game_t *const game) {
     for (size_t i = 0; i < game->camera->nrays; i++) {
         const struct ray_t *const ray = game->camera->rays + i;
         const struct intersection_t *const intersection = &ray->intersection;
@@ -52,7 +52,7 @@ PRIVATE void render_rays(const struct game_t *const game) {
     }
 }
 
-PRIVATE void render_3d(const struct game_t *const game) {
+private void render_3d(const struct game_t *const game) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
@@ -80,7 +80,7 @@ PRIVATE void render_3d(const struct game_t *const game) {
     }
 }
 
-PRIVATE void render_camera(const struct game_t *const game) {
+private void render_camera(const struct game_t *const game) {
     filledCircleColor(game->renderer,
                       (int16_t) game->camera->pos.x,
                       (int16_t) game->camera->pos.y,

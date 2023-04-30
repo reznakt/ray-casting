@@ -26,7 +26,7 @@
 
 
 /* note: out-of-order assignment is a GNU extension */
-PRIVATE const char *const LOG_PREFIXV[] = {
+private const char *const LOG_PREFIXV[] = {
         [LOG_LEVEL_NOLOG] = NULL,
         [LOG_LEVEL_FATAL] = "FATAL",
         [LOG_LEVEL_ERROR] = "ERROR",
