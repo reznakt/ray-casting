@@ -72,7 +72,7 @@
 /**
  * @brief Default resolution multiplier for the camera.
  */
-#define CAMERA_RESMULT 10
+#define CAMERA_RESMULT (SCREEN_WIDTH / CAMERA_FOV + 1)
 
 /**
  * @brief Rotation speed multiplier for the camera.
@@ -102,12 +102,12 @@
 /**
  * @brief The default color of the ceiling/sky.
  */
-#define CEIL_COLOR color_opaque(10, 10, 20)
+#define CEIL_COLOR rgb(10, 10, 20)
 
 /**
  * @brief The default color of the floor/ground.
  */
-#define FLOOR_COLOR color_opaque(0, 0, 0)
+#define FLOOR_COLOR rgb(0, 0, 0)
 
 #define KEY_FORWARD SDLK_UP
 #define KEY_BACKWARD SDLK_DOWN
