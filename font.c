@@ -146,7 +146,7 @@ void render_char(SDL_Renderer *const renderer, const int x, const int y, const i
     }
 }
 
-void render_string(SDL_Renderer *const renderer, const int x, const int y, const char *const str) {
+void render_string(SDL_Renderer *const restrict renderer, const int x, const int y, const char *const restrict str) {
     for (size_t i = 0; i < strlen(str); i++) {
         render_char(renderer, x + 10 * (int) i, y, str[i]);
     }

@@ -6,8 +6,11 @@
 #include "math.h"
 
 
-float map(const float value, const float old_low, const float old_high,
-          const float new_low, const float new_high) {
+float map(const float value,
+          const float old_low,
+          const float old_high,
+          const float new_low,
+          const float new_high) {
     if (value > old_high) {
         return new_high;
     }
@@ -35,11 +38,11 @@ bool isclose(const float a, const float b) {
     return fabsf(a - b) < FLT_EPSILON;
 }
 
-float degrees(float angle) {
+float degrees(const float angle) {
     return angle * 180.0f / (float) M_PI;
 }
 
-float radians(float angle) {
+float radians(const float angle) {
     return angle * (float) M_PI / 180.0f;
 }
 
