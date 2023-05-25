@@ -6,7 +6,7 @@
 #include "conf.h"
 
 
-#define unused __attribute((unused))
+#define unused __attribute__((unused))
 #define private static
 
 
