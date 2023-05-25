@@ -66,7 +66,7 @@ private void render_3d(const struct game_t *const game) {
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
-                .y = game->center.y - height / 2.0f,
+                .y = game->center.y - height / 2.0f - (game->camera->movement.crouch ? SCREEN_HEIGHT / 10.0f : 0.0f),
                 .h = height,
                 .w = width
         };
@@ -244,6 +244,10 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_RIGHT:
                     game->camera->movement.right = true;
                     break;
+                case KEY_CROUCH:
+                    game->camera->movement.crouch = true;
+                    game->camera->speed = CAMERA_CROUCH_MOVEMENT_SPEED;
+                    break;
                 case KEY_SPRINT:
                     game->camera->speed = CAMERA_SPRINT_MOVEMENT_SPEED;
                     break;
@@ -288,6 +292,10 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     break;
                 case KEY_RIGHT:
                     game->camera->movement.right = false;
+                    break;
+                case KEY_CROUCH:
+                    game->camera->movement.crouch = false;
+                    game->camera->speed = CAMERA_MOVEMENT_SPEED;
                     break;
                 case KEY_SPRINT:
                     game->camera->speed = CAMERA_MOVEMENT_SPEED;

@@ -43,7 +43,7 @@ struct camera_t {
     struct vector_t dir; /**< Direction the camera is facing. */
     struct ray_t *rays; /**< Array of rays cast from the camera. */
     struct {
-        bool forward, backward, left, right; /**< Boolean flags indicating which movement keys are pressed. */
+        bool forward, backward, left, right, crouch; /**< Boolean flags indicating which movement keys are pressed. */
     } movement;
     float angle; /**< The angle (in degrees) that the camera is facing. */
     float speed; /**< The current movement speed of the camera. */

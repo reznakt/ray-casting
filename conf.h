@@ -90,6 +90,11 @@
 #define CAMERA_SPRINT_MOVEMENT_SPEED (2 * CAMERA_MOVEMENT_SPEED)
 
 /**
+ * @brief Movement speed multiplier for the camera while crouching.
+ */
+#define CAMERA_CROUCH_MOVEMENT_SPEED (0.5 * CAMERA_MOVEMENT_SPEED)
+
+/**
  * @brief Default orientation of the camera.
  */
 #define CAMERA_HEADING NORTH
@@ -113,6 +118,7 @@
 #define KEY_BACKWARD SDLK_DOWN
 #define KEY_LEFT SDLK_LEFT
 #define KEY_RIGHT SDLK_RIGHT
+#define KEY_CROUCH SDLK_RCTRL
 #define KEY_SPRINT SDLK_RSHIFT
 #define KEY_RESET SDLK_r
 #define KEY_SWITCH_MODE SDLK_TAB
