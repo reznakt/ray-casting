@@ -4,7 +4,6 @@
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reznakt/ray-casting/build.yml)
 ![GitHub repo size](https://img.shields.io/github/repo-size/reznakt/ray-casting)
 ![GitHub repo file count](https://img.shields.io/github/directory-file-count/reznakt/ray-casting)
-![Lines of code](https://img.shields.io/tokei/lines/github.com/reznakt/ray-casting)
 
 > A simple experiment with ray casting and C.
 
