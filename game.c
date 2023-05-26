@@ -66,7 +66,8 @@ private void render_3d(const struct game_t *const game) {
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
-                .y = game->center.y - height / 2.0f - (game->camera->movement.crouch ? SCREEN_HEIGHT / 10.0f : 0.0f),
+                .y = game->center.y - height / 2.0f
+                     - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f),
                 .h = height,
                 .w = width
         };
@@ -116,6 +117,11 @@ void render(struct game_t *const game) {
                     .w = SCREEN_WIDTH,
                     .h = game->center.y
             };
+
+            if (game->camera->movement.crouch) {
+                floor.y -= CAMERA_CROUCH_HEIGHT_DELTA;
+                floor.h += CAMERA_CROUCH_HEIGHT_DELTA;
+            }
 
             SDL_RenderFillRectF(game->renderer, &floor);
 

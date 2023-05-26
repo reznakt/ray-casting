@@ -95,6 +95,11 @@
 #define CAMERA_CROUCH_MOVEMENT_SPEED (0.5 * CAMERA_MOVEMENT_SPEED)
 
 /**
+ * @brief The difference in height between standing and crouching.
+ */
+#define CAMERA_CROUCH_HEIGHT_DELTA (SCREEN_HEIGHT / 10.0f)
+
+/**
  * @brief Default orientation of the camera.
  */
 #define CAMERA_HEADING NORTH
