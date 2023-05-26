@@ -111,17 +111,12 @@ void render(struct game_t *const game) {
 
             set_color(game, game->floor_color);
 
-            SDL_FRect floor = {
+            const SDL_FRect floor = {
                     .x = 0,
-                    .y = game->center.y,
+                    .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f),
                     .w = SCREEN_WIDTH,
-                    .h = game->center.y
+                    .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f)
             };
-
-            if (game->camera->movement.crouch) {
-                floor.y -= CAMERA_CROUCH_HEIGHT_DELTA;
-                floor.h += CAMERA_CROUCH_HEIGHT_DELTA;
-            }
 
             SDL_RenderFillRectF(game->renderer, &floor);
 
