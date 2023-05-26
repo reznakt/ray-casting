@@ -19,6 +19,8 @@ I previously made something similar in Python, but it was quite slow (~100 fps),
 - CMake
 - SDL2
 
+> ⚠️ *This project currently requires Clang*
+
 ## 🚀 Getting Started
 
 To get a local copy up and running, follow these simple steps:
