@@ -104,7 +104,7 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 
 void render(struct game_t *const game) {
     switch (game->render_mode) {
-        case RENDER_MODE_NORMAL: {
+        case RENDER_MODE_NORMAL:
             set_color(game, game->ceil_color);
             SDL_RenderClear(game->renderer);
 
@@ -121,20 +121,17 @@ void render(struct game_t *const game) {
 
             render_3d(game);
             break;
-        }
 
-        case RENDER_MODE_FLAT: {
+        case RENDER_MODE_FLAT:
             set_color(game, COLOR_BLACK);
             SDL_RenderClear(game->renderer);
             set_color(game, COLOR_GREEN);
             render_walls(game);
-
             set_color(game, COLOR_WHITE);
             render_rays(game);
-
             render_camera(game);
             break;
-        }
+
     }
 
     set_color(game, COLOR_WHITE);
