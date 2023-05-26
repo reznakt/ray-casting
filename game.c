@@ -34,7 +34,7 @@ private void render_walls(const struct game_t *const game) {
 
 private void render_hud(const struct game_t *const game) {
     render_printf(game, 10, 10,
-                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | ppr: %.4f",
+                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
                   game->camera->fov, game->camera->resmult, game->camera->nrays,
                   (float) SCREEN_WIDTH / (float) game->camera->nrays);
