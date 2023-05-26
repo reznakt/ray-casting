@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_C_COMPILER "clang")
 
-project(RayCastingSDL C)
+project(ray-casting C)
 
 
 set(CMAKE_C_STANDARD 99)

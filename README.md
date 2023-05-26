@@ -27,7 +27,7 @@ To get a local copy up and running, follow these simple steps:
 
 1. Clone the repository: `git clone https://github.com/reznakt/ray-casting.git`
 2. Compile the code: `cd ray-casting && mkdir build && cd build && cmake .. && make`
-3. Run the executable: `./RayCastingSDL`
+3. Run the executable: `./ray-casting`
 
 ## 🎮 How to Play
 
