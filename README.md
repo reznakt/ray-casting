@@ -39,8 +39,13 @@ Currently, there are no game features per se. You can walk around and observe th
 
 ## 📷 Screenshots
 
-![image](https://github.com/reznakt/ray-casting/assets/56887011/b96d28c1-583f-4580-ab50-ed8af8d3f436)
+|![image](https://github.com/reznakt/ray-casting/assets/56887011/b96d28c1-583f-4580-ab50-ed8af8d3f436)|
+|:--:| 
+| *Normal mode* |
 
+|![image](https://github.com/reznakt/ray-casting/assets/56887011/41866d32-3a4d-4f0b-92db-74393efa8e9d)|
+|:--:| 
+| *Flat mode* |
 
 ## 📝 License
 
