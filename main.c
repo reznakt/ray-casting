@@ -12,6 +12,7 @@
 #include "ray.h"
 #include "game.h"
 #include "logger.h"
+#include "util.h"
 
 
 int init(struct game_t *const game) {
