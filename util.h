@@ -29,9 +29,9 @@
 
 
 /**
- * Allocate a new object of type `type` on the stack.
+ * Allocate `n` new objects of type `type` on the stack.
  */
-#define stack_alloc(type) ((type [1]) {0})
+#define stack_alloc(type, n) ((type [n]) {0})
 
 /**
  * @brief Macro for printing SDL errors.
