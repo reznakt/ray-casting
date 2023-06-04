@@ -54,5 +54,5 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## ❤️ Acknowledgements
 
-- [Lode Vandevenne](http://lodev.org/cgtutor/raycasting.html) for the excellent tutorial on ray casting.
+- [Lode Vandevenne](https://github.com/lvandeve) for the legendary [ray casting tutorial](http://lodev.org/cgtutor/raycasting.html).
 
