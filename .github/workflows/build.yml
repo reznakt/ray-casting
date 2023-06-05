@@ -28,5 +28,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: RayCastingSDL
-        path: build/RayCastingSDL
+        path: build/ray-casting
 
