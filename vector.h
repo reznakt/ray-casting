@@ -24,22 +24,22 @@
 /**
  * Create a new struct vector_t on the stack.
  */
-#define vector() stack_alloc(struct vector_t)
+#define vector() stack_alloc(struct vector_t, 1)
 
 /**
  * Create a new struct ivector_t on the stack.
  */
-#define ivector() stack_alloc(struct ivector_t)
+#define ivector() stack_alloc(struct ivector_t, 1)
 
 /**
  * Create a new struct line_t on the stack.
  */
-#define line() stack_alloc(struct line_t)
+#define line() stack_alloc(struct line_t, 1)
 
 /**
  * Create a new struct iline_t on the stack.
  */
-#define iline() stack_alloc(struct iline_t)
+#define iline() stack_alloc(struct iline_t, 1)
 
 
 /**
@@ -79,6 +79,15 @@ struct iline_t {
  * Constant zero vector.
  */
 extern const struct vector_t vector_zero;
+
+
+/**
+ * @brief Clears the vector @p vec, i.e. sets it to the zero vector.
+ * @param vec Pointer to the vector to clear.
+ * @return Pointer to the zero vector @p vec.
+ * @see vector_zero
+ */
+struct vector_t *vector_clear(struct vector_t *vec);
 
 
 /**
@@ -176,7 +185,7 @@ float vector_length(const struct vector_t *vec);
  *
  * @return The squared magnitude of the vector @p vec.
  */
-float vector_length_squared(const struct vector_t *vec);
+float vector_length2(const struct vector_t *vec);
 
 /**
  * @brief Prints the components of the vector @p vec to the standard output.

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <math.h>
 
 #include "math.h"
@@ -9,6 +8,10 @@
 
 const struct vector_t vector_zero = {0, 0};
 
+
+struct vector_t *vector_clear(struct vector_t *vec) {
+    return vector_copy(vec, &vector_zero);
+}
 
 struct vector_t *vector_add(struct vector_t *const restrict dst, const struct vector_t *const restrict src) {
     dst->x += src->x;
@@ -39,10 +42,10 @@ float vector_product(const struct vector_t *const restrict vec1, const struct ve
 }
 
 float vector_length(const struct vector_t *const vec) {
-    return sqrtf(vector_length_squared(vec));
+    return sqrtf(vector_length2(vec));
 }
 
-float vector_length_squared(const struct vector_t *vec) {
+float vector_length2(const struct vector_t *vec) {
     return vector_product(vec, vec);
 }
 
@@ -68,9 +71,7 @@ struct vector_t *vector_normalize_weak(struct vector_t *const vec) {
         return vec;
     }
 
-    vec->x /= length;
-    vec->y /= length;
-    return vec;
+    return vector_div(vec, length);
 }
 
 float vector_distance(const struct vector_t *const restrict vec1, const struct vector_t *const restrict vec2) {
@@ -85,9 +86,7 @@ float vector_angle_to(const struct vector_t *const restrict vec1, const struct v
 }
 
 struct vector_t *vector_copy(struct vector_t *const restrict dst, const struct vector_t *const restrict src) {
-    dst->x = src->x;
-    dst->y = src->y;
-    return dst;
+    return memcpy(dst, src, sizeof *dst);
 }
 
 struct vector_t *vector_rotate(struct vector_t *const vec, const float angle) {
