@@ -6,6 +6,12 @@
 #include <string.h>
 #include <errno.h>
 
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
+#include <assert.h>
+
 
 #include "util.h"
 
@@ -42,13 +48,12 @@ private const char *const LOG_PREFIXV[] = {
  * @param fmt The format string.
  * @param ... The arguments to the format string.
  */
-#define logger_printf(level, fmt, ...)                                                          \
-    do {                                                                                        \
-        if(!(LOG_LEVEL >= LOG_LEVEL_NOLOG && LOG_LEVEL <= LOG_LEVEL_DEBUG)) {abort();}          \
-        if (LOG_LEVEL < (unsigned int) (level)) {break;};                                       \
-        fprintf(stderr, "%s:%d [%s] %s: ",                                                      \
-               basename(__FILE__), __LINE__, *(LOG_PREFIXV + (level)), __func__);                \
-        fprintf(stderr, (fmt), __VA_ARGS__);                                                    \
+#define logger_printf(level, fmt, ...)                                                              \
+    do {                                                                                            \
+        assert(LOG_LEVEL >= LOG_LEVEL_NOLOG && LOG_LEVEL <= LOG_LEVEL_DEBUG);                       \
+        if (LOG_LEVEL < (unsigned int) (level)) { break; };                                         \
+        assert(fprintf(stderr, "%s:%d [%s] %s: " fmt,                                               \
+               basename(__FILE__), __LINE__, *(LOG_PREFIXV + (level)), __func__, __VA_ARGS__) > 0); \
     } while (0)
 
 /**
