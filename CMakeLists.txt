@@ -42,6 +42,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wcomment \
                     -Wchar-subscripts \
                     -Wparentheses \
+                    -Wmissing-prototypes \
                     -Wpointer-arith")
 
 
