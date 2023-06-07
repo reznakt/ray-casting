@@ -29,7 +29,7 @@
         camera_update_angle(&game, CAMERA_HEADING);                                                     \
         struct ray_t rays[FOV_MAX * RESMULT_MAX];                                                       \
         game.camera->rays = rays;                                                                       \
-        game.textbuf = (char[TEXTBUFLEN]) {0};                                                          \
+        game.textbuf = stack_alloc(char, TEXTBUFLEN);                                                   \
         game.ceil_color = CEIL_COLOR;                                                                   \
         game.floor_color = FLOOR_COLOR;                                                                 \
 } while (0)
