@@ -56,7 +56,7 @@ private void render_3d(const struct game_t *const game) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
-        const struct ray_t *const ray = game->camera->rays + i;
+        const struct ray_t *const ray = &game->camera->rays[i];
 
         if (ray->intersection.wall == NULL) {
             continue;
@@ -192,7 +192,7 @@ void update(struct game_t *const game) {
         float min_dist = INFINITY;
 
         for (size_t j = 0; j < game->nwalls; j++) {
-            const struct wall_t *const wall = game->walls + j;
+            const struct wall_t *const wall = &game->walls[j];
             const struct vector_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
@@ -213,12 +213,12 @@ void update(struct game_t *const game) {
     }
 }
 
-void camera_set_resmult(struct game_t *const game, const size_t resmult) {
+private void camera_set_resmult(struct game_t *const game, const size_t resmult) {
     game->camera->resmult = (size_t) constrain((float) resmult, RESMULT_MIN, RESMULT_MAX);
     game->camera->nrays = game->camera->fov * game->camera->resmult;
 }
 
-void camera_set_fov(struct game_t *const game, const size_t fov) {
+private void camera_set_fov(struct game_t *const game, const size_t fov) {
     game->camera->fov = (size_t) constrain((float) fov, FOV_MIN, FOV_MAX);
     game->camera->nrays = game->camera->fov * game->camera->resmult;
 }
