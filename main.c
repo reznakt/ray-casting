@@ -15,7 +15,7 @@
 #include "util.h"
 
 
-int init(struct game_t *const game) {
+private int init(struct game_t *const game) {
     game->window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_UNDEFINED,
                                     SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
                                     SCREEN_FLAGS);
@@ -36,7 +36,7 @@ int init(struct game_t *const game) {
     return 0;
 }
 
-void cleanup(const struct game_t *const game) {
+private void cleanup(const struct game_t *const game) {
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);
 }
