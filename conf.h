@@ -15,6 +15,11 @@
 
 
 /**
+ * @brief Path to a file containing the world specification.
+ */
+#define WORLD_SPEC_FILE "../world.txt"
+
+/**
  * @brief Width of the window in pixels.
  */
 #define SCREEN_WIDTH 1920

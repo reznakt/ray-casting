@@ -8,7 +8,7 @@
 #include "vector.h"
 
 
-#define WORLD_NWALLS 100
+#define WORLD_NOBJECTS_MAX 100
 
 
 #define WALL_TYPE_SOLID (1 << 0)
@@ -27,15 +27,28 @@ struct wall_t {
     unsigned int type;
 };
 
+/**
+ * Represents an object in the game world.
+ */
+struct wobject_t {
+    enum unused {
+        WALL
+    } type; /**< type of the object. */
+    union {
+        struct wall_t wall;
+    } data; /**< data of the object. Depends on the type. */
+};
 
-extern const struct wall_t world_walls[WORLD_NWALLS];
 
 /**
- * Checks if all walls are valid.
- * @return True if all walls are valid, false otherwise.
- * @note if a wall is invalid, a message will be printed to stderr.
+ * @brief Parses the world specification.
+ * @param stream the stream to read the world specification from.
+ * @param objects pointer to an array of wobject_t structs to store the parsed objects, or NULL, if the objects should not be stored.
+ * @param nobjects pointer to a size_t variable to store the number of parsed objects, or NULL, if the number of objects should not be stored.
+ * @return 0 on success, -1 on error (objects and nobjects are not modified in this case).
+ * @see parse_record
  */
-bool check_walls(void);
+int load_world(const char *path, struct wobject_t *objects, size_t *nobjects);
 
 
 #endif // RAY_WORLD_H

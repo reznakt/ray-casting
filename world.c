@@ -2,7 +2,6 @@
 
 
 #include "vector.h"
-#include "conf.h"
 #include "util.h"
 #include "logger.h"
 
@@ -10,79 +9,190 @@
 #include "world.h"
 
 
-const struct wall_t world_walls[WORLD_NWALLS] = {
-        {
-                {0,   0},
-                {SCREEN_WIDTH - 1, 0},
-                COLOR_RED,
-                WALL_TYPE_SOLID
-        },
-        {
-                {SCREEN_WIDTH - 1, 0},
-                {SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1},
-                COLOR_GREEN,
-                WALL_TYPE_SOLID
-        },
-        {
-                {SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1},
-                {0,                SCREEN_HEIGHT - 1},
-                COLOR_BLUE,
-                WALL_TYPE_SOLID
-        },
-        {
-                {0,   0},
-                {0,                SCREEN_HEIGHT - 1},
-                COLOR_CYAN,
-                WALL_TYPE_NONSOLID
-        },
-        {
-                {100, 100},
-                {200,  100},
-                COLOR_BLUE,
-                WALL_TYPE_NONSOLID
-        },
-        {
-                {100, 100},
-                {100,  200},
-                COLOR_BLUE,
-                WALL_TYPE_NONSOLID
-        },
-        {
-                {200, 100},
-                {200,  200},
-                COLOR_MAGENTA,
-                WALL_TYPE_NONSOLID
-        },
-        {
-                {200, 200},
-                {100,  200},
-                COLOR_BLUE,
-                WALL_TYPE_NONSOLID
-        },
-        {
-                {500, 1000},
-                {1000, 800},
-                COLOR_YELLOW,
-                WALL_TYPE_NONSOLID
+/**
+ * Maximum number of columns in a record (line).
+ */
+#define PARSER_MAX_COLS 256
+
+
+#define parse_decimal(dst, src)                                                             \
+    do {                                                                                    \
+        if (!is_decimal(src)) {                                                             \
+            logger_printf(LOG_LEVEL_ERROR, "unexpected non-decimal token: '%s'\n", token);  \
+            return -1;                                                                      \
+        }                                                                                   \
+                                                                                            \
+        errno = 0;                                                                          \
+        *dst = (float) strtof(token, NULL);                                                 \
+                                                                                            \
+        if (errno != 0) {                                                                   \
+            logger_perror("strtof");                                                        \
+            return -1;                                                                      \
+        }                                                                                   \
+                                                                                            \
+    } while (0)
+
+
+/**
+ * @brief Parses a color string.
+ * @param colorstr a string containing a color in hexadecimal format (e.g. #ff0000 for red).
+ * @param dst pointer to a SDL_Color struct to store the parsed color, or NULL, if the color should not be stored.
+ * @return 0 on success, -1 on error (dst is not modified in this case).
+ */
+private int parse_color(const char *const colorstr, SDL_Color *const dst) {
+    if (strlen(colorstr) != 7 || *colorstr != '#') {
+        return -1;
+    }
+
+    const int r1 = hex_to_dec(colorstr[1]), r2 = hex_to_dec(colorstr[2]);
+    const int g1 = hex_to_dec(colorstr[3]), g2 = hex_to_dec(colorstr[4]);
+    const int b1 = hex_to_dec(colorstr[5]), b2 = hex_to_dec(colorstr[6]);
+
+    if (r1 == -1 || r2 == -1 || g1 == -1 || g2 == -1 || b1 == -1 || b2 == -1) {
+        return -1;
+    }
+
+    if (dst) {
+        dst->r = (Uint8) (r1 * 16 + r2);
+        dst->g = (Uint8) (g1 * 16 + g2);
+        dst->b = (Uint8) (b1 * 16 + b2);
+        dst->a = 255;
+    }
+
+    return 0;
+}
+
+
+/**
+ * @brief Parses a record (line) in the world specification.
+ * @param record the record to parse. Must be a null-terminated string with at most PARSER_MAX_COLS characters.
+ * @param dst pointer to a wobject_t struct to store the parsed object, or NULL, if the object should not be stored.
+ * @return 0 on success, -1 on error (dst is not modified in this case).
+ */
+private int parse_record(char *const restrict record, struct wobject_t *const dst) {
+    if (record == NULL) {
+        return -1;
+    }
+
+    char *const line = strncpy(stack_alloc(char, PARSER_MAX_COLS), record, PARSER_MAX_COLS);
+    const char *token;
+    size_t tokenno = 0;
+    struct wobject_t object = {0};
+
+    for (token = strtok(line, " "); token != NULL; token = strtok(NULL, " "), tokenno++) {
+        if (tokenno == 0) { /* type */
+            if (strcmp(token, "wall") == 0) {
+                object.type = WALL;
+                memset(&object.data.wall, 0, sizeof object.data.wall);
+                continue;
+            }
+
+            logger_printf(LOG_LEVEL_ERROR, "invalid object type: %s\n", token);
+            return -1;
         }
-};
 
-
-bool check_walls(void) {
-    for (size_t i = 0; i < WORLD_NWALLS; i++) {
-        if (world_walls[i].a.x < 0 || world_walls[i].a.x > SCREEN_WIDTH ||
-            world_walls[i].a.y < 0 || world_walls[i].a.y > SCREEN_HEIGHT ||
-            world_walls[i].b.x < 0 || world_walls[i].b.x > SCREEN_WIDTH ||
-            world_walls[i].b.y < 0 || world_walls[i].b.y > SCREEN_HEIGHT) {
-            logger_printf(LOG_LEVEL_ERROR, "wall %zu is out of bounds\n", i);
-            return false;
-        }
-
-        if (world_walls[i].type & WALL_TYPE_SOLID && world_walls[i].type & WALL_TYPE_NONSOLID) {
-            logger_printf(LOG_LEVEL_ERROR, "wall %zu is both solid and nonsolid\n", i);
-            return false;
+        switch (object.type) {
+            case WALL: {
+                switch (tokenno) {
+                    case 1:
+                        parse_decimal(&object.data.wall.a.x, token);
+                        break;
+                    case 2:
+                        parse_decimal(&object.data.wall.a.y, token);
+                        break;
+                    case 3:
+                        parse_decimal(&object.data.wall.b.x, token);
+                        break;
+                    case 4:
+                        parse_decimal(&object.data.wall.b.y, token);
+                        break;
+                    case 5:
+                        if (parse_color(token, &object.data.wall.color) != 0) {
+                            logger_printf(LOG_LEVEL_ERROR, "invalid color: %s\n", token);
+                            return -1;
+                        }
+                        break;
+                    case 6: /* wall type/material */
+                        if (strcmp(token, "solid") == 0) {
+                            object.data.wall.type = WALL_TYPE_SOLID;
+                            break;
+                        }
+                        if (strcmp(token, "nonsolid") == 0) {
+                            object.data.wall.type = WALL_TYPE_NONSOLID;
+                            break;
+                        }
+                        // TODO: add more wall types
+                        break;
+                    default:
+                        logger_printf(LOG_LEVEL_ERROR, "unexpected token '%s' starting at position %zu\n",
+                                      token, token - line + 1);
+                        return -1;
+                }
+                break;
+            }
         }
     }
 
-    return true;
+    if (dst != NULL) {
+        memcpy(dst, &object, sizeof object);
+    }
+
+    return 0;
+}
+
+
+int load_world(const char *const restrict path,
+               struct wobject_t *const restrict objects,
+               size_t *const restrict nobjects) {
+    if (path == NULL) {
+        return -1;
+    }
+
+    FILE *const stream = fopen(path, "r");
+
+    if (stream == NULL) {
+        logger_perror("fopen");
+        return -1;
+    }
+
+    if (nobjects != NULL) {
+        *nobjects = 0;
+    }
+
+    char line[PARSER_MAX_COLS] = {0};
+
+    for (int i = 0, ch = fgetc(stream); ch != EOF; ch = fgetc(stream), i++) {
+        if (i == sizeof line) {
+            logger_print(LOG_LEVEL_ERROR, "line too long");
+            fclose(stream);
+            return -1;
+        }
+
+        if (ch != '\n') {
+            line[i] = (char) ch;
+            continue;
+        }
+
+        if (is_whitespace(line)) {
+            goto next;
+        }
+
+        struct wobject_t object = {0};
+
+        if (parse_record(line, &object) != 0) {
+            fclose(stream);
+            return -1;
+        }
+
+        if (objects != NULL && nobjects != NULL) {
+            memcpy(&objects[(*nobjects)++], &object, sizeof object);
+        }
+
+        next:
+        i = -1;
+        memset(line, 0, sizeof line);
+    }
+
+    fclose(stream);
+    return 0;
 }

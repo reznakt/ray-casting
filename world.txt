@@ -1,0 +1,5 @@
+wall 100 100 200 100 #0000FF nonsolid
+wall 100 100 100 200 #0000FF nonsolid
+wall 200 100 200 200 #FF00FF nonsolid
+wall 200 200 100 200 #0000FF nonsolid
+wall 500 1000 1000 800 #FFFF00 nonsolid

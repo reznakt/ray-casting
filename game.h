@@ -5,19 +5,21 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <assert.h>
 
 
 #include <SDL2/SDL.h>
 
 
 #include "vector.h"
+#include "world.h"
+#include "util.h"
+#include "conf.h"
 
 
 #define game_init(game)                                                                                 \
     do {                                                                                                \
         game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};    \
-        game.walls = world_walls;                                                                       \
-        game.nwalls = WORLD_NWALLS;                                                                     \
         game.render_mode = RENDER_MODE_NORMAL;                                                          \
         struct camera_t camera;                                                                         \
         game.camera = &camera;                                                                          \
@@ -32,6 +34,8 @@
         game.textbuf = stack_alloc(char, TEXTBUFLEN);                                                   \
         game.ceil_color = CEIL_COLOR;                                                                   \
         game.floor_color = FLOOR_COLOR;                                                                 \
+        game.objects = stack_alloc(struct wobject_t, WORLD_NOBJECTS_MAX);                               \
+        assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);                         \
 } while (0)
 
 
@@ -59,11 +63,11 @@ struct game_t {
     SDL_Renderer *renderer; /**< The SDL renderer for the game. */
     SDL_Window *window; /**< The SDL window for the game. */
     struct camera_t *camera; /**< The camera used for rendering the game. */
-    const struct wall_t *walls; /**< The walls in the game world. */
+    struct wobject_t *objects; /**< The objects in the game world. */
     struct ivector_t mouse; /**< The current position of the mouse. */
     struct vector_t center; /**< The center of the game window. */
     char *textbuf; /**< The buffer used for rendering text to the game window. */
-    size_t nwalls; /**< The number of walls in the game world. */
+    size_t nobjects; /**< The number of objects in the game world. */
     uint64_t fps; /**< The current frames per second (FPS) of the game. */
     uint64_t frames; /**< The total number of frames rendered by the game. */
     uint64_t newframes; /**< The number of frames rendered by the game since the last polling event. */

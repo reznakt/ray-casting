@@ -26,8 +26,12 @@ private void set_color(const struct game_t *const game, const SDL_Color color) {
 }
 
 private void render_walls(const struct game_t *const game) {
-    for (size_t i = 0; i < game->nwalls; i++) {
-        const struct wall_t *const wall = game->walls + i;
+    for (size_t i = 0; i < game->nobjects; i++) {
+        if (game->objects[i].type != WALL) {
+            continue;
+        }
+
+        const struct wall_t *const wall = &game->objects[i].data.wall;
         SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
     }
 }
@@ -191,8 +195,12 @@ void update(struct game_t *const game) {
 
         float min_dist = INFINITY;
 
-        for (size_t j = 0; j < game->nwalls; j++) {
-            const struct wall_t *const wall = &game->walls[j];
+        for (size_t j = 0; j < game->nobjects; j++) {
+            if (game->objects[j].type != WALL) {
+                continue;
+            }
+
+            const struct wall_t *const wall = &game->objects[j].data.wall;
             const struct vector_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
