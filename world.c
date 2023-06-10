@@ -15,22 +15,45 @@
 #define PARSER_MAX_COLS 256
 
 
-#define parse_decimal(dst, src)                                                             \
-    do {                                                                                    \
-        if (!is_decimal(src)) {                                                             \
-            logger_printf(LOG_LEVEL_ERROR, "unexpected non-decimal token: '%s'\n", token);  \
-            return -1;                                                                      \
-        }                                                                                   \
-                                                                                            \
-        errno = 0;                                                                          \
-        *dst = (float) strtof(token, NULL);                                                 \
-                                                                                            \
-        if (errno != 0) {                                                                   \
-            logger_perror("strtof");                                                        \
-            return -1;                                                                      \
-        }                                                                                   \
-                                                                                            \
-    } while (0)
+#define parse_coord(dst, token)                                                     \
+do {                                                                                \
+    if (parse_coordinate((dst), (token)) != 0) {                                    \
+        logger_printf(LOG_LEVEL_ERROR, "unable to parse coordinate '%s'\n", token); \
+        return -1;                                                                  \
+    }                                                                               \
+} while (0)
+
+
+private int parse_coordinate(float *const restrict dst, const char *const restrict token) {
+    if (token == NULL) {
+        return -1;
+    }
+
+    float result;
+
+    if (strcmp(token, "WIDTH") == 0) {
+        result = SCREEN_WIDTH;
+    } else if (strcmp(token, "HEIGHT") == 0) {
+        result = SCREEN_HEIGHT;
+    } else if (is_decimal(token)) {
+        errno = 0;
+        result = (float) strtof(token, NULL);
+
+        if (errno != 0) {
+            logger_perror("strtof");
+            return -1;
+        }
+    } else {
+        logger_printf(LOG_LEVEL_ERROR, "unexpected non-decimal token: '%s'\n", token);
+        return -1;
+    }
+
+    if (dst != NULL) {
+        *dst = result;
+    }
+
+    return 0;
+}
 
 
 /**
@@ -94,19 +117,20 @@ private int parse_record(char *const restrict record, struct wobject_t *const ds
         switch (object.type) {
             case WALL: {
                 switch (tokenno) {
-                    case 1:
-                        parse_decimal(&object.data.wall.a.x, token);
+                    /* 1-4: wall coordinates */
+                    case 1: /* a.x */
+                        parse_coord(&object.data.wall.a.x, token);
                         break;
-                    case 2:
-                        parse_decimal(&object.data.wall.a.y, token);
+                    case 2:  /* a.y */
+                        parse_coord(&object.data.wall.a.y, token);
                         break;
-                    case 3:
-                        parse_decimal(&object.data.wall.b.x, token);
+                    case 3:  /* b.x */
+                        parse_coord(&object.data.wall.b.x, token);
                         break;
-                    case 4:
-                        parse_decimal(&object.data.wall.b.y, token);
+                    case 4:  /* b.y */
+                        parse_coord(&object.data.wall.b.y, token);
                         break;
-                    case 5:
+                    case 5:  /* wall color */
                         if (parse_color(token, &object.data.wall.color) != 0) {
                             logger_printf(LOG_LEVEL_ERROR, "invalid color: %s\n", token);
                             return -1;

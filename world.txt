@@ -1,3 +1,8 @@
+wall 0 0 WIDTH 0 #FF0000 solid
+wall 0 0 0 HEIGHT #00FFFF solid
+wall WIDTH 0 WIDTH HEIGHT #00FF00 solid
+wall 0 HEIGHT WIDTH HEIGHT #FFFFFF solid
+
 wall 100 100 200 100 #0000FF nonsolid
 wall 100 100 100 200 #0000FF nonsolid
 wall 200 100 200 200 #FF00FF nonsolid
