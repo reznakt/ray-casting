@@ -32,6 +32,7 @@ private void render_walls(const struct game_t *const game) {
         }
 
         const struct wall_t *const wall = &game->objects[i].data.wall;
+        SDL_SetRenderDrawColor(game->renderer, wall->color.r, wall->color.g, wall->color.b, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
     }
 }
