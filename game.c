@@ -39,10 +39,10 @@ private void render_walls(const struct game_t *const game) {
 
 private void render_hud(const struct game_t *const game) {
     render_printf(game, 10, 10,
-                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f",
+                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
                   game->camera->fov, game->camera->resmult, game->camera->nrays,
-                  (float) SCREEN_WIDTH / (float) game->camera->nrays);
+                  (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads);
 }
 
 private void render_rays(const struct game_t *const game) {
@@ -184,7 +184,7 @@ void update(struct game_t *const game) {
         }
     }
 
-#pragma omp parallel for default(none) shared(game) num_threads(min(3, THREADS_MAX))
+#pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
         struct intersection_t ray_int = {.wall = NULL};
@@ -269,6 +269,12 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     break;
                 case KEY_RESMULT_DEC:
                     camera_set_resmult(game, game->camera->resmult - 1);
+                    break;
+                case KEY_NTHREADS_INC:
+                    game->nthreads++;
+                    break;
+                case KEY_NTHREADS_DEC:
+                    game->nthreads = max(game->nthreads - 1, 1);
                     break;
                 case KEY_RESET:
                     game->camera->pos = game->center;

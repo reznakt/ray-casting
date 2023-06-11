@@ -36,6 +36,7 @@
         game.floor_color = FLOOR_COLOR;                                                                 \
         game.objects = stack_alloc(struct wobject_t, WORLD_NOBJECTS_MAX);                               \
         assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);                         \
+        game.nthreads = THREADS;                                                                        \
 } while (0)
 
 
@@ -68,6 +69,7 @@ struct game_t {
     struct vector_t center; /**< The center of the game window. */
     char *textbuf; /**< The buffer used for rendering text to the game window. */
     size_t nobjects; /**< The number of objects in the game world. */
+    size_t nthreads; /**< The number of threads to use for parallel computation. */
     uint64_t fps; /**< The current frames per second (FPS) of the game. */
     uint64_t frames; /**< The total number of frames rendered by the game. */
     uint64_t newframes; /**< The number of frames rendered by the game since the last polling event. */

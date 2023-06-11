@@ -13,11 +13,10 @@
 
 #include "util.h"
 
-
 /**
- * @brief Maximum number of threads to use for parallel computation.
+ * @brief The default number of threads to use for parallel computation.
  */
-#define THREADS_MAX 4
+#define THREADS 3
 
 /**
  * @brief Path to a file containing the world specification.
@@ -143,6 +142,8 @@
 #define KEY_FOV_DEC SDLK_KP_MINUS
 #define KEY_RESMULT_INC SDLK_INSERT
 #define KEY_RESMULT_DEC SDLK_DELETE
+#define KEY_NTHREADS_INC SDLK_PAGEUP
+#define KEY_NTHREADS_DEC SDLK_PAGEDOWN
 
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX
@@ -152,6 +153,10 @@
 // Check if the camera resolution multiplier is within the allowed range
 #if CAMERA_RESMULT < RESMULT_MIN || CAMERA_RESMULT > RESMULT_MAX
 #error CAMERA_RESMULT: illegal value
+#endif
+
+#if THREADS < 1
+#error THREADS: illegal value
 #endif
 
 
