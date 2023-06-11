@@ -9,15 +9,18 @@
 
 ## 🤔 About the project
 
-This project is a simple experiment with ray casting and C. It's not really a game, but rather a proof of concept. You can walk around and observe the environment, which consists of walls and an open sky. 
+This project is a simple experiment with ray casting and C. It's not really a game, but rather a proof of concept. You
+can walk around and observe the environment, which consists of walls and an open sky.
 
-I previously made something similar in Python, but it was quite slow (~100 fps), so I wanted to see how fast it could be in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun project indeed.
+I previously made something similar in Python, but it was quite slow (~100 fps), so I wanted to see how fast it could be
+in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun project indeed.
 
 ## 💻 Built with
 
 - C99
 - CMake
 - SDL2
+- OpenMP
 
 > ⚠️ *This project currently requires Clang*
 
@@ -31,7 +34,8 @@ To get a local copy up and running, follow these simple steps:
 
 ## 🎮 How to Play
 
-Currently, there are no game features per se. You can walk around and observe the environment. However, you can configure various parameters by modifying the header files:
+Currently, there are no game features per se. You can walk around and observe the environment. However, you can
+configure various parameters by modifying the header files:
 
 - Screen size
 - Field of view
@@ -40,13 +44,13 @@ Currently, there are no game features per se. You can walk around and observe th
 
 ## 📷 Screenshots
 
-|![image](https://github.com/reznakt/ray-casting/assets/56887011/b96d28c1-583f-4580-ab50-ed8af8d3f436)|
-|:--:| 
-| *Normal mode* |
+| ![image](https://github.com/reznakt/ray-casting/assets/56887011/b96d28c1-583f-4580-ab50-ed8af8d3f436) |
+|:-----------------------------------------------------------------------------------------------------:| 
+|                                             *Normal mode*                                             |
 
-|![image](https://github.com/reznakt/ray-casting/assets/56887011/41866d32-3a4d-4f0b-92db-74393efa8e9d)|
-|:--:| 
-| *Flat mode* |
+| ![image](https://github.com/reznakt/ray-casting/assets/56887011/41866d32-3a4d-4f0b-92db-74393efa8e9d) |
+|:-----------------------------------------------------------------------------------------------------:| 
+|                                              *Flat mode*                                              |
 
 ## 📝 License
 
@@ -54,5 +58,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## ❤️ Acknowledgements
 
-- [Lode Vandevenne](https://github.com/lvandeve) for the legendary [ray casting tutorial](http://lodev.org/cgtutor/raycasting.html).
+- [Lode Vandevenne](https://github.com/lvandeve) for the
+  legendary [ray casting tutorial](http://lodev.org/cgtutor/raycasting.html).
 
