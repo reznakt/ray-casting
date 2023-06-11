@@ -184,7 +184,7 @@ void update(struct game_t *const game) {
         }
     }
 
-
+#pragma omp parallel for default(none) shared(game) num_threads(min(3, THREADS_MAX))
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
         struct intersection_t ray_int = {.wall = NULL};

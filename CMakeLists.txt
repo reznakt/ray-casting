@@ -23,6 +23,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -funroll-loops \
                     -fomit-frame-pointer \
                     -fstrict-aliasing \
+                    -fopenmp \
                     -pedantic \
                     -pedantic-errors \
                     -Wall \

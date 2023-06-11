@@ -15,6 +15,11 @@
 
 
 /**
+ * @brief Maximum number of threads to use for parallel computation.
+ */
+#define THREADS_MAX 4
+
+/**
  * @brief Path to a file containing the world specification.
  */
 #define WORLD_SPEC_FILE "../world.dat"
