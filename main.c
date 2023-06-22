@@ -13,6 +13,7 @@
 #include "game.h"
 #include "logger.h"
 #include "util.h"
+#include "event.h"
 
 
 private int init(struct game_t *const game) {
