@@ -69,9 +69,6 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_SWITCH_MODE:
                     game->render_mode = game->render_mode == RENDER_MODE_NORMAL ? RENDER_MODE_FLAT : RENDER_MODE_NORMAL;
                     break;
-
-                default:
-                    break;
             }
             break;
 
@@ -104,9 +101,6 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
         case SDL_MOUSEMOTION:
             camera_update_angle(game,
                                 game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
-            break;
-
-        default:
             break;
     }
 
