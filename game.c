@@ -103,6 +103,23 @@ private void render_camera(const struct game_t *const game) {
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
 }
 
+private void render_visual_fps(struct game_t *const game) {
+    const float size = (float) game->fps / 5.0f;
+
+    const SDL_FRect rect = {
+            .x = SCREEN_WIDTH - 10,
+            .w = 10,
+            .y = SCREEN_HEIGHT - size,
+            .h = size
+    };
+
+    set_color(game, COLOR_WHITE);
+    SDL_RenderFillRectF(game->renderer, &rect);
+
+    set_color(game, COLOR_BLACK);
+    SDL_RenderDrawRectF(game->renderer, &rect);
+}
+
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0f);
     vector_from_angle(&game->camera->dir, radians(game->camera->angle));
@@ -139,6 +156,8 @@ void render(struct game_t *const game) {
             break;
 
     }
+
+    render_visual_fps(game);
 
     set_color(game, COLOR_WHITE);
     render_hud(game);
