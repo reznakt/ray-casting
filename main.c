@@ -14,6 +14,7 @@
 #include "logger.h"
 #include "util.h"
 #include "event.h"
+#include "ringbuffer.h"
 
 
 private int init(struct game_t *const game) {
@@ -43,6 +44,22 @@ private void cleanup(const struct game_t *const game) {
 }
 
 int main(int argc, char **argv) {
+    struct ringbuffer_t *const buffer = ringbuffer(10);
+
+    for (size_t i = 0; i < 10; i++) {
+        ringbuffer_push(buffer, (void *) i);
+    }
+
+    printf("size: %zu, capacity: %zu\n", ringbuffer_size(buffer), ringbuffer_capacity(buffer));
+    // test peek at
+    printf("peek at 0: %p\n", ringbuffer_peek_at(buffer, 0));
+    printf("peek at 1: %p\n", ringbuffer_peek_at(buffer, 1));
+    printf("peek at 2: %p\n", ringbuffer_peek_at(buffer, 2));
+    printf("peek at 3: %p\n", ringbuffer_peek_at(buffer, 3));
+    printf("peek at 4: %p\n", ringbuffer_peek_at(buffer, 4));
+
+
+    exit(0);
     bool profile = false;
 
     if (argc == 2 && (strcmp(argv[1], "--profile") == 0 || strcmp(argv[1], "-p") == 0)) {
