@@ -10,10 +10,10 @@
 #include "game.h"
 
 
-private void render_texture(struct game_t *const restrict game,
-                            const uint8_t texno,
-                            const SDL_Rect *restrict src,
-                            const SDL_FRect *const restrict dst) {
+unused private void render_texture(struct game_t *const restrict game,
+                                   const uint8_t texno,
+                                   const SDL_Rect *restrict src,
+                                   const SDL_FRect *const restrict dst) {
     if (src->x < 0 || src->x > TEXTURE_ATLAS_WIDTH
         || src->y < 0 || src->y > TEXTURE_ATLAS_WIDTH
         || src->w < 0 || src->w > TEXTURE_ATLAS_WIDTH
@@ -106,9 +106,7 @@ private void render_3d(struct game_t *const game) {
         change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
 
         SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-        //SDL_RenderFillRectF(game->renderer, &stripe);
-        //printf("%lf %lf %d %d\n", stripe.w, stripe.h, (int) stripe.w, (int) stripe.h);
-        render_texture(game, 0, &(SDL_Rect) {((int) i * (int) stripe.w) % 1, 0, (int) stripe.w, 64}, &stripe);
+        SDL_RenderFillRectF(game->renderer, &stripe);
     }
 }
 
