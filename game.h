@@ -63,6 +63,7 @@ struct camera_t {
 struct game_t {
     SDL_Renderer *renderer; /**< The SDL renderer for the game. */
     SDL_Window *window; /**< The SDL window for the game. */
+    SDL_Texture *texture; /**< The texture atlas for the game. */
     struct camera_t *camera; /**< The camera used for rendering the game. */
     struct wobject_t *objects; /**< The objects in the game world. */
     struct ivector_t mouse; /**< The current position of the mouse. */

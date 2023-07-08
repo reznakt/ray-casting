@@ -24,6 +24,21 @@
 #define WORLD_SPEC_FILE "../world.dat"
 
 /**
+ * @brief Path to a file containing the texture atlas.
+ */
+#define TEXTURE_ATLAS_FILE "../textures.png"
+
+/**
+ * @brief The size of one texture in the texture atlas.
+ */
+#define TEXTURE_SIZE 64
+
+/**
+ * @brief The number of textures in one row of the texture atlas.
+ */
+#define TEXTURE_ATLAS_WIDTH 6
+
+/**
  * @brief Width of the window in pixels.
  */
 #define SCREEN_WIDTH 1920
@@ -36,7 +51,7 @@
 /**
  * @brief Flags used for creating the window.
  */
-#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN)
+#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_VULKAN)
 
 /**
  * @brief Title of the window.

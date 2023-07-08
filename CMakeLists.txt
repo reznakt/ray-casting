@@ -56,6 +56,12 @@ if (NOT SDL2_GFX_LIBRARY)
     message(FATAL_ERROR " SDL2_gfx library not found ")
 endif ()
 
+find_library(SDL2_IMG_LIBRARY NAMES SDL2_image)
+
+if (NOT SDL2_IMG_LIBRARY)
+    message(FATAL_ERROR " SDL2_image library not found ")
+endif ()
+
 
 add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c util.c logger.c event.c)
 
@@ -63,4 +69,4 @@ add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} m)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)

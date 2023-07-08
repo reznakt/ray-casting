@@ -4,6 +4,7 @@
 
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 
 #include "vector.h"
@@ -54,6 +55,11 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
+    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+        logger_print(LOG_LEVEL_FATAL, "SDL_Image: unable to initialize IMG_INIT_PNG");
+        return EXIT_FAILURE;
+    }
+
     struct game_t game = {0};
     game_init(game);
 
@@ -72,6 +78,20 @@ int main(int argc, char **argv) {
 
 
     if (init(&game) != 0) {
+        return EXIT_FAILURE;
+    }
+
+    SDL_Surface *const surface = IMG_Load(TEXTURE_ATLAS_FILE);
+
+    if (surface == NULL) {
+        logger_printf(LOG_LEVEL_FATAL, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
+        return EXIT_FAILURE;
+    }
+
+    game.texture = SDL_CreateTextureFromSurface(game.renderer, surface);
+
+    if (game.texture == NULL) {
+        logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
         return EXIT_FAILURE;
     }
 
