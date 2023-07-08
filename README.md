@@ -27,16 +27,19 @@ in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun proje
 > 💡 On Debian-based systems, you can install all necessary dependencies with:
 
 ```shell
-sudo apt-get install -y clang cmake libsdl2-dev libsdl2-gfx-dev libomp-dev
+sudo apt-get install -y clang cmake libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
 ```
 
 ## 🚀 Getting Started
 
 To get a local copy up and running, follow these simple steps:
 
-1. Clone the repository: `git clone https://github.com/reznakt/ray-casting.git`
-2. Compile the code: `cd ray-casting && mkdir build && cd build && cmake .. && make`
-3. Run the executable: `./ray-casting`
+```shell
+git clone https://github.com/reznakt/ray-casting.git && cd ray-casting
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
 
 ## 🎮 How to Play
 
