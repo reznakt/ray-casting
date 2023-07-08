@@ -56,7 +56,7 @@
 /**
  * @brief Title of the window.
  */
-#define SCREEN_TITLE "RayCastingSDL"
+#define SCREEN_TITLE "ray-casting"
 
 /**
  * @brief Interval between input polling events in milliseconds.
