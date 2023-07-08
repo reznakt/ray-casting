@@ -51,7 +51,7 @@
 /**
  * @brief Flags used for creating the window.
  */
-#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_VULKAN)
+#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN)
 
 /**
  * @brief Title of the window.
