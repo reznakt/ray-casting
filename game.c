@@ -134,6 +134,8 @@ private void render_3d(struct game_t *const game) {
             const float min_dist2 = min(dist_a2, dist_b2);
 
             // vertical line; only at the adge of a wall
+            // this is a bad approximation, which works poorly in lower resolutions
+            // TODO: find a better threshold than strip.w
             if (min_dist2 <= stripe.w) {
                 SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
             }
