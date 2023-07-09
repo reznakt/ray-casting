@@ -161,6 +161,7 @@
 #define KEY_VIEW_1 SDLK_F1
 #define KEY_VIEW_2 SDLK_F2
 #define KEY_VIEW_3 SDLK_F3
+#define KEY_VIEW_4 SDLK_F4
 
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX

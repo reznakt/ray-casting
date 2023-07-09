@@ -20,7 +20,7 @@
 #define game_init(game)                                                                                 \
     do {                                                                                                \
         game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};    \
-        game.render_mode = RENDER_MODE_NORMAL;                                                          \
+        game.render_mode = RENDER_MODE_TEXTURED;                                                        \
         struct camera_t camera;                                                                         \
         game.camera = &camera;                                                                          \
         game.camera->fov = CAMERA_FOV;                                                                  \
@@ -78,7 +78,7 @@ struct game_t {
     SDL_Color ceil_color; /**< The color of the ceiling/sky. */
     SDL_Color floor_color; /**< The color of the floor/ground. */
     unused enum {
-        RENDER_MODE_NORMAL, RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME
+        RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED, RENDER_MODE_TEXTURED
     } render_mode; /**< The current render mode. */
 };
 

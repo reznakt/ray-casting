@@ -104,41 +104,42 @@ private void render_3d(struct game_t *const game) {
         SDL_Color color;
         memcpy(&color, &ray->intersection.wall->color, sizeof color);
 
-        if (game->render_mode == RENDER_MODE_NORMAL) {
+        if (game->render_mode != RENDER_MODE_WIREFRAME) {
             change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
         }
 
         SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
 
-        if (game->render_mode == RENDER_MODE_NORMAL) {
+        if (game->render_mode != RENDER_MODE_WIREFRAME) {
             SDL_RenderFillRectF(game->renderer, &stripe);
-        } else {
-            const float x = stripe.x + stripe.w, y = stripe.y + stripe.h;
+            continue;
+        }
 
-            // top horizontal line
-            SDL_RenderDrawLineF(game->renderer,
-                                stripe.x,
-                                stripe.y,
-                                x,
-                                stripe.y);
+        const float x = stripe.x + stripe.w, y = stripe.y + stripe.h;
 
-            // bottom horizontal line
-            SDL_RenderDrawLineF(game->renderer,
-                                stripe.x,
-                                y,
-                                x,
-                                y);
+        // top horizontal line
+        SDL_RenderDrawLineF(game->renderer,
+                            stripe.x,
+                            stripe.y,
+                            x,
+                            stripe.y);
 
-            const float dist_a2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->a);
-            const float dist_b2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->b);
-            const float min_dist2 = min(dist_a2, dist_b2);
+        // bottom horizontal line
+        SDL_RenderDrawLineF(game->renderer,
+                            stripe.x,
+                            y,
+                            x,
+                            y);
 
-            // vertical line; only at the adge of a wall
-            // this is a bad approximation, which works poorly in lower resolutions
-            // TODO: find a better threshold than strip.w
-            if (min_dist2 <= stripe.w) {
-                SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
-            }
+        const float dist_a2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->a);
+        const float dist_b2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->b);
+        const float min_dist2 = min(dist_a2, dist_b2);
+
+        // vertical line; only at the adge of a wall
+        // this is a bad approximation, which works poorly in lower resolutions
+        // TODO: find a better threshold than strip.w
+        if (min_dist2 <= stripe.w) {
+            SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
         }
     }
 }
@@ -184,13 +185,24 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 
 void render(struct game_t *const game) {
     switch (game->render_mode) {
+        case RENDER_MODE_FLAT:
+            set_color(game, COLOR_BLACK);
+            SDL_RenderClear(game->renderer);
+            set_color(game, COLOR_GREEN);
+            render_walls(game);
+            set_color(game, COLOR_WHITE);
+            render_rays(game);
+            render_camera(game);
+            break;
+
         case RENDER_MODE_WIREFRAME:
             set_color(game, game->floor_color);
             SDL_RenderClear(game->renderer);
             render_3d(game);
             break;
 
-        case RENDER_MODE_NORMAL:
+        case RENDER_MODE_UNTEXTURED:
+        case RENDER_MODE_TEXTURED:
             set_color(game, game->ceil_color);
             SDL_RenderClear(game->renderer);
 
@@ -207,17 +219,6 @@ void render(struct game_t *const game) {
 
             render_3d(game);
             break;
-
-        case RENDER_MODE_FLAT:
-            set_color(game, COLOR_BLACK);
-            SDL_RenderClear(game->renderer);
-            set_color(game, COLOR_GREEN);
-            render_walls(game);
-            set_color(game, COLOR_WHITE);
-            render_rays(game);
-            render_camera(game);
-            break;
-
     }
 
     render_visual_fps(game);
