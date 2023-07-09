@@ -10,6 +10,14 @@
 #include "game.h"
 
 
+/**
+ * @brief Renders a texture from the texture atlas to the screen.
+ *
+ * @param game A pointer to the game_t struct representing the game.
+ * @param texno The number of the texture to render (0-indexed, left-to-right, top-to-bottom).
+ * @param src The source rectangle of the texture to render.
+ * @param dst The destination rectangle at which to render the texture.
+ */
 unused private void render_texture(struct game_t *const restrict game,
                                    const uint8_t texno,
                                    const SDL_Rect *restrict src,
