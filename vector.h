@@ -253,6 +253,20 @@ struct vector_t *vector_normalize_weak(struct vector_t *vec);
 float vector_distance(const struct vector_t *vec1, const struct vector_t *vec2);
 
 /**
+ * @brief Computes squared the Euclidean distance between two vectors.
+ *
+ * This function computes the squared Euclidean distance between the vectors @p vec1 and @p vec2 in two-dimensional
+ * space using the formula (x2 - x1)^2 + (y2 - y1)^2, where (x1, y1) and (x2, y2) are the components
+ * of @p vec1 and @p vec2, respectively.
+ *
+ * @param vec1 Pointer to the first vector.
+ * @param vec2 Pointer to the second vector.
+ *
+ * @return The squared Euclidean distance between the vectors @p vec1 and @p vec2.
+ */
+float vector_distance2(const struct vector_t *vec1, const struct vector_t *vec2);
+
+/**
  * @brief Computes the angle between two vectors.
  *
  * This function computes the angle between the vectors @p vec1 and @p vec2 in two-dimensional

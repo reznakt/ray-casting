@@ -75,7 +75,11 @@ struct vector_t *vector_normalize_weak(struct vector_t *const vec) {
 }
 
 float vector_distance(const struct vector_t *const restrict vec1, const struct vector_t *const restrict vec2) {
-    return sqrtf(powf(vec2->x - vec1->x, 2) + powf(vec2->y - vec1->y, 2));
+    return sqrtf(vector_distance2(vec1, vec2));
+}
+
+float vector_distance2(const struct vector_t *const restrict vec1, const struct vector_t *const restrict vec2) {
+    return powf(vec2->x - vec1->x, 2) + powf(vec2->y - vec1->y, 2);
 }
 
 float vector_angle_to(const struct vector_t *const restrict vec1, const struct vector_t *const restrict vec2) {
