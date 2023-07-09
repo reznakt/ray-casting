@@ -44,7 +44,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wchar-subscripts \
                     -Wparentheses \
                     -Wmissing-prototypes \
-                    -Wpointer-arith")
+                    -Wpointer-arith \
+                    -Wno-keyword-macro")
 
 
 find_package(SDL2 REQUIRED)

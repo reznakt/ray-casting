@@ -9,8 +9,21 @@
 #include "conf.h"
 
 
+#ifdef __clang__
+#define typeof(x) __typeof__(x)
+#endif
+
+
 #define unused __attribute__((unused))
 #define private static
+
+
+#define swap(a, b)                      \
+    do {                                \
+        const typeof(a) _tmp = a;       \
+        a = b;                          \
+        b = _tmp;                       \
+    } while (0)                         \
 
 
 #define EAST 0
