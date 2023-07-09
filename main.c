@@ -89,11 +89,15 @@ int main(int argc, char **argv) {
     }
 
     game.texture = SDL_CreateTextureFromSurface(game.renderer, surface);
+    SDL_FreeSurface(surface);
 
     if (game.texture == NULL) {
         logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
         return EXIT_FAILURE;
     }
+
+    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n", TEXTURE_ATLAS_FILE, surface->w,
+                  surface->h);
 
     while (true) {
         if (profile && game.ticks >= 10000) {
