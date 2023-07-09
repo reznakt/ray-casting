@@ -164,9 +164,9 @@ private void render_visual_fps(struct game_t *const game) {
     const float size = (float) game->fps / 5.0f;
 
     const SDL_FRect rect = {
-            .x = SCREEN_WIDTH - 10,
-            .w = 10,
-            .y = SCREEN_HEIGHT - size,
+            .x = (float) SCREEN_WIDTH - 10.0f,
+            .w = 10.0f,
+            .y = (float) SCREEN_HEIGHT - size,
             .h = size
     };
 
