@@ -103,10 +103,41 @@ private void render_3d(struct game_t *const game) {
 
         SDL_Color color;
         memcpy(&color, &ray->intersection.wall->color, sizeof color);
-        change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
+
+        if (game->render_mode == RENDER_MODE_NORMAL) {
+            change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
+        }
 
         SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-        SDL_RenderFillRectF(game->renderer, &stripe);
+
+        if (game->render_mode == RENDER_MODE_NORMAL) {
+            SDL_RenderFillRectF(game->renderer, &stripe);
+        } else {
+            const float x = stripe.x + stripe.w, y = stripe.y + stripe.h;
+
+            // top horizontal line
+            SDL_RenderDrawLineF(game->renderer,
+                                stripe.x,
+                                stripe.y,
+                                x,
+                                stripe.y);
+
+            // bottom horizontal line
+            SDL_RenderDrawLineF(game->renderer,
+                                stripe.x,
+                                y,
+                                x,
+                                y);
+
+            const float dist_a2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->a);
+            const float dist_b2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->b);
+            const float min_dist2 = min(dist_a2, dist_b2);
+
+            // vertical line; only at the adge of a wall
+            if (min_dist2 <= stripe.w) {
+                SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
+            }
+        }
     }
 }
 
@@ -151,6 +182,12 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 
 void render(struct game_t *const game) {
     switch (game->render_mode) {
+        case RENDER_MODE_WIREFRAME:
+            set_color(game, game->floor_color);
+            SDL_RenderClear(game->renderer);
+            render_3d(game);
+            break;
+
         case RENDER_MODE_NORMAL:
             set_color(game, game->ceil_color);
             SDL_RenderClear(game->renderer);

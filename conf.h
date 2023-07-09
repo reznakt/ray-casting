@@ -160,6 +160,7 @@
 #define KEY_NTHREADS_DEC SDLK_PAGEDOWN
 #define KEY_VIEW_1 SDLK_F1
 #define KEY_VIEW_2 SDLK_F2
+#define KEY_VIEW_3 SDLK_F3
 
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX

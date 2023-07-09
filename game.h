@@ -78,7 +78,7 @@ struct game_t {
     SDL_Color ceil_color; /**< The color of the ceiling/sky. */
     SDL_Color floor_color; /**< The color of the floor/ground. */
     unused enum {
-        RENDER_MODE_NORMAL, RENDER_MODE_FLAT
+        RENDER_MODE_NORMAL, RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME
     } render_mode; /**< The current render mode. */
 };
 

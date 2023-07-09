@@ -72,6 +72,9 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_VIEW_2:
                     game->render_mode = RENDER_MODE_FLAT;
                     break;
+                case KEY_VIEW_3:
+                    game->render_mode = RENDER_MODE_WIREFRAME;
+                    break;
             }
             break;
 
