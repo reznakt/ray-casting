@@ -150,7 +150,6 @@
 #define KEY_CROUCH SDLK_RCTRL
 #define KEY_SPRINT SDLK_RSHIFT
 #define KEY_RESET SDLK_r
-#define KEY_SWITCH_MODE SDLK_TAB
 #define KEY_QUIT_1 SDLK_q
 #define KEY_QUIT_2 SDLK_ESCAPE
 #define KEY_FOV_INC SDLK_KP_PLUS
@@ -159,6 +158,8 @@
 #define KEY_RESMULT_DEC SDLK_DELETE
 #define KEY_NTHREADS_INC SDLK_PAGEUP
 #define KEY_NTHREADS_DEC SDLK_PAGEDOWN
+#define KEY_VIEW_1 SDLK_F1
+#define KEY_VIEW_2 SDLK_F2
 
 // Check if the camera field of view is within the allowed range
 #if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX

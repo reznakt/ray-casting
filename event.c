@@ -66,8 +66,11 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_QUIT_1:
                 case KEY_QUIT_2:
                     return false;
-                case KEY_SWITCH_MODE:
-                    game->render_mode = game->render_mode == RENDER_MODE_NORMAL ? RENDER_MODE_FLAT : RENDER_MODE_NORMAL;
+                case KEY_VIEW_1:
+                    game->render_mode = RENDER_MODE_NORMAL;
+                    break;
+                case KEY_VIEW_2:
+                    game->render_mode = RENDER_MODE_FLAT;
                     break;
             }
             break;
