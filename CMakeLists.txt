@@ -63,11 +63,15 @@ if (NOT SDL2_IMG_LIBRARY)
     message(FATAL_ERROR " SDL2_image library not found ")
 endif ()
 
+file(GLOB SOURCES "*.c")
+file(GLOB TEST_SOURCES "tests/*.c")
 
-add_executable(${PROJECT_NAME} main.c math.c vector.c world.c ray.c font.c game.c util.c logger.c event.c)
+add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(test ${TEST_SOURCES} "math.c" "vector.c")
 
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)
+target_link_libraries(test ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)
