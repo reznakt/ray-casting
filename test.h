@@ -80,8 +80,8 @@ do {                                                            \
 #define assert_leq(a, b) assert((a) <= (b))
 #define assert_geq(a, b) assert((a) >= (b))
 
-#define assert_is_close(a, b) assert(isclose((a), (b)))
-#define assert_not_close(a, b) assert(!isclose((a), (b)))
+#define assert_is_close(a, b) assert(fabsf((a) - (b)) <= 0.0001F)
+#define assert_not_close(a, b) assert(fabsf((a) - (b)) > 0.0001F)
 
 #define assert_null(ptr) assert((ptr) == NULL)
 #define assert_not_null(ptr) assert((ptr) != NULL)
