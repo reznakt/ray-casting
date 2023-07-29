@@ -140,8 +140,8 @@ private void render_3d(struct game_t *const game) {
                             x,
                             y);
 
-        const float dist_a2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->a);
-        const float dist_b2 = vector_distance2(&ray->intersection.pos, &ray->intersection.wall->b);
+        const float dist_a2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->a);
+        const float dist_b2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->b);
         const float min_dist2 = min(dist_a2, dist_b2);
 
         // vertical line; only at the adge of a wall
@@ -162,9 +162,9 @@ private void render_camera(const struct game_t *const game) {
 
     set_color(game, COLOR_GREEN);
 
-    const struct vector_t *const endpoint = vector_add(
-            vector_copy(vector(), &game->camera->pos),
-            vector_mul(vector_copy(vector(), &game->camera->dir), 100)
+    const struct vec_t *const endpoint = vadd(
+            vcopy(vector(), &game->camera->pos),
+            vmul(vcopy(vector(), &game->camera->dir), 100)
     );
 
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
@@ -189,7 +189,7 @@ private void render_visual_fps(struct game_t *const game) {
 
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0F);
-    vector_from_angle(&game->camera->dir, radians(game->camera->angle));
+    vfromangle(&game->camera->dir, radians(game->camera->angle));
 }
 
 void render(struct game_t *const game) {
@@ -250,24 +250,24 @@ void update(struct game_t *const game) {
         game->newframes = 0;
     }
 
-    struct vector_t *const dirvect = vector_mul(vector_copy(vector(), &game->camera->dir),
-                                                speed_coeff(game, game->camera->speed));
+    struct vec_t *const dirvect = vmul(vcopy(vector(), &game->camera->dir),
+                                       speed_coeff(game, game->camera->speed));
 
     if (game->camera->movement.forward ^ game->camera->movement.backward) {
         if (game->camera->movement.forward) { /* forward */
-            vector_add(&game->camera->pos, dirvect);
+            vadd(&game->camera->pos, dirvect);
         } else { /* backward */
-            vector_sub(&game->camera->pos, dirvect);
+            vsub(&game->camera->pos, dirvect);
         }
     }
 
     if (game->camera->movement.left ^ game->camera->movement.right) {
-        vector_rotate(dirvect, radians(90));
+        vrotate(dirvect, radians(90));
 
         if (game->camera->movement.left) { /* left */
-            vector_sub(&game->camera->pos, dirvect);
+            vsub(&game->camera->pos, dirvect);
         } else { /* right */
-            vector_add(&game->camera->pos, dirvect);
+            vadd(&game->camera->pos, dirvect);
         }
     }
 
@@ -276,8 +276,8 @@ void update(struct game_t *const game) {
         struct ray_t ray;
         struct intersection_t ray_int = {.wall = NULL};
 
-        ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vector_from_angle(vector(), radians(
+        ray.pos = (struct vec_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
+        ray.dir = *vfromangle(vector(), radians(
                 (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0F)
         );
 
@@ -289,13 +289,13 @@ void update(struct game_t *const game) {
             }
 
             const struct wall_t *const wall = &game->objects[j].data.wall;
-            const struct vector_t *const intersection = ray_intersection(&ray, wall, vector());
+            const struct vec_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
                 continue;
             }
 
-            const float dist = vector_distance(&ray.pos, intersection);
+            const float dist = vdist(&ray.pos, intersection);
 
             if (dist < min_dist) {
                 ray_int.pos = *intersection;

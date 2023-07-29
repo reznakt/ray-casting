@@ -21,8 +21,8 @@
 
 
 struct wall_t {
-    struct vector_t a;
-    struct vector_t b;
+    struct vec_t a;
+    struct vec_t b;
     SDL_Color color;
     unsigned int type;
 };

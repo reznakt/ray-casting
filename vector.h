@@ -2,7 +2,7 @@
  * @file vector.h
  * @brief Contains functions for working with 2D vectors and lines.
  *
- * This file defines the `struct vector_t` and `struct ivector_t` structs, which represent 2D vectors
+ * This file defines the `struct vec_t` and `struct ivector_t` structs, which represent 2D vectors
  * with `float` and `long` components, respectively. It also defines the `struct line_t` and `struct iline_t`
  * structs, which represent lines defined by two points.
  *
@@ -22,15 +22,15 @@
 
 
 /**
- * Create a new struct vector_t on the stack.
+ * Create a new struct vec_t on the stack.
  */
-#define vector() stack_alloc(struct vector_t, 1)
+#define vector() stack_alloc(struct vec_t, 1)
 
 
 /**
  * A 2D vector with `x` and `y` coordinates.
  */
-struct vector_t {
+struct vec_t {
     float x; /**< The x-coordinate of the vector. */
     float y; /**< The y-coordinate of the vector. */
 };
@@ -39,16 +39,16 @@ struct vector_t {
 /**
  * Constant zero vector.
  */
-extern const struct vector_t vector_zero;
+extern const struct vec_t vzero;
 
 
 /**
  * @brief Clears the vector @p vec, i.e. sets it to the zero vector.
  * @param vec Pointer to the vector to clear.
  * @return Pointer to the zero vector @p vec.
- * @see vector_zero
+ * @see vzero
  */
-struct vector_t *vector_clear(struct vector_t *vec);
+struct vec_t *vclear(struct vec_t *vec);
 
 
 /**
@@ -64,7 +64,7 @@ struct vector_t *vector_clear(struct vector_t *vec);
  *
  * @note This function modifies the vector pointed to by @p dst.
  */
-struct vector_t *vector_add(struct vector_t *dst, const struct vector_t *src);
+struct vec_t *vadd(struct vec_t *dst, const struct vec_t *src);
 
 /**
  * @brief Subtracts the vector @p src from the vector @p dst.
@@ -79,7 +79,7 @@ struct vector_t *vector_add(struct vector_t *dst, const struct vector_t *src);
  *
  * @note This function modifies the vector pointed to by @p dst.
  */
-struct vector_t *vector_sub(struct vector_t *dst, const struct vector_t *src);
+struct vec_t *vsub(struct vec_t *dst, const struct vec_t *src);
 
 /**
  * @brief Multiplies the vector @p vec by the scalar @p x.
@@ -92,7 +92,7 @@ struct vector_t *vector_sub(struct vector_t *dst, const struct vector_t *src);
  *
  * @return Pointer to the resulting vector @p vec.
  */
-struct vector_t *vector_mul(struct vector_t *vec, float x);
+struct vec_t *vmul(struct vec_t *vec, float x);
 
 /**
  * @brief Divides the vector @p vec by the scalar @p x.
@@ -108,7 +108,7 @@ struct vector_t *vector_mul(struct vector_t *vec, float x);
  * @note Division by zero is not checked in this function. Ensure that @p x is not zero
  *       to avoid unexpected results.
  */
-struct vector_t *vector_div(struct vector_t *vec, float x);
+struct vec_t *vdiv(struct vec_t *vec, float x);
 
 /**
  * @brief Computes the dot product of the vectors @p vec1 and @p vec2.
@@ -122,7 +122,7 @@ struct vector_t *vector_div(struct vector_t *vec, float x);
  *
  * @return The dot product of the vectors @p vec1 and @p vec2.
  */
-float vector_product(const struct vector_t *vec1, const struct vector_t *vec2);
+float vprod(const struct vec_t *vec1, const struct vec_t *vec2);
 
 /**
  * @brief Computes the magnitude of the vector @p vec.
@@ -134,7 +134,7 @@ float vector_product(const struct vector_t *vec1, const struct vector_t *vec2);
  *
  * @return The magnitude of the vector @p vec.
  */
-float vector_length(const struct vector_t *vec);
+float vlen(const struct vec_t *vec);
 
 /**
  * @brief Computes the squared magnitude of the vector @p vec.
@@ -146,7 +146,7 @@ float vector_length(const struct vector_t *vec);
  *
  * @return The squared magnitude of the vector @p vec.
  */
-float vector_length2(const struct vector_t *vec);
+float vlen2(const struct vec_t *vec);
 
 /**
  * @brief Computes the vector with magnitude 1 and angle @p angle, and stores the result in @p dst.
@@ -160,7 +160,7 @@ float vector_length2(const struct vector_t *vec);
  *
  * @return A pointer to the resulting vector, which is also stored in @p dst.
  */
-struct vector_t *vector_from_angle(struct vector_t *dst, float angle);
+struct vec_t *vfromangle(struct vec_t *dst, float angle);
 
 /**
  * @brief Computes the unit vector in the direction of the vector @p vec, and stores the result in @p vec.
@@ -174,7 +174,7 @@ struct vector_t *vector_from_angle(struct vector_t *dst, float angle);
  *
  * @note The input vector @p vec may not have zero length.
  */
-struct vector_t *vector_normalize(struct vector_t *vec);
+struct vec_t *vnorm(struct vec_t *vec);
 
 /**
  * @brief Computes the unit vector in the direction of the vector @p vec, and stores the result in @p vec.
@@ -187,7 +187,7 @@ struct vector_t *vector_normalize(struct vector_t *vec);
  *
  * @return A pointer to the resulting vector, which is also stored in @p vec.
  */
-struct vector_t *vector_normalize_weak(struct vector_t *vec);
+struct vec_t *vnorm_weak(struct vec_t *vec);
 
 /**
  * @brief Computes the Euclidean distance between two vectors.
@@ -201,7 +201,7 @@ struct vector_t *vector_normalize_weak(struct vector_t *vec);
  *
  * @return The Euclidean distance between the vectors @p vec1 and @p vec2.
  */
-float vector_distance(const struct vector_t *vec1, const struct vector_t *vec2);
+float vdist(const struct vec_t *vec1, const struct vec_t *vec2);
 
 /**
  * @brief Computes squared the Euclidean distance between two vectors.
@@ -215,7 +215,7 @@ float vector_distance(const struct vector_t *vec1, const struct vector_t *vec2);
  *
  * @return The squared Euclidean distance between the vectors @p vec1 and @p vec2.
  */
-float vector_distance2(const struct vector_t *vec1, const struct vector_t *vec2);
+float vdist2(const struct vec_t *vec1, const struct vec_t *vec2);
 
 /**
  * @brief Computes the angle between two vectors.
@@ -233,7 +233,7 @@ float vector_distance2(const struct vector_t *vec1, const struct vector_t *vec2)
  *
  * @note The input vector @p vec may not have zero length.
  */
-float vector_angle_to(const struct vector_t *vec1, const struct vector_t *vec2);
+float vangle(const struct vec_t *vec1, const struct vec_t *vec2);
 
 /**
  * @brief Copies a vector.
@@ -246,7 +246,7 @@ float vector_angle_to(const struct vector_t *vec1, const struct vector_t *vec2);
  *
  * @return Pointer to the destination vector @p dst.
  */
-struct vector_t *vector_copy(struct vector_t *dst, const struct vector_t *src);
+struct vec_t *vcopy(struct vec_t *dst, const struct vec_t *src);
 
 /**
  * @brief Rotates a vector by a given angle.
@@ -258,7 +258,7 @@ struct vector_t *vector_copy(struct vector_t *dst, const struct vector_t *src);
  *
  * @return Pointer to the rotated vector @p vec.
  */
-struct vector_t *vector_rotate(struct vector_t *vec, float angle);
+struct vec_t *vrotate(struct vec_t *vec, float angle);
 
 /**
  * @brief Linearly interpolate between two vectors.
@@ -273,7 +273,7 @@ struct vector_t *vector_rotate(struct vector_t *vec, float angle);
  *
  * @note        If t is outside the range [0, 1], the result will be extrapolated beyond the range of src and dst.
  */
-struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, float t);
+struct vec_t *vlerp(struct vec_t *dst, const struct vec_t *src, float t);
 
 /**
  * @brief Scale a vector to a specified length while preserving its direction.
@@ -282,16 +282,16 @@ struct vector_t *vector_lerp(struct vector_t *dst, const struct vector_t *src, f
  * @param length The desired length of the scaled vector.
  * @return A pointer to the scaled vector.
  *
- * This function first normalizes the input vector by calling `vector_normalize_weak()`,
- * and then multiplies each component of the vector by the specified length using `vector_mul()`.
+ * This function first normalizes the input vector by calling `vnorm_weak()`,
+ * and then multiplies each component of the vector by the specified length using `vmul()`.
  * The resulting vector has the same direction as the input vector but with a magnitude equal to `length`.
  *
  * @note This function modifies the input vector in place.
  *
- * @see vector_normalize_weak()
- * @see vector_mul()
+ * @see vnorm_weak()
+ * @see vmul()
  */
-struct vector_t *vector_scale(struct vector_t *vec, float length);
+struct vec_t *vscale(struct vec_t *vec, float length);
 
 /**
  * Reflects a vector off a plane defined by a normal vector.
@@ -300,7 +300,7 @@ struct vector_t *vector_scale(struct vector_t *vec, float length);
  * @param normal The normal vector defining the plane to reflect off.
  * @return The reflected vector.
  */
-struct vector_t *vector_reflect(struct vector_t *vec, const struct vector_t *normal);
+struct vec_t *vreflect(struct vec_t *vec, const struct vec_t *normal);
 
 /**
  * Projects a vector onto a plane defined by a normal vector.
@@ -309,7 +309,7 @@ struct vector_t *vector_reflect(struct vector_t *vec, const struct vector_t *nor
  * @param vec The vector to project.
  * @return The projected vector.
  */
-struct vector_t *vector_project(struct vector_t *normal, const struct vector_t *vec);
+struct vec_t *vproject(struct vec_t *normal, const struct vec_t *vec);
 
 
 #endif // RAY_VECTOR_H

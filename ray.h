@@ -27,7 +27,7 @@
  * The fields `wall` and `ray` are NULL if there is no intersection.
  */
 struct intersection_t {
-    struct vector_t pos;
+    struct vec_t pos;
     float dist;
     const struct wall_t *wall;
 };
@@ -46,8 +46,8 @@ struct intersection_t {
  * fields will be undefined.
  */
 struct ray_t {
-    struct vector_t pos;
-    struct vector_t dir;
+    struct vec_t pos;
+    struct vec_t dir;
     struct intersection_t intersection;
 };
 
@@ -61,7 +61,7 @@ struct ray_t {
  *
  * @return A pointer to the resulting intersection point, or NULL if there is no intersection.
  */
-struct vector_t *ray_intersection(const struct ray_t *ray, const struct wall_t *wall, struct vector_t *dst);
+struct vec_t *ray_intersection(const struct ray_t *ray, const struct wall_t *wall, struct vec_t *dst);
 
 
 #endif // RAY_RAY_H

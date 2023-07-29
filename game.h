@@ -19,7 +19,7 @@
 
 #define game_init(game)                                                                                 \
     do {                                                                                                \
-        game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};    \
+        game.center = (struct vec_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};    \
         game.render_mode = RENDER_MODE_TEXTURED;                                                        \
         struct camera_t camera;                                                                         \
         game.camera = &camera;                                                                          \
@@ -44,8 +44,8 @@
  * @brief Structure representing a camera in the game.
  */
 struct camera_t {
-    struct vector_t pos; /**< Position of the camera. */
-    struct vector_t dir; /**< Direction the camera is facing. */
+    struct vec_t pos; /**< Position of the camera. */
+    struct vec_t dir; /**< Direction the camera is facing. */
     struct ray_t *rays; /**< Array of rays cast from the camera. */
     struct {
         bool forward, backward, left, right, crouch; /**< Boolean flags indicating which movement keys are pressed. */
@@ -66,7 +66,7 @@ struct game_t {
     SDL_Texture *texture; /**< The texture atlas for the game. */
     struct camera_t *camera; /**< The camera used for rendering the game. */
     struct wobject_t *objects; /**< The objects in the game world. */
-    struct vector_t center; /**< The center of the game window. */
+    struct vec_t center; /**< The center of the game window. */
     char *textbuf; /**< The buffer used for rendering text to the game window. */
     size_t nobjects; /**< The number of objects in the game world. */
     size_t nthreads; /**< The number of threads to use for parallel computation. */
