@@ -9,7 +9,7 @@
 #include "test.h"
 
 
-unused private float rand_float(void) {
+private float randf(void) {
     return (float) rand() / (float) RAND_MAX;
 }
 
@@ -234,8 +234,8 @@ TEST(test_vector_zero, {
 
 TEST(test_vector_clear_rand, {
     struct vector_t vec;
-    vec.x = rand_float();
-    vec.y = rand_float();
+    vec.x = randf();
+    vec.y = randf();
 
     assert_equals(vector_clear(&vec), &vec);
     assert_equals(vec.x, 0.0F);
@@ -246,10 +246,10 @@ TEST(test_vector_add_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
-    const float x1 = rand_float();
-    const float y1 = rand_float();
-    const float x2 = rand_float();
-    const float y2 = rand_float();
+    const float x1 = randf();
+    const float y1 = randf();
+    const float x2 = randf();
+    const float y2 = randf();
 
     vec1.x = x1;
     vec1.y = y1;
@@ -269,10 +269,10 @@ TEST(test_vector_sub_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
-    const float x1 = rand_float();
-    const float y1 = rand_float();
-    const float x2 = rand_float();
-    const float y2 = rand_float();
+    const float x1 = randf();
+    const float y1 = randf();
+    const float x2 = randf();
+    const float y2 = randf();
 
     vec1.x = x1;
     vec1.y = y1;
@@ -291,9 +291,9 @@ TEST(test_vector_sub_rand, {
 TEST(test_vector_mul_rand, {
     struct vector_t vec;
 
-    const float x = rand_float();
-    const float y = rand_float();
-    const float m = rand_float();
+    const float x = randf();
+    const float y = randf();
+    const float m = randf();
 
     vec.x = x;
     vec.y = y;
@@ -307,9 +307,9 @@ TEST(test_vector_mul_rand, {
 TEST(test_vector_div_rand, {
     struct vector_t vec;
 
-    const float x = rand_float();
-    const float y = rand_float();
-    const float d = rand_float();
+    const float x = randf();
+    const float y = randf();
+    const float d = randf();
 
     vec.x = x;
     vec.y = y;
@@ -324,10 +324,10 @@ TEST(test_vector_product_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
-    const float x1 = rand_float();
-    const float y1 = rand_float();
-    const float x2 = rand_float();
-    const float y2 = rand_float();
+    const float x1 = randf();
+    const float y1 = randf();
+    const float x2 = randf();
+    const float y2 = randf();
 
     vec1.x = x1;
     vec1.y = y1;
@@ -345,8 +345,8 @@ TEST(test_vector_product_rand, {
 TEST(test_vector_length_rand, {
     struct vector_t vec;
 
-    const float x = rand_float();
-    const float y = rand_float();
+    const float x = randf();
+    const float y = randf();
 
     vec.x = x;
     vec.y = y;
@@ -372,8 +372,8 @@ TEST(test_vector_length_rand, {
 TEST(test_vector_length2_rand, {
     struct vector_t vec;
 
-    const float x = rand_float();
-    const float y = rand_float();
+    const float x = randf();
+    const float y = randf();
 
     vec.x = x;
     vec.y = y;
@@ -423,8 +423,8 @@ TEST(test_vector_from_angle, {
 TEST(test_vector_normalize_rand, {
     struct vector_t vec;
 
-    const float x = rand_float();
-    const float y = rand_float();
+    const float x = randf();
+    const float y = randf();
 
     vec.x = x == 0.0F ? 1.0F : x; // avoid division by zero
     vec.y = y == 0.0F ? 1.0F : y;
@@ -450,8 +450,8 @@ TEST(test_vector_normalize_weak_rand, {
     assert_is_close(vec.y, 0.0F);
     assert_is_close(vector_length(&vec), 0.0F);
 
-    const float x = rand_float();
-    const float y = rand_float();
+    const float x = randf();
+    const float y = randf();
 
     vec.x = x;
     vec.y = y;
@@ -619,8 +619,8 @@ TEST(test_vector_copy_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
-    vec1.x = rand_float();
-    vec1.y = rand_float();
+    vec1.x = randf();
+    vec1.y = randf();
 
     assert_equals(vector_copy(&vec2, &vec1), &vec2);
 
