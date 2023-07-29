@@ -121,12 +121,12 @@
 /**
  * @brief The difference in height between standing and crouching.
  */
-#define CAMERA_CROUCH_HEIGHT_DELTA (SCREEN_HEIGHT / 10.0f)
+#define CAMERA_CROUCH_HEIGHT_DELTA (SCREEN_HEIGHT / 10.0F)
 
 /**
  * @brief Default orientation of the camera.
  */
-#define CAMERA_HEADING NORTH
+#define CAMERA_HEADING 270 // north
 
 /**
  * @brief Size of the walls in the game world.

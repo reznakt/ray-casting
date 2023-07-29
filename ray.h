@@ -30,7 +30,6 @@ struct intersection_t {
     struct vector_t pos;
     float dist;
     const struct wall_t *wall;
-    const struct ray_t *ray;
 };
 
 /**

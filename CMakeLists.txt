@@ -45,6 +45,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wparentheses \
                     -Wmissing-prototypes \
                     -Wpointer-arith \
+                    -Wno-unknown-pragmas \
                     -Wno-keyword-macro")
 
 

@@ -19,7 +19,7 @@
 
 #define game_init(game)                                                                                 \
     do {                                                                                                \
-        game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0f, (float) SCREEN_HEIGHT / 2.0f};    \
+        game.center = (struct vector_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};    \
         game.render_mode = RENDER_MODE_TEXTURED;                                                        \
         struct camera_t camera;                                                                         \
         game.camera = &camera;                                                                          \

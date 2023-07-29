@@ -39,10 +39,10 @@ bool isclose(const float a, const float b) {
 }
 
 float degrees(const float angle) {
-    return angle * 180.0f / (float) M_PI;
+    return angle * 180.0F / (float) M_PI;
 }
 
 float radians(const float angle) {
-    return angle * (float) M_PI / 180.0f;
+    return angle * (float) M_PI / 180.0F;
 }
 

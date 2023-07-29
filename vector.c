@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <math.h>
 
 #include "math.h"
@@ -49,9 +48,6 @@ float vector_length2(const struct vector_t *vec) {
     return vector_product(vec, vec);
 }
 
-void print_vector(const struct vector_t *const vec) {
-    printf("(%f, %f)\n", vec->x, vec->y);
-}
 
 struct vector_t *vector_from_angle(struct vector_t *const dst, const float angle) {
     dst->x = cosf(angle);
@@ -121,7 +117,7 @@ struct vector_t *vector_scale(struct vector_t *const vec, const float length) {
 
 struct vector_t *vector_reflect(struct vector_t *const restrict vec, const struct vector_t *const restrict normal) {
     struct vector_t *const ncopy = vector_copy(vector(), normal);
-    return vector_sub(vec, vector_scale(ncopy, 2.0f * vector_product(vec, normal)));
+    return vector_sub(vec, vector_scale(ncopy, 2.0F * vector_product(vec, normal)));
 }
 
 struct vector_t *vector_project(struct vector_t *const restrict normal, const struct vector_t *const restrict vec) {

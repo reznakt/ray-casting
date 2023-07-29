@@ -99,12 +99,12 @@ private void render_3d(struct game_t *const game) {
             continue;
         }
 
-        const float height = map(1.0f / ray->intersection.dist, 0.0f, 0.005f, 0.0f, (float) WALL_SIZE);
+        const float height = map(1.0F / ray->intersection.dist, 0.0F, 0.005F, 0.0F, (float) WALL_SIZE);
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
-                .y = game->center.y - height / 2.0f
-                     - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f),
+                .y = game->center.y - height / 2.0F
+                     - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
                 .h = height,
                 .w = width
         };
@@ -113,7 +113,7 @@ private void render_3d(struct game_t *const game) {
         memcpy(&color, &ray->intersection.wall->color, sizeof color);
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            change_brightness(&color, map(1.0f / powf(ray->intersection.dist, 2.0f), 0.0f, 0.00001f, 0.0f, 1.0f));
+            change_brightness(&color, map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F));
         }
 
         SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
@@ -123,7 +123,8 @@ private void render_3d(struct game_t *const game) {
             continue;
         }
 
-        const float x = stripe.x + stripe.w, y = stripe.y + stripe.h;
+        const float x = stripe.x + stripe.w;
+        const float y = stripe.y + stripe.h;
 
         // top horizontal line
         SDL_RenderDrawLineF(game->renderer,
@@ -170,11 +171,11 @@ private void render_camera(const struct game_t *const game) {
 }
 
 private void render_visual_fps(struct game_t *const game) {
-    const float size = (float) game->fps / 5.0f;
+    const float size = (float) game->fps / 5.0F;
 
     const SDL_FRect rect = {
-            .x = (float) SCREEN_WIDTH - 10.0f,
-            .w = 10.0f,
+            .x = (float) SCREEN_WIDTH - 10.0F,
+            .w = 10.0F,
             .y = (float) SCREEN_HEIGHT - size,
             .h = size
     };
@@ -187,7 +188,7 @@ private void render_visual_fps(struct game_t *const game) {
 }
 
 void camera_update_angle(struct game_t *const game, const float angle) {
-    game->camera->angle = fmodf(angle, 360.0f);
+    game->camera->angle = fmodf(angle, 360.0F);
     vector_from_angle(&game->camera->dir, radians(game->camera->angle));
 }
 
@@ -218,9 +219,9 @@ void render(struct game_t *const game) {
 
             const SDL_FRect floor = {
                     .x = 0,
-                    .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f),
+                    .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
                     .w = SCREEN_WIDTH,
-                    .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0f)
+                    .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F)
             };
 
             SDL_RenderFillRectF(game->renderer, &floor);
@@ -249,7 +250,9 @@ void update(struct game_t *const game) {
         game->newframes = 0;
     }
 
-    int mouseX, mouseY;
+    int mouseX;
+    int mouseY;
+
     SDL_GetMouseState(&mouseX, &mouseY);
     game->mouse.x = (long) mouseX;
     game->mouse.y = (long) mouseY;
@@ -282,7 +285,7 @@ void update(struct game_t *const game) {
 
         ray.pos = (struct vector_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
         ray.dir = *vector_from_angle(vector(), radians(
-                (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0f)
+                (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0F)
         );
 
         float min_dist = INFINITY;

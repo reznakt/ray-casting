@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     __cleanup:
     if (profile) {
         printf("ticks: %zu, frames: %zu, avg fps: %f\n",
-               game.ticks, game.frames, (float) game.frames / (float) game.ticks * 1000.0f);
+               game.ticks, game.frames, (float) game.frames / (float) game.ticks * 1000.0F);
     }
     cleanup(&game);
     SDL_Quit();

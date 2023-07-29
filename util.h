@@ -9,27 +9,9 @@
 #include "conf.h"
 
 
-#ifdef __clang__
-#define typeof(x) __typeof__(x)
-#endif
-
-
 #define unused __attribute__((__unused__))
 #define private static
 
-
-#define swap(a, b)                      \
-    do {                                \
-        const typeof(a) _tmp = a;       \
-        a = b;                          \
-        b = _tmp;                       \
-    } while (0)                         \
-
-
-#define EAST 0
-#define SOUTH 90
-#define WEST 180
-#define NORTH 270
 
 #define rgba(r, g, b, a) (SDL_Color) {(r), (g), (b), (a)}
 #define rgb(r, g, b) rgba((r), (g), (b), 255)

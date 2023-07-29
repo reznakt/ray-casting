@@ -2,6 +2,9 @@
  * Taken from https://gist.github.com/RabaDabaDoba/145049536f815903c79944599c6f952a
 */
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+
 
 //Regular text
 #define BLK "\x1b[0;30m"
@@ -77,3 +80,5 @@
 #define reset "\x1b[0m"
 #define CRESET "\x1b[0m"
 #define COLOR_RESET "\x1b[0m"
+
+#pragma clang diagnostic pop

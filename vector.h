@@ -188,16 +188,6 @@ float vector_length(const struct vector_t *vec);
 float vector_length2(const struct vector_t *vec);
 
 /**
- * @brief Prints the components of the vector @p vec to the standard output.
- *
- * This function prints the components of the vector @p vec to the standard output
- * in the format "(x, y)". The output is followed by a newline character.
- *
- * @param vec Pointer to the input vector.
- */
-void print_vector(const struct vector_t *vec);
-
-/**
  * @brief Computes the vector with magnitude 1 and angle @p angle, and stores the result in @p dst.
  *
  * This function computes the vector with magnitude 1 and angle @p angle, and stores the result in

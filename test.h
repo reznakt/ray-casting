@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
+
 #ifndef RAY_TEST_H
 #define RAY_TEST_H
 
@@ -15,7 +18,7 @@
 #include "util.h"
 
 
-#define NTESTS (1000 * 1000)
+#define NTESTS (1000u * 1000u)
 #define OUTPUT_MAXLEN 1000
 
 #define TIMER_START 0
@@ -133,7 +136,9 @@ unused private void print_justified(const char *const str, const size_t width, c
 
 unused private int run_tests(struct test_t *const tests, const size_t ntests) {
     timer(TIMER_START);
-    size_t passed = 0, failed = 0, total = 0;
+    size_t passed = 0;
+    size_t failed = 0;
+    size_t total = 0;
 
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
@@ -187,3 +192,4 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
 }
 
 #endif //RAY_TEST_H
+#pragma clang diagnostic pop
