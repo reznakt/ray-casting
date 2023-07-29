@@ -11,8 +11,8 @@
 #include <unistd.h>
 
 
-#include "ansi-color.h"
-#include "../util.h"
+#include "color.h"
+#include "util.h"
 
 
 #define NTESTS (1000 * 1000)
