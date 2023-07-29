@@ -147,11 +147,12 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
 
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
+        const size_t nrepeats = strstr(test->name, "rand") ? NTESTS : 1;
 
         printf("[%3zu] ", i + 1);
         print_justified(test->name, 60, '.');
 
-        for (size_t j = 0; j < NTESTS; j++) {
+        for (size_t j = 0; j < nrepeats; j++) {
             if (!test->func(test)) {
                 test->passed = false;
                 break;
@@ -159,13 +160,18 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
         }
 
         if (test->passed) {
-            puts(HGRN " PASS" CRESET);
+            fputs(HGRN " PASS" CRESET, stdout);
             passed++;
         } else {
-            puts(RED " FAIL" CRESET);
+            fputs(RED " FAIL" CRESET, stdout);
             failed++;
         }
 
+        if (nrepeats > 1) {
+            printf(" (%.0e runs)", (double ) nrepeats);
+        }
+
+        putchar('\n');
         total++;
     }
 

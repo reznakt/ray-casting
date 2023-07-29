@@ -231,7 +231,7 @@ TEST(test_vector_zero, {
     assert_equals(vector_zero.y, 0.0F);
 })
 
-TEST(test_vector_clear, {
+TEST(test_vector_clear_rand, {
     struct vector_t vec;
     vec.x = rand_float();
     vec.y = rand_float();
@@ -241,7 +241,7 @@ TEST(test_vector_clear, {
     assert_equals(vec.y, 0.0F);
 })
 
-TEST(test_vector_add, {
+TEST(test_vector_add_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
@@ -264,7 +264,7 @@ TEST(test_vector_add, {
     assert_is_close(vec1.y, y1 + y2);
 })
 
-TEST(test_vector_sub, {
+TEST(test_vector_sub_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
@@ -287,7 +287,7 @@ TEST(test_vector_sub, {
     assert_is_close(vec1.y, y1 - y2);
 })
 
-TEST(test_vector_mul, {
+TEST(test_vector_mul_rand, {
     struct vector_t vec;
 
     const float x = rand_float();
@@ -303,7 +303,7 @@ TEST(test_vector_mul, {
     assert_is_close(vec.y, y * m);
 })
 
-TEST(test_vector_div, {
+TEST(test_vector_div_rand, {
     struct vector_t vec;
 
     const float x = rand_float();
@@ -319,7 +319,7 @@ TEST(test_vector_div, {
     assert_is_close(vec.y, y / d);
 })
 
-TEST(test_vector_product, {
+TEST(test_vector_product_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
@@ -341,7 +341,7 @@ TEST(test_vector_product, {
     assert_is_close(vec2.y, y2);
 })
 
-TEST(test_vector_length, {
+TEST(test_vector_length_rand, {
     struct vector_t vec;
 
     const float x = rand_float();
@@ -368,7 +368,7 @@ TEST(test_vector_length, {
     assert_is_close(vector_length(&vec), sqrtf(2.0F));
 })
 
-TEST(test_vector_length2, {
+TEST(test_vector_length2_rand, {
     struct vector_t vec;
 
     const float x = rand_float();
@@ -419,7 +419,7 @@ TEST(test_vector_from_angle, {
     assert_is_close(vec.y, 0.0F);
 })
 
-TEST(test_vector_normalize, {
+TEST(test_vector_normalize_rand, {
     struct vector_t vec;
 
     const float x = rand_float();
@@ -439,7 +439,7 @@ TEST(test_vector_normalize, {
     assert_is_close(vec.y, y / length_before);
 })
 
-TEST(test_vector_normalize_weak, {
+TEST(test_vector_normalize_weak_rand, {
     struct vector_t vec;
 
     vec.x = 0.0F;
@@ -614,7 +614,7 @@ TEST(test_vector_angle_to, {
     assert_is_close(vector_angle_to(&vec1, &vec2), 3.0F * (float) M_PI / 4.0F);
 })
 
-TEST(test_vector_copy, {
+TEST(test_vector_copy_rand, {
     struct vector_t vec1;
     struct vector_t vec2;
 
@@ -793,21 +793,21 @@ RUN_TESTS(
         ADD_TEST(test_degrees),
         ADD_TEST(test_radians),
         ADD_TEST(test_vector_zero),
-        ADD_TEST(test_vector_clear),
-        ADD_TEST(test_vector_add),
-        ADD_TEST(test_vector_sub),
-        ADD_TEST(test_vector_mul),
-        ADD_TEST(test_vector_div),
-        ADD_TEST(test_vector_product),
-        ADD_TEST(test_vector_length),
-        ADD_TEST(test_vector_length2),
+        ADD_TEST(test_vector_clear_rand),
+        ADD_TEST(test_vector_add_rand),
+        ADD_TEST(test_vector_sub_rand),
+        ADD_TEST(test_vector_mul_rand),
+        ADD_TEST(test_vector_div_rand),
+        ADD_TEST(test_vector_product_rand),
+        ADD_TEST(test_vector_length_rand),
+        ADD_TEST(test_vector_length2_rand),
         ADD_TEST(test_vector_from_angle),
-        ADD_TEST(test_vector_normalize),
-        ADD_TEST(test_vector_normalize_weak),
+        ADD_TEST(test_vector_normalize_rand),
+        ADD_TEST(test_vector_normalize_weak_rand),
         ADD_TEST(test_vector_distance),
         ADD_TEST(test_vector_distance2),
         ADD_TEST(test_vector_angle_to),
-        ADD_TEST(test_vector_copy),
+        ADD_TEST(test_vector_copy_rand),
         ADD_TEST(test_vector_rotate),
         ADD_TEST(test_vector_lerp),
         ADD_TEST(test_vector_scale),
