@@ -18,6 +18,11 @@
 #include "util.h"
 
 
+#ifdef assert
+#undef assert
+#endif
+
+
 #define NTESTS (1000u * 1000u)
 #define OUTPUT_MAXLEN 1000
 
