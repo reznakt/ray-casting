@@ -14,7 +14,7 @@
 #endif
 
 
-#define unused __attribute__((unused))
+#define unused __attribute__((__unused__))
 #define private static
 
 
