@@ -309,7 +309,11 @@ TEST(test_vector_div_rand, {
 
     const float x = randf();
     const float y = randf();
-    const float d = randf();
+    float d;
+
+    do {
+        d = randf();
+    } while (d == 0.0F);
 
     vec.x = x;
     vec.y = y;
@@ -423,11 +427,16 @@ TEST(test_vector_from_angle, {
 TEST(test_vector_normalize_rand, {
     struct vector_t vec;
 
-    const float x = randf();
-    const float y = randf();
+    float x;
+    float y;
 
-    vec.x = x == 0.0F ? 1.0F : x; // avoid division by zero
-    vec.y = y == 0.0F ? 1.0F : y;
+    do {
+        x = randf();
+        y = randf();
+    } while (x == 0.0F || y == 0.0F);
+
+    vec.x = x;
+    vec.y = y;
 
     const float length_before = vector_length(&vec);
 
