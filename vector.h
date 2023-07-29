@@ -26,21 +26,6 @@
  */
 #define vector() stack_alloc(struct vector_t, 1)
 
-/**
- * Create a new struct ivector_t on the stack.
- */
-#define ivector() stack_alloc(struct ivector_t, 1)
-
-/**
- * Create a new struct line_t on the stack.
- */
-#define line() stack_alloc(struct line_t, 1)
-
-/**
- * Create a new struct iline_t on the stack.
- */
-#define iline() stack_alloc(struct iline_t, 1)
-
 
 /**
  * A 2D vector with `x` and `y` coordinates.
@@ -48,30 +33,6 @@
 struct vector_t {
     float x; /**< The x-coordinate of the vector. */
     float y; /**< The y-coordinate of the vector. */
-};
-
-/**
- * A 2D vector with `x` and `y` coordinates, but with integer types.
- */
-struct ivector_t {
-    long x; /**< The x-coordinate of the vector. */
-    long y; /**< The y-coordinate of the vector. */
-};
-
-/**
- * A line segment with `a` and `b` as its endpoints, both of type `struct vector_t`.
- */
-struct line_t {
-    struct vector_t a; /**< The first endpoint of the line segment. */
-    struct vector_t b; /**< The second endpoint of the line segment. */
-};
-
-/**
- * A line segment with `a` and `b` as its endpoints, both of type `struct ivector_t`.
- */
-struct iline_t {
-    struct ivector_t a; /**< The first endpoint of the line segment. */
-    struct ivector_t b; /**< The second endpoint of the line segment. */
 };
 
 

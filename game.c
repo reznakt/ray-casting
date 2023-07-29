@@ -250,13 +250,6 @@ void update(struct game_t *const game) {
         game->newframes = 0;
     }
 
-    int mouseX;
-    int mouseY;
-
-    SDL_GetMouseState(&mouseX, &mouseY);
-    game->mouse.x = (long) mouseX;
-    game->mouse.y = (long) mouseY;
-
     struct vector_t *const dirvect = vector_mul(vector_copy(vector(), &game->camera->dir),
                                                 speed_coeff(game, game->camera->speed));
 

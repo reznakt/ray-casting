@@ -66,7 +66,6 @@ struct game_t {
     SDL_Texture *texture; /**< The texture atlas for the game. */
     struct camera_t *camera; /**< The camera used for rendering the game. */
     struct wobject_t *objects; /**< The objects in the game world. */
-    struct ivector_t mouse; /**< The current position of the mouse. */
     struct vector_t center; /**< The center of the game window. */
     char *textbuf; /**< The buffer used for rendering text to the game window. */
     size_t nobjects; /**< The number of objects in the game world. */
