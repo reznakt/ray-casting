@@ -1,8 +1,7 @@
 name: Build with CMake and SDL2
 
 on:
-  push:
-    branches: [ "main" ]
+  - push
 
 jobs:
   build:
