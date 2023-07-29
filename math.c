@@ -35,7 +35,7 @@ float lerp(const float a, const float b, const float t) {
 }
 
 bool isclose(const float a, const float b) {
-    return fabsf(a - b) < FLT_EPSILON;
+    return fabsf(a - b) <= FLT_EPSILON;
 }
 
 float degrees(const float angle) {

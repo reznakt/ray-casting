@@ -19,8 +19,8 @@ TEST(test_isclose, {
     assert(!isclose(0, 1));
     assert(isclose(0.0F, 0.0F));
     assert(!isclose(0.0F, 0.1F));
-    assert(!isclose(1.0F, 1.0F + FLT_EPSILON));
-    assert(!isclose(1.0F, 1.0F - FLT_EPSILON));
+    assert(isclose(1.0F, 1.0F + FLT_EPSILON));
+    assert(isclose(1.0F, 1.0F - FLT_EPSILON));
     assert(!isclose(1.0F, 1.0F + FLT_EPSILON - 0.00001F));
     assert(!isclose(1.0F, 1.0F - FLT_EPSILON + 0.00001F));
 })

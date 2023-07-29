@@ -16,6 +16,7 @@
 
 #include "color.h"
 #include "util.h"
+#include "math.h"
 
 
 #ifdef assert
@@ -78,8 +79,8 @@ do {                                                            \
 #define assert_leq(a, b) assert((a) <= (b))
 #define assert_geq(a, b) assert((a) >= (b))
 
-#define assert_is_close(a, b) assert(fabsf((a) - (b)) <= FLT_EPSILON)
-#define assert_not_close(a, b) assert(fabsf((a) - (b)) > FLT_EPSILON)
+#define assert_is_close(a, b) assert(isclose((a), (b)))
+#define assert_not_close(a, b) assert(!isclose((a), (b)))
 
 #define assert_null(ptr) assert((ptr) == NULL)
 #define assert_not_null(ptr) assert((ptr) != NULL)
@@ -168,7 +169,7 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
         }
 
         if (nrepeats > 1) {
-            printf(" (%.0e runs)", (double ) nrepeats);
+            printf(" (%.0e runs)", (double) nrepeats);
         }
 
         putchar('\n');
