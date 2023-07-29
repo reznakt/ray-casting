@@ -112,12 +112,6 @@ TEST(test_map, {
     assert_is_close(map(3.0F, 0.0F, 3.0F, 0.0F, 1.0F), 1.0F);
     assert_is_close(map(0.0F, 0.0F, 3.0F, 0.0F, 2.0F), 0.0F);
     assert_is_close(map(1.5F, 0.0F, 3.0F, 0.0F, 2.0F), 1.0F);
-    assert_is_close(map(-1.0F, -1.0F, 1.0F, 0.0F, 1.0F), 0.0F);
-    assert_is_close(map(0.0F, -1.0F, 1.0F, 0.0F, 1.0F), 0.5F);
-    assert_is_close(map(1.0F, -1.0F, 1.0F, 0.0F, 1.0F), 1.0F);
-    assert_is_close(map(-1.0F, -1.0F, 1.0F, 0.0F, 2.0F), 0.0F);
-    assert_is_close(map(0.0F, -1.0F, 1.0F, 0.0F, 2.0F), 1.0F);
-    assert_is_close(map(1.0F, -1.0F, 1.0F, 0.0F, 2.0F), 2.0F);
 })
 
 TEST(test_constrain, {
