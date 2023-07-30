@@ -308,3 +308,35 @@ void update(struct game_t *const game) {
         game->camera->rays[i] = ray;
     }
 }
+
+struct game_t *game_create(void) {
+    static struct game_t game = {0};
+    static char textbuf[TEXTBUFLEN] = {0};
+    static struct ray_t rays[FOV_MAX * RESMULT_MAX] = {0};
+    static struct camera_t camera = {0};
+    static struct wobject_t objects[WORLD_NOBJECTS_MAX] = {0};
+
+    const float x = (float) SCREEN_WIDTH / 2.0F;
+    const float y = (float) SCREEN_HEIGHT / 2.0F;
+    vcopy(&game.center, &(struct vec_t) {x, y});
+
+    game.camera = &camera;
+    game.camera->fov = CAMERA_FOV;
+    game.camera->resmult = CAMERA_RESMULT;
+    game.camera->nrays = game.camera->fov * game.camera->resmult;
+    game.camera->pos = game.center;
+    game.camera->speed = CAMERA_MOVEMENT_SPEED;
+    game.camera->rays = rays;
+
+    game.render_mode = RENDER_MODE_TEXTURED;
+    game.textbuf = textbuf;
+    game.ceil_color = CEIL_COLOR;
+    game.floor_color = FLOOR_COLOR;
+    game.nthreads = THREADS;
+    game.objects = objects;
+
+    assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);
+    camera_update_angle(&game, CAMERA_HEADING);
+
+    return &game;
+}

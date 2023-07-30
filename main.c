@@ -60,13 +60,12 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    struct game_t game = {0};
-    game_init(game);
+    struct game_t *const game = game_create();
 
-    logger_printf(LOG_LEVEL_INFO, "loaded %zu objects from %s: \n", game.nobjects, WORLD_SPEC_FILE);
+    logger_printf(LOG_LEVEL_INFO, "loaded %zu objects from %s: \n", game->nobjects, WORLD_SPEC_FILE);
 
-    for (size_t i = 0; i < game.nobjects; i++) {
-        const struct wobject_t object = game.objects[i];
+    for (size_t i = 0; i < game->nobjects; i++) {
+        const struct wobject_t object = game->objects[i];
 
         if (object.type == WALL) {
             const struct wall_t wall = object.data.wall;
@@ -77,7 +76,7 @@ int main(int argc, char **argv) {
     }
 
 
-    if (init(&game) != 0) {
+    if (init(game) != 0) {
         return EXIT_FAILURE;
     }
 
@@ -88,10 +87,10 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    game.texture = SDL_CreateTextureFromSurface(game.renderer, surface);
+    game->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
     SDL_FreeSurface(surface);
 
-    if (game.texture == NULL) {
+    if (game->texture == NULL) {
         logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
         return EXIT_FAILURE;
     }
@@ -100,17 +99,17 @@ int main(int argc, char **argv) {
                   surface->h);
 
     while (true) {
-        if (profile && game.ticks >= 10000) {
+        if (profile && game->ticks >= 10000) {
             goto __cleanup;
         }
 
-        update(&game);
-        render(&game);
+        update(game);
+        render(game);
 
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            if (!on_event(&game, &event)) {
+            if (!on_event(game, &event)) {
                 goto __cleanup;
             }
         }
@@ -119,9 +118,9 @@ int main(int argc, char **argv) {
     __cleanup:
     if (profile) {
         printf("ticks: %zu, frames: %zu, avg fps: %f\n",
-               game.ticks, game.frames, (float) game.frames / (float) game.ticks * 1000.0F);
+               game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
     }
-    cleanup(&game);
+    cleanup(game);
     SDL_Quit();
 
     return EXIT_SUCCESS;

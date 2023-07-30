@@ -17,29 +17,6 @@
 #include "conf.h"
 
 
-#define game_init(game)                                                                                 \
-    do {                                                                                                \
-        game.center = (struct vec_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};    \
-        game.render_mode = RENDER_MODE_TEXTURED;                                                        \
-        struct camera_t camera;                                                                         \
-        game.camera = &camera;                                                                          \
-        game.camera->fov = CAMERA_FOV;                                                                  \
-        game.camera->resmult = CAMERA_RESMULT;                                                          \
-        game.camera->nrays = game.camera->fov * game.camera->resmult;                                   \
-        game.camera->pos = game.center;                                                                 \
-        game.camera->speed = CAMERA_MOVEMENT_SPEED;                                                     \
-        camera_update_angle(&game, CAMERA_HEADING);                                                     \
-        struct ray_t rays[FOV_MAX * RESMULT_MAX];                                                       \
-        game.camera->rays = rays;                                                                       \
-        game.textbuf = stack_alloc(char, TEXTBUFLEN);                                                   \
-        game.ceil_color = CEIL_COLOR;                                                                   \
-        game.floor_color = FLOOR_COLOR;                                                                 \
-        game.objects = stack_alloc(struct wobject_t, WORLD_NOBJECTS_MAX);                               \
-        assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);                         \
-        game.nthreads = THREADS;                                                                        \
-} while (0)
-
-
 /**
  * @brief Structure representing a camera in the game.
  */
@@ -102,6 +79,12 @@ void render(struct game_t *game);
  * @param game The game instance to update.
  */
 void update(struct game_t *game);
+
+/**
+ * @brief Initializes the game by allocating memory and setting default values.
+ * @param game The game instance to initialize.
+ */
+struct game_t *game_create(void);
 
 
 #endif //RAY_GAME_H
