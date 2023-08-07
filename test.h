@@ -117,8 +117,10 @@ unused private unsigned int get_seed(void) {
     }
 
     unsigned int seed;
+    const size_t bytes = fread(&seed, sizeof seed, 1, stream);
+    fclose(stream);
 
-    if (fread(&seed, sizeof seed, 1, stream) != 1) {
+    if (bytes != 1) {
         abort();
     }
 
