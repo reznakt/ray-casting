@@ -766,7 +766,35 @@ TEST(test_vector_reflect, {
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
-    // TODO: add more tests
+    vec.x = 1.0F;
+    vec.y = 0.0F;
+
+    normal.x = 1.0F;
+    normal.y = 0.0F;
+
+    assert_equals(vreflect(&vec, &normal), &vec);
+    assert_is_close(vec.x, -1.0F);
+    assert_is_close(vec.y, 0.0F);
+
+    vec.x = 0.0F;
+    vec.y = 0.0F;
+
+    normal.x = 1.0F;
+    normal.y = 0.0F;
+
+    assert_equals(vreflect(&vec, &normal), &vec);
+    assert_is_close(vec.x, 0.0F);
+    assert_is_close(vec.y, 0.0F);
+
+    vec.x = 1.0F;
+    vec.y = 1.0F;
+
+    normal.x = 1.0F;
+    normal.y = 0.0F;
+
+    assert_equals(vreflect(&vec, &normal), &vec);
+    assert_is_close(vec.x, -1.0F);
+    assert_is_close(vec.y, 1.0F);
 })
 
 TEST(test_vector_project, {
