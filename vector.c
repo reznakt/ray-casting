@@ -8,7 +8,7 @@
 const struct vec_t vzero = {0, 0};
 
 
-struct vec_t *vclear(struct vec_t *vec) {
+struct vec_t *vclear(struct vec_t *const vec) {
     return vcopy(vec, &vzero);
 }
 
@@ -24,13 +24,13 @@ struct vec_t *vsub(struct vec_t *const restrict dst, const struct vec_t *const r
     return dst;
 }
 
-struct vec_t *vmul(struct vec_t *vec, float x) {
+struct vec_t *vmul(struct vec_t *const vec, const float x) {
     vec->x *= x;
     vec->y *= x;
     return vec;
 }
 
-struct vec_t *vdiv(struct vec_t *vec, float x) {
+struct vec_t *vdiv(struct vec_t *const vec, const float x) {
     vec->x /= x;
     vec->y /= x;
     return vec;
@@ -40,26 +40,26 @@ float vprod(const struct vec_t *const restrict vec1, const struct vec_t *const r
     return vec1->x * vec2->x + vec1->y * vec2->y;
 }
 
-float vlen(const struct vec_t *vec) {
+float vlen(const struct vec_t *const vec) {
     return sqrtf(vlen2(vec));
 }
 
-float vlen2(const struct vec_t *vec) {
+float vlen2(const struct vec_t *const vec) {
     return vprod(vec, vec);
 }
 
 
-struct vec_t *vfromangle(struct vec_t *dst, float angle) {
+struct vec_t *vfromangle(struct vec_t *const dst, const float angle) {
     dst->x = cosf(angle);
     dst->y = sinf(angle);
     return dst;
 }
 
-struct vec_t *vnorm(struct vec_t *vec) {
+struct vec_t *vnorm(struct vec_t *const vec) {
     return vdiv(vec, vlen(vec));
 }
 
-struct vec_t *vnorm_weak(struct vec_t *vec) {
+struct vec_t *vnorm_weak(struct vec_t *const vec) {
     const float length = vlen(vec);
 
     if (isclose(length, 0)) {
@@ -89,7 +89,7 @@ struct vec_t *vcopy(struct vec_t *const restrict dst, const struct vec_t *const 
     return memcpy(dst, src, sizeof *dst);
 }
 
-struct vec_t *vrotate(struct vec_t *vec, float angle) {
+struct vec_t *vrotate(struct vec_t *const vec, const float angle) {
     const float sin_a = sinf(angle), cos_a = cosf(angle);
     const float x = vec->x, y = vec->y;
 
@@ -101,14 +101,14 @@ struct vec_t *vrotate(struct vec_t *vec, float angle) {
 
 struct vec_t *vlerp(struct vec_t *const restrict dst,
                     const struct vec_t *const restrict src,
-                    float t) {
+                    const float t) {
     dst->x = lerp(dst->x, src->x, t);
     dst->y = lerp(dst->y, src->y, t);
 
     return dst;
 }
 
-struct vec_t *vscale(struct vec_t *vec, float length) {
+struct vec_t *vscale(struct vec_t *const vec, const float length) {
     vnorm_weak(vec);
     vmul(vec, length);
 
