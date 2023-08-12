@@ -13,16 +13,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -D_GNU_SOURCE \
                     -std=c99 \
                     -g \
-                    -Ofast \
+                    -O3 \
                     -masm=intel \
                     -march=native \
                     -mtune=native \
-                    -fverbose-asm \
-                    -fstack-protector-strong \
-                    -ffast-math \
-                    -funroll-loops \
-                    -fomit-frame-pointer \
-                    -fstrict-aliasing \
                     -fopenmp \
                     -pedantic \
                     -pedantic-errors \
