@@ -79,7 +79,17 @@ float vdist2(const struct vec_t *const restrict vec1, const struct vec_t *const 
 
 float vangle(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
     const float length1 = vlen(vec1);
+
+    if (isclose(length1, 0)) {
+        return NAN;
+    }
+
     const float length2 = vlen(vec2);
+
+    if (isclose(length2, 0)) {
+        return NAN;
+    }
+
     const float product = vprod(vec1, vec2);
     return acosf(product / (length1 * length2));
 }

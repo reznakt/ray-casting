@@ -573,49 +573,28 @@ TEST(test_vector_angle_to, {
     vec2.x = 0.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), 0.0F);
+    assert_nan(vangle(&vec1, &vec2));
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), 0.0F);
+    assert_nan(vangle(&vec1, &vec2));
 
-    vec1.x = 0.0F;
+    vec1.x = 1.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
     assert_is_close(vangle(&vec1, &vec2), (float) M_PI / 2.0F);
 
-    vec1.x = 0.0F;
+    vec1.x = 1.0F;
     vec1.y = 0.0F;
     vec2.x = -1.0F;
     vec2.y = 0.0F;
 
     assert_is_close(vangle(&vec1, &vec2), (float) M_PI);
-
-    vec1.x = 0.0F;
-    vec1.y = 0.0F;
-    vec2.x = 0.0F;
-    vec2.y = -1.0F;
-
-    assert_is_close(vangle(&vec1, &vec2), 3.0F * (float) M_PI / 2.0F);
-
-    vec1.x = 0.0F;
-    vec1.y = 0.0F;
-    vec2.x = 1.0F;
-    vec2.y = 1.0F;
-
-    assert_is_close(vangle(&vec1, &vec2), (float) M_PI / 4.0F);
-
-    vec1.x = 0.0F;
-    vec1.y = 0.0F;
-    vec2.x = -1.0F;
-    vec2.y = 1.0F;
-
-    assert_is_close(vangle(&vec1, &vec2), 3.0F * (float) M_PI / 4.0F);
 })
 
 TEST(test_vector_copy_rand, {

@@ -231,7 +231,7 @@ float vdist2(const struct vec_t *vec1, const struct vec_t *vec2);
  *
  * @return The angle between the vectors @p vec1 and @p vec2, in radians.
  *
- * @note The input vector @p vec may not have zero length.
+ * @note If the length of either vector is zero, the result will be NaN.
  */
 float vangle(const struct vec_t *vec1, const struct vec_t *vec2);
 

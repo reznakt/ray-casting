@@ -83,6 +83,12 @@ do {                                                            \
 #define assert_is_close(a, b) assert(fabsf((a) - (b)) <= 0.0001F)
 #define assert_not_close(a, b) assert(fabsf((a) - (b)) > 0.0001F)
 
+#define assert_nan(a) assert(isnan(a))
+#define assert_not_nan(a) assert(!isnan(a))
+
+#define assert_inf(a) assert(isinf(a))
+#define assert_not_inf(a) assert(!isinf(a))
+
 #define assert_null(ptr) assert((ptr) == NULL)
 #define assert_not_null(ptr) assert((ptr) != NULL)
 
