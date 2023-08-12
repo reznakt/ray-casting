@@ -101,14 +101,14 @@ struct vec_t *vmul(struct vec_t *vec, float x);
  * stores the result in the same vector. The original vector is modified.
  *
  * @param vec Pointer to the vector to be divided.
- * @param x The scalar value to divide the vector by.
+ * @param d The scalar value to divide the vector by.
  *
  * @return Pointer to the resulting vector @p vec.
  *
  * @note Division by zero is not checked in this function. Ensure that @p x is not zero
  *       to avoid unexpected results.
  */
-struct vec_t *vdiv(struct vec_t *vec, float x);
+struct vec_t *vdiv(struct vec_t *vec, float d);
 
 /**
  * @brief Computes the dot product of the vectors @p vec1 and @p vec2.

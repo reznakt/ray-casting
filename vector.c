@@ -30,9 +30,9 @@ struct vec_t *vmul(struct vec_t *const vec, const float x) {
     return vec;
 }
 
-struct vec_t *vdiv(struct vec_t *const vec, const float x) {
-    vec->x /= x;
-    vec->y /= x;
+struct vec_t *vdiv(struct vec_t *const vec, const float d) {
+    vec->x /= d;
+    vec->y /= d;
     return vec;
 }
 
