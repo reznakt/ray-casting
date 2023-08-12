@@ -597,14 +597,14 @@ TEST(test_vangle, {
     assert_is_close(vangle(&vec1, &vec2), (float) M_PI);
 })
 
-TEST(test_vcopy_rand, {
+TEST(test_vmove_rand, {
     struct vec_t vec1;
     struct vec_t vec2;
 
     vec1.x = randf();
     vec1.y = randf();
 
-    assert_equals(vcopy(&vec2, &vec1), &vec2);
+    assert_equals(vmove(&vec2, &vec1), &vec2);
 
     assert_is_close(vec1.x, vec2.x);
     assert_is_close(vec1.y, vec2.y);
@@ -818,7 +818,7 @@ RUN_TESTS(
         ADD_TEST(test_vdist),
         ADD_TEST(test_vdist2),
         ADD_TEST(test_vangle),
-        ADD_TEST(test_vcopy_rand),
+        ADD_TEST(test_vmove_rand),
         ADD_TEST(test_vrotate),
         ADD_TEST(test_vlerp),
         ADD_TEST(test_vscale),

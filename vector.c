@@ -9,7 +9,7 @@ const struct vec_t vzero = {0, 0};
 
 
 struct vec_t *vclear(struct vec_t *const vec) {
-    return vcopy(vec, &vzero);
+    return vmove(vec, &vzero);
 }
 
 struct vec_t *vadd(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
@@ -94,7 +94,7 @@ float vangle(const struct vec_t *const restrict vec1, const struct vec_t *const 
     return acosf(product / (length1 * length2));
 }
 
-struct vec_t *vcopy(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
+struct vec_t *vmove(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
     return memcpy(dst, src, sizeof *dst);
 }
 
@@ -125,7 +125,7 @@ struct vec_t *vscale(struct vec_t *const vec, const float length) {
 }
 
 struct vec_t *vreflect(struct vec_t *const restrict vec, const struct vec_t *const restrict normal) {
-    struct vec_t *const ncopy = vcopy(vector(), normal);
+    struct vec_t *const ncopy = vcopy(normal);
     return vsub(vec, vscale(ncopy, 2.0F * vprod(vec, normal)));
 }
 

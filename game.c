@@ -163,8 +163,8 @@ private void render_camera(const struct game_t *const game) {
     set_color(game, COLOR_GREEN);
 
     const struct vec_t *const endpoint = vadd(
-            vcopy(vector(), &game->camera->pos),
-            vmul(vcopy(vector(), &game->camera->dir), 100)
+            vmove(vector(), &game->camera->pos),
+            vmul(vmove(vector(), &game->camera->dir), 100)
     );
 
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
@@ -250,8 +250,7 @@ void update(struct game_t *const game) {
         game->newframes = 0;
     }
 
-    struct vec_t *const dirvect = vmul(vcopy(vector(), &game->camera->dir),
-                                       speed_coeff(game, game->camera->speed));
+    struct vec_t *const dirvect = vmul(vcopy(&game->camera->dir), speed_coeff(game, game->camera->speed));
 
     if (game->camera->movement.forward ^ game->camera->movement.backward) {
         if (game->camera->movement.forward) { /* forward */
@@ -318,7 +317,7 @@ struct game_t *game_create(void) {
 
     const float x = (float) SCREEN_WIDTH / 2.0F;
     const float y = (float) SCREEN_HEIGHT / 2.0F;
-    vcopy(&game.center, &(struct vec_t) {x, y});
+    vmove(&game.center, &(struct vec_t) {x, y});
 
     game.camera = &camera;
     game.camera->fov = CAMERA_FOV;

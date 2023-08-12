@@ -26,6 +26,17 @@
  */
 #define vector() stack_alloc(struct vec_t, 1)
 
+/**
+ * @brief Copies a vector.
+ *
+ * This function copies the contents of the vector pointed to by @p vec into a new vector allocated on the stack.
+ *
+ * @param vec Pointer to the source vector.
+ *
+ * @return Pointer to the newly created vector.
+ */
+#define vcopy(vec) vmove(vector(), (vec))
+
 
 /**
  * A 2D vector with `x` and `y` coordinates.
@@ -246,7 +257,7 @@ float vangle(const struct vec_t *vec1, const struct vec_t *vec2);
  *
  * @return Pointer to the destination vector @p dst.
  */
-struct vec_t *vcopy(struct vec_t *dst, const struct vec_t *src);
+struct vec_t *vmove(struct vec_t *dst, const struct vec_t *src);
 
 /**
  * @brief Rotates a vector by a given angle.
