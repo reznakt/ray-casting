@@ -24,8 +24,8 @@
 #endif
 
 
-#define NTESTS (1000u * 1000u)
-#define OUTPUT_MAXLEN 1000
+#define NTESTS 1e6
+#define OUTPUT_MAXLEN 1024
 
 #define TIMER_START 0
 #define TIMER_STOP 1
@@ -151,7 +151,7 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
 
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
-        const size_t nrepeats = strstr(test->name, "rand") ? NTESTS : 1;
+        const size_t nrepeats = strstr(test->name, "rand") ? (size_t) NTESTS : 1;
 
         printf("[%3zu] ", i + 1);
         print_justified(test->name, 60, '.');
