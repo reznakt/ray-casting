@@ -48,7 +48,6 @@ float vlen2(const struct vec_t *const vec) {
     return vprod(vec, vec);
 }
 
-
 struct vec_t *vfromangle(struct vec_t *const dst, const float angle) {
     dst->x = cosf(angle);
     dst->y = sinf(angle);
