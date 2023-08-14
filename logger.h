@@ -76,7 +76,6 @@ private const char *const LOG_PREFIXV[] = {
 #define logger_perror(msg)                                                  \
     do {                                                                    \
         logger_printf(LOG_LEVEL_ERROR, "%s: %s\n", (msg), strerror(errno)); \
-        print_stacktrace();                                                 \
     } while (0)
 
 /**
