@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 
-#include "math.h"
-#include "vector.h"
+#include "../src/math.h"
+#include "../src/vector.h"
 
 
 #include "test.h"

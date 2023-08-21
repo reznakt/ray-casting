@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 
 
-#include "fonts/font8x8_basic.h"
+#include "../fonts/font8x8_basic.h"
 
 
 #include "text.h"

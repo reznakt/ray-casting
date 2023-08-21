@@ -21,12 +21,12 @@
 /**
  * @brief Path to a file containing the world specification.
  */
-#define WORLD_SPEC_FILE "../world.dat"
+#define WORLD_SPEC_FILE "../assets/world.dat"
 
 /**
  * @brief Path to a file containing the texture atlas.
  */
-#define TEXTURE_ATLAS_FILE "../textures.png"
+#define TEXTURE_ATLAS_FILE "../assets/textures.png"
 
 /**
  * @brief The size of one texture in the texture atlas.

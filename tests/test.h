@@ -14,9 +14,9 @@
 #include <unistd.h>
 
 
-#include "color.h"
-#include "util.h"
-#include "math.h"
+#include "../src/color.h"
+#include "../src/util.h"
+#include "../src/math.h"
 
 
 #ifdef assert
