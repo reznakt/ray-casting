@@ -1,8 +1,8 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedMacroInspection"
 
-#ifndef RAY_TEST_H
-#define RAY_TEST_H
+#ifndef RAY_TESTS_TEST_H
+#define RAY_TESTS_TEST_H
 
 
 #include <fcntl.h>
@@ -161,5 +161,5 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
 }
 
 
-#endif //RAY_TEST_H
+#endif //RAY_TESTS_TEST_H
 #pragma clang diagnostic pop
