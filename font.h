@@ -12,15 +12,7 @@
 
 
 #define FONT_BYTES 8 /**< The number of bytes required to represent a single character. */
-#define FONT_BASIC 128 /**< The number of characters in the basic font set. */
-
-
-/**
- * @brief The basic font set.
- *
- * This is a 128 character ASCII-compatible font set.
- */
-extern const int font_basic[FONT_BASIC][FONT_BYTES];
+#define FONT_CHARS 128 /**< The number of characters in the basic font set. */
 
 
 /**
