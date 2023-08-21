@@ -21,7 +21,7 @@
 /**
  * @brief Path to a file containing the world specification.
  */
-#define WORLD_SPEC_FILE "../assets/world.dat"
+#define WORLD_SPEC_FILE "../assets/world.txt"
 
 /**
  * @brief Path to a file containing the texture atlas.
