@@ -7,14 +7,14 @@
 #include <SDL2/SDL_image.h>
 
 
-#include "vector.h"
 #include "conf.h"
-#include "world.h"
-#include "ray.h"
+#include "event.h"
 #include "game.h"
 #include "logger.h"
+#include "ray.h"
 #include "util.h"
-#include "event.h"
+#include "vector.h"
+#include "world.h"
 
 
 private int init(struct game_t *const game) {

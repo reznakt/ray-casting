@@ -2,9 +2,9 @@
 #define RAY_LOGGER_H
 
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 #ifdef NDEBUG
 #undef NDEBUG

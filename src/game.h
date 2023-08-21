@@ -2,19 +2,19 @@
 #define RAY_GAME_H
 
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 
 #include <SDL2/SDL.h>
 
 
+#include "conf.h"
+#include "util.h"
 #include "vector.h"
 #include "world.h"
-#include "util.h"
-#include "conf.h"
 
 
 /**

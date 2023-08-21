@@ -5,8 +5,8 @@
 #include <stdbool.h>
 
 
-#include "text.h"
 #include "conf.h"
+#include "text.h"
 
 
 #define unused __attribute__((__unused__))

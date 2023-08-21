@@ -15,8 +15,8 @@
 
 
 #include "../src/color.h"
-#include "../src/util.h"
 #include "../src/math.h"
+#include "../src/util.h"
 
 
 #ifdef assert

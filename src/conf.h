@@ -13,6 +13,7 @@
 
 #include "util.h"
 
+
 /**
  * @brief The default number of threads to use for parallel computation.
  */

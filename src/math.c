@@ -1,6 +1,6 @@
-#include <stdbool.h>
-#include <math.h>
 #include <float.h>
+#include <math.h>
+#include <stdbool.h>
 
 
 #include "math.h"

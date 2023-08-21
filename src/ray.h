@@ -15,9 +15,9 @@
 #include <stdbool.h>
 
 
+#include "ray.h"
 #include "vector.h"
 #include "world.h"
-#include "ray.h"
 
 
 /**

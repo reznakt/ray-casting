@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h>
 
 
-#include "vector.h"
-#include "util.h"
 #include "logger.h"
+#include "util.h"
+#include "vector.h"
 
 
 #include "world.h"

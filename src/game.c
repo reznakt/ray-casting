@@ -2,9 +2,9 @@
 
 
 #include "math.h"
-#include "vector.h"
 #include "ray.h"
 #include "util.h"
+#include "vector.h"
 
 
 #include "game.h"
