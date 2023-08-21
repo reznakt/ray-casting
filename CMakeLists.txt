@@ -51,7 +51,7 @@ if (NOT SDL2_IMG_LIBRARY)
 endif ()
 
 file(GLOB SOURCES "src/*.c")
-file(GLOB TEST_SOURCES "tests/test.*")
+file(GLOB TEST_SOURCES "tests/*.c")
 list(REMOVE_ITEM SOURCES ${TEST_SOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES})

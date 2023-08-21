@@ -17,6 +17,7 @@
 #include "../src/color.h"
 #include "../src/math.h"
 #include "../src/util.h"
+#include "util.h"
 
 
 #ifdef assert
@@ -26,9 +27,6 @@
 
 #define NTESTS 1e6
 #define OUTPUT_MAXLEN 1024
-
-#define TIMER_START 0
-#define TIMER_STOP 1
 
 
 struct test_t {
@@ -99,56 +97,6 @@ do {                                                            \
 #define assert_str_not_contains(a, b) assert(strstr((a), (b)) == NULL)
 
 
-unused private intmax_t timer(const int op) {
-    static struct timespec start;
-    struct timespec end;
-
-    switch (op) {
-        case TIMER_START:
-            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-            return 0;
-        case TIMER_STOP:
-            clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-            return (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
-        default:
-            return -1;
-    }
-}
-
-unused private unsigned int get_seed(void) {
-    FILE *const stream = fopen("/dev/urandom", "rb");
-
-    if (stream == NULL) {
-        abort();
-    }
-
-    unsigned int seed;
-    const size_t bytes = fread(&seed, sizeof seed, 1, stream);
-    fclose(stream);
-
-    if (bytes != 1) {
-        abort();
-    }
-
-    return seed;
-}
-
-unused private void print_justified(const char *const str, const size_t width, const char pad) {
-    const size_t len = strlen(str);
-
-    if (len >= width) {
-        printf("%.*s", (int) width, str);
-        return;
-    }
-
-    printf("%s", str);
-
-    for (size_t i = 0; i < width - len; i++) {
-        putchar(pad);
-    }
-}
-
-
 unused private int run_tests(struct test_t *const tests, const size_t ntests) {
     timer(TIMER_START);
     size_t passed = 0;
@@ -211,6 +159,7 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
 
     return failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
 
 #endif //RAY_TEST_H
 #pragma clang diagnostic pop
