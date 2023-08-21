@@ -65,4 +65,3 @@ struct vec_t *ray_intersection(const struct ray_t *ray, const struct wall_t *wal
 
 
 #endif // RAY_RAY_H
-

@@ -41,4 +41,3 @@ float degrees(const float angle) {
 float radians(const float angle) {
     return angle * (float) M_PI / 180.0F;
 }
-

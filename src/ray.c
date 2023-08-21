@@ -37,4 +37,3 @@ struct vec_t *ray_intersection(const struct ray_t *const restrict ray,
 
     return NULL;
 }
-

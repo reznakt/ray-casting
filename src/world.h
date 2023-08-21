@@ -52,4 +52,3 @@ int load_world(const char *path, struct wobject_t *objects, size_t *nobjects);
 
 
 #endif // RAY_WORLD_H
-
