@@ -1,9 +1,3 @@
-/**
- * @file font.h
- * @brief Defines a basic font set for text rendering.
- */
-
-
 #ifndef RAY_FONT_H
 #define RAY_FONT_H
 

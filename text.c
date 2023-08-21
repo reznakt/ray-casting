@@ -4,7 +4,7 @@
 #include "fonts/font8x8_basic.h"
 
 
-#include "font.h"
+#include "text.h"
 
 
 void render_char(SDL_Renderer *const renderer, const int x, const int y, const int chr) {

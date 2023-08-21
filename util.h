@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 
-#include "font.h"
+#include "text.h"
 #include "conf.h"
 
 
