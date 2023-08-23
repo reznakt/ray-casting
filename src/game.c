@@ -201,11 +201,13 @@ private void render_floor_and_ceiling(struct game_t *const game) {
     set_color(game, game->ceil_color);
     SDL_RenderClear(game->renderer);
 
+    const float height_diff = game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
+
     const SDL_FRect floor = {
             .x = 0,
-            .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
+            .y = game->center.y - height_diff,
             .w = SCREEN_WIDTH,
-            .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F)
+            .h = game->center.y + height_diff
     };
 
     set_color(game, game->floor_color);
