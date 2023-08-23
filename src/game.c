@@ -157,18 +157,20 @@ private void render_3d(struct game_t *const game) {
     }
 }
 
-private void render_camera(const struct game_t *const game) {
-    filledCircleColor(game->renderer,
-                      (int16_t) game->camera->pos.x,
-                      (int16_t) game->camera->pos.y,
-                      5,
-                      0xFF0000FF);
+private void render_camera(const struct game_t *const game, const SDL_Color camera, const SDL_Color direction) {
+    filledCircleColor(
+            game->renderer,
+            (int16_t) game->camera->pos.x,
+            (int16_t) game->camera->pos.y,
+            5,
+            color_to_int(&camera)
+    );
 
     struct vec_t *const pos = vcopy(&game->camera->pos);
     struct vec_t *const dir = vcopy(&game->camera->dir);
     const struct vec_t *const endpoint = vadd(pos, vmul(dir, 100.0F));
 
-    set_color(game, COLOR_GREEN);
+    set_color(game, direction);
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
 }
 
@@ -192,7 +194,7 @@ private void render_visual_fps(struct game_t *const game, const SDL_Color fg, co
 private void render_flat(struct game_t *const game) {
     render_walls(game);
     render_rays(game, COLOR_WHITE);
-    render_camera(game);
+    render_camera(game, COLOR_RED, COLOR_GREEN);
 }
 
 private void render_floor_and_ceiling(struct game_t *const game) {

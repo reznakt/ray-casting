@@ -81,3 +81,7 @@ int dec_to_hex(const int decnum) {
 
     return decnum < 10 ? '0' + decnum : 'a' + decnum - 10;
 }
+
+uint32_t color_to_int(const SDL_Color *const color) {
+    return (uint32_t) color->r << 24 | (uint32_t) color->g << 16 | (uint32_t) color->b << 8 | (uint32_t) color->a;
+}

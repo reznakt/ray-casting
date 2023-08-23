@@ -120,4 +120,12 @@ int hex_to_dec(char hexnum);
  */
 int dec_to_hex(int decnum);
 
+/**
+ * @brief Converts an SDL_Color to a uint32_t.
+ * @param color The color to convert.
+ * @return The converted color.
+ */
+uint32_t color_to_int(const SDL_Color *color);
+
+
 #endif //RAY_UTIL_H
