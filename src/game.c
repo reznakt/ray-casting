@@ -197,7 +197,6 @@ void render(struct game_t *const game) {
         case RENDER_MODE_FLAT:
             set_color(game, COLOR_BLACK);
             SDL_RenderClear(game->renderer);
-            set_color(game, COLOR_GREEN);
             render_walls(game);
             set_color(game, COLOR_WHITE);
             render_rays(game);
