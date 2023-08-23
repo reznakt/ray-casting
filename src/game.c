@@ -191,6 +191,27 @@ private void render_visual_fps(struct game_t *const game, const SDL_Color fg, co
     SDL_RenderDrawRectF(game->renderer, &rect);
 }
 
+private void render_flat(struct game_t *const game) {
+    render_walls(game);
+    render_rays(game, COLOR_WHITE);
+    render_camera(game);
+}
+
+private void render_floor_and_ceiling(struct game_t *const game) {
+    set_color(game, game->ceil_color);
+    SDL_RenderClear(game->renderer);
+
+    const SDL_FRect floor = {
+            .x = 0,
+            .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
+            .w = SCREEN_WIDTH,
+            .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F)
+    };
+
+    set_color(game, game->floor_color);
+    SDL_RenderFillRectF(game->renderer, &floor);
+}
+
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0F);
     vfromangle(&game->camera->dir, radians(game->camera->angle));
@@ -201,9 +222,7 @@ void render(struct game_t *const game) {
         case RENDER_MODE_FLAT:
             set_color(game, COLOR_BLACK);
             SDL_RenderClear(game->renderer);
-            render_walls(game);
-            render_rays(game, COLOR_WHITE);
-            render_camera(game);
+            render_flat(game);
             break;
 
         case RENDER_MODE_WIREFRAME:
@@ -214,19 +233,7 @@ void render(struct game_t *const game) {
 
         case RENDER_MODE_UNTEXTURED:
         case RENDER_MODE_TEXTURED:
-            set_color(game, game->ceil_color);
-            SDL_RenderClear(game->renderer);
-
-            set_color(game, game->floor_color);
-
-            const SDL_FRect floor = {
-                    .x = 0,
-                    .y = game->center.y - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
-                    .w = SCREEN_WIDTH,
-                    .h = game->center.y + (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F)
-            };
-
-            SDL_RenderFillRectF(game->renderer, &floor);
+            render_floor_and_ceiling(game);
             render_3d(game);
             break;
     }
