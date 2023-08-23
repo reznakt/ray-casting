@@ -226,7 +226,7 @@ void render(struct game_t *const game) {
             break;
 
         case RENDER_MODE_WIREFRAME:
-            set_color(game, game->floor_color);
+            set_color(game, COLOR_BLACK);
             SDL_RenderClear(game->renderer);
             render_3d(game);
             break;
