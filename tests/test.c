@@ -3,8 +3,8 @@
 
 
 #include "../src/math.h"
-#include "../src/vector.h"
 #include "../src/util.h"
+#include "../src/vector.h"
 
 
 #include "test.h"
