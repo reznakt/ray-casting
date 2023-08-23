@@ -79,7 +79,9 @@ private void render_hud(const struct game_t *const game, const SDL_Color color) 
                   (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads);
 }
 
-private void render_rays(const struct game_t *const game) {
+private void render_rays(const struct game_t *const game, const SDL_Color color) {
+    set_color(game, color);
+
     for (size_t i = 0; i < game->camera->nrays; i++) {
         const struct ray_t *const ray = game->camera->rays + i;
         const struct intersection_t *const intersection = &ray->intersection;
@@ -200,8 +202,7 @@ void render(struct game_t *const game) {
             set_color(game, COLOR_BLACK);
             SDL_RenderClear(game->renderer);
             render_walls(game);
-            set_color(game, COLOR_WHITE);
-            render_rays(game);
+            render_rays(game, COLOR_WHITE);
             render_camera(game);
             break;
 
