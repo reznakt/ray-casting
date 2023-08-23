@@ -69,7 +69,9 @@ private void render_walls(const struct game_t *const game) {
     }
 }
 
-private void render_hud(const struct game_t *const game) {
+private void render_hud(const struct game_t *const game, const SDL_Color color) {
+    set_color(game, color);
+
     render_printf(game, 10, 10,
                   "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
@@ -170,7 +172,7 @@ private void render_camera(const struct game_t *const game) {
     SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
 }
 
-private void render_visual_fps(struct game_t *const game) {
+private void render_visual_fps(struct game_t *const game, const SDL_Color fg, const SDL_Color bg) {
     const float size = (float) game->fps / 5.0F;
 
     const SDL_FRect rect = {
@@ -180,10 +182,10 @@ private void render_visual_fps(struct game_t *const game) {
             .h = size
     };
 
-    set_color(game, COLOR_WHITE);
+    set_color(game, fg);
     SDL_RenderFillRectF(game->renderer, &rect);
 
-    set_color(game, COLOR_BLACK);
+    set_color(game, bg);
     SDL_RenderDrawRectF(game->renderer, &rect);
 }
 
@@ -224,15 +226,12 @@ void render(struct game_t *const game) {
             };
 
             SDL_RenderFillRectF(game->renderer, &floor);
-
             render_3d(game);
             break;
     }
 
-    render_visual_fps(game);
-
-    set_color(game, COLOR_WHITE);
-    render_hud(game);
+    render_visual_fps(game, COLOR_WHITE, COLOR_BLACK);
+    render_hud(game, COLOR_WHITE);
 
     SDL_RenderPresent(game->renderer);
 }
