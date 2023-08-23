@@ -212,6 +212,20 @@ private void render_floor_and_ceiling(struct game_t *const game) {
     SDL_RenderFillRectF(game->renderer, &floor);
 }
 
+private void tick(struct game_t *const game) {
+    const uint64_t ticks = SDL_GetTicks64();
+    const uint64_t tick_delta = ticks - game->ticks;
+
+    if (tick_delta > POLLINTERVAL) {
+        game->fps = 1000 * game->newframes / tick_delta;
+        game->ticks = ticks;
+        game->frames += game->newframes;
+        game->newframes = 0;
+    }
+
+    game->newframes++;
+}
+
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0F);
     vfromangle(&game->camera->dir, radians(game->camera->angle));
@@ -245,17 +259,6 @@ void render(struct game_t *const game) {
 }
 
 void update(struct game_t *const game) {
-    const uint64_t ticks = SDL_GetTicks64();
-
-    game->newframes++;
-
-    if (ticks - game->ticks > POLLINTERVAL) {
-        game->fps = (uint64_t) ((float) game->newframes / (float) (ticks - game->ticks) * 1000.0);
-        game->ticks = ticks;
-        game->frames += game->newframes;
-        game->newframes = 0;
-    }
-
     struct vec_t *const dirvect = vmul(vcopy(&game->camera->dir), speed_coeff(game, game->camera->speed));
 
     if (game->camera->movement.forward ^ game->camera->movement.backward) {
@@ -312,6 +315,8 @@ void update(struct game_t *const game) {
         ray.intersection = ray_int;
         game->camera->rays[i] = ray;
     }
+
+    tick(game);
 }
 
 struct game_t *game_create(void) {
