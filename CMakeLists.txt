@@ -55,7 +55,7 @@ file(GLOB TEST_SOURCES "tests/*.c")
 list(REMOVE_ITEM SOURCES ${TEST_SOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-add_executable(test ${TEST_SOURCES} "src/math.c" "src/vector.c")
+add_executable(test ${TEST_SOURCES} "src/math.c" "src/vector.c" "src/util.c")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)

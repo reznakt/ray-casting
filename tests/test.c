@@ -4,6 +4,7 @@
 
 #include "../src/math.h"
 #include "../src/vector.h"
+#include "../src/util.h"
 
 
 #include "test.h"
@@ -791,6 +792,32 @@ TEST(test_vproject, {
     assert_is_close(vec.y, 0.0F);
 })
 
+const struct {
+    SDL_Color input;
+    uint32_t output;
+} test_color_to_int_cases[] = {
+        {.input = rgba(0, 0, 0, 0), .output=0x00000000},
+        {.input = rgba(0, 0, 0, 255), .output=0x000000FF},
+        {.input = rgba(255, 255, 255, 255), .output=0xFFFFFFFF},
+        {.input = rgba(255, 0, 0, 255), .output=0xFF0000FF},
+        {.input = rgba(0, 255, 0, 255), .output=0x00FF00FF},
+        {.input = rgba(0, 0, 255, 255), .output=0x0000FFFF},
+        {.input = rgba(255, 255, 0, 255), .output=0xFFFF00FF},
+        {.input = rgba(0, 255, 255, 255), .output=0x00FFFFFF},
+        {.input = rgba(255, 0, 255, 255), .output=0xFF00FFFF},
+};
+
+TEST(test_color_to_int, {
+    const size_t ncases = sizeof test_color_to_int_cases / sizeof *test_color_to_int_cases;
+
+    for (size_t i = 0; i < ncases; i++) {
+        const SDL_Color input = test_color_to_int_cases[i].input;
+        const uint32_t output = test_color_to_int_cases[i].output;
+
+        assert_equals(color_to_int(&input), output);
+    }
+})
+
 
 RUN_TESTS(
         ADD_TEST(test_isclose),
@@ -823,5 +850,6 @@ RUN_TESTS(
         ADD_TEST(test_vlerp),
         ADD_TEST(test_vscale),
         ADD_TEST(test_vreflect),
-        ADD_TEST(test_vproject)
+        ADD_TEST(test_vproject),
+        ADD_TEST(test_color_to_int),
 )
