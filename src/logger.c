@@ -24,7 +24,7 @@ private const struct {
 void logger_log(const enum log_level_t level,
                 const char *const restrict file,
                 const unsigned int line,
-                const char *const func,
+                const char *const restrict func,
                 const char *const restrict fmt, ...) {
     const char *const prefix = LOG_LEVELS[level].prefix;
     FILE *const stream = LOG_LEVELS[level].target == LOG_TARGET_STDERR ? stderr : stdout;
