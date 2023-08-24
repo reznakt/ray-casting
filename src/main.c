@@ -46,12 +46,27 @@ private void cleanup(const struct game_t *const game) {
     SDL_DestroyWindow(game->window);
 }
 
-int main(int argc, char **argv) {
-    bool profile = false;
+private bool get_flag(const char *const restrict arg,
+                      const char *const restrict shortopt,
+                      const char *const restrict longopt) {
+    return strcmp(arg, shortopt) == 0 || strcmp(arg, longopt) == 0;
+}
 
-    if (argc == 2 && (strcmp(argv[1], "--profile") == 0 || strcmp(argv[1], "-p") == 0)) {
-        profile = true;
+private void display_help(const char *const argv0) {
+    printf("usage: %s [-h|--help] [-p|--profile]\n", argv0);
+    printf("\t-h, --help\t\tprint this help message and exit\n");
+    printf("\t-p, --profile\t\tprint profiling information and exit\n");
+}
+
+int main(int argc, char **argv) {
+    const bool help = argc >= 2 && get_flag(argv[1], "-h", "--help");
+
+    if (help) {
+        display_help(argv[0]);
+        return EXIT_SUCCESS;
     }
+
+    const bool profile = argc >= 2 && get_flag(argv[1], "-p", "--profile");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         sdl_error("SDL_Init");
