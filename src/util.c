@@ -47,7 +47,7 @@ bool is_whitespace(const char *const buf) {
 }
 
 bool is_decimal(const char *const buf) {
-    if (buf == NULL) {
+    if (buf == NULL || *buf == '\0') {
         return false;
     }
 
