@@ -18,7 +18,7 @@ char *color_to_str(const SDL_Color color, char *const dst) {
         return NULL;
     }
 
-    char buf[] = {
+    const char buf[] = {
             '#',
             (char) dec_to_hex(color.r / 16),
             (char) dec_to_hex(color.r % 16),
