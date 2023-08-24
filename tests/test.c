@@ -818,6 +818,183 @@ TEST(test_color_to_int, {
     }
 })
 
+TEST(test_is_decimal_valid, {
+    assert_true(is_decimal("0"));
+    assert_true(is_decimal("1"));
+    assert_true(is_decimal("2"));
+    assert_true(is_decimal("3"));
+    assert_true(is_decimal("4"));
+    assert_true(is_decimal("5"));
+    assert_true(is_decimal("6"));
+    assert_true(is_decimal("7"));
+    assert_true(is_decimal("8"));
+    assert_true(is_decimal("9"));
+    assert_true(is_decimal("10"));
+    assert_true(is_decimal("16518651238516981"));
+})
+
+TEST(test_is_decimal_valid_rand, {
+    static char buffer[100] = {0};
+
+    snprintf(buffer, 100, "%d", rand());
+    assert_true(is_decimal(buffer));
+})
+
+TEST(test_is_decimal_invalid, {
+    assert_false(is_decimal(""));
+    assert_false(is_decimal(" "));
+    assert_false(is_decimal("a"));
+    assert_false(is_decimal("0a"));
+    assert_false(is_decimal("a0"));
+    assert_false(is_decimal("0.0.0"));
+    assert_false(is_decimal("0x0"));
+    assert_false(is_decimal("0b0"));
+    assert_false(is_decimal("-1"));
+})
+
+private bool color_equals(const SDL_Color a, const SDL_Color b) {
+    return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
+}
+
+TEST(test_change_brightness, {
+    SDL_Color color;
+
+    color = rgb(0, 0, 0);
+    assert_equals(change_brightness(&color, 0.0F), &color);
+    assert_true(color_equals(color, rgb(0, 0, 0)));
+
+    color = rgb(255, 255, 255);
+    assert_equals(change_brightness(&color, 1.0F), &color);
+    assert_true(color_equals(color, rgb(255, 255, 255)));
+
+    color = rgb(255, 255, 255);
+    assert_equals(change_brightness(&color, 0.5F), &color);
+    assert_true(color_equals(color, rgb(127, 127, 127)));
+
+    color = rgb(255, 255, 255);
+    assert_equals(change_brightness(&color, 0.1F), &color);
+    assert_true(color_equals(color, rgb(25, 25, 25)));
+
+    color = rgb(255, 0, 0);
+    assert_equals(change_brightness(&color, 0.5F), &color);
+    assert_true(color_equals(color, rgb(127, 0, 0)));
+
+    color = rgb(0, 255, 0);
+    assert_equals(change_brightness(&color, 0.5F), &color);
+    assert_true(color_equals(color, rgb(0, 127, 0)));
+
+    color = rgb(0, 0, 255);
+    assert_equals(change_brightness(&color, 0.5F), &color);
+    assert_true(color_equals(color, rgb(0, 0, 127)));
+})
+
+TEST(test_color_to_str, {
+    static char buffer[sizeof "#RRGGBB" + 1] = {0};
+
+    assert_equals(color_to_str(rgb(0, 0, 0), NULL), NULL);
+
+    assert_equals(color_to_str(rgb(0, 0, 0), buffer), buffer);
+    assert_str_equals(buffer, "#000000");
+
+    assert_equals(color_to_str(rgb(255, 255, 255), buffer), buffer);
+    assert_str_equals(buffer, "#ffffff");
+
+    assert_equals(color_to_str(rgb(255, 0, 0), buffer), buffer);
+    assert_str_equals(buffer, "#ff0000");
+
+    assert_equals(color_to_str(rgb(0, 255, 0), buffer), buffer);
+    assert_str_equals(buffer, "#00ff00");
+
+    assert_equals(color_to_str(rgb(0, 0, 255), buffer), buffer);
+    assert_str_equals(buffer, "#0000ff");
+
+    assert_equals(color_to_str(rgb(255, 255, 0), buffer), buffer);
+    assert_str_equals(buffer, "#ffff00");
+
+    assert_equals(color_to_str(rgb(0, 255, 255), buffer), buffer);
+    assert_str_equals(buffer, "#00ffff");
+
+    assert_equals(color_to_str(rgb(255, 0, 255), buffer), buffer);
+    assert_str_equals(buffer, "#ff00ff");
+
+    assert_equals(color_to_str(rgb(17, 249, 156), buffer), buffer);
+    assert_str_equals(buffer, "#11f99c");
+
+    assert_equals(color_to_str(rgb(85, 170, 255), buffer), buffer);
+    assert_str_equals(buffer, "#55aaff");
+})
+
+TEST(test_is_whitespace, {
+    assert_true(is_whitespace(""));
+    assert_true(is_whitespace(" "));
+    assert_true(is_whitespace("\t"));
+    assert_true(is_whitespace("\n"));
+    assert_true(is_whitespace("\r"));
+    assert_true(is_whitespace("\f"));
+    assert_true(is_whitespace("\v"));
+    assert_true(is_whitespace(" \t\n\r\f\v"));
+
+    assert_false(is_whitespace(NULL));
+    assert_false(is_whitespace("a"));
+    assert_false(is_whitespace("0"));
+    assert_false(is_whitespace("!"));
+    assert_false(is_whitespace("A"));
+    assert_false(is_whitespace("Z"));
+    assert_false(is_whitespace("["));
+    assert_false(is_whitespace("`"));
+    assert_false(is_whitespace("z"));
+    assert_false(is_whitespace("{"));
+    assert_false(is_whitespace("~"));
+    assert_false(is_whitespace("a0!AZ[`z{~"));
+})
+
+TEST(test_hex_to_dec, {
+    assert_equals(hex_to_dec('0'), 0);
+    assert_equals(hex_to_dec('1'), 1);
+    assert_equals(hex_to_dec('2'), 2);
+    assert_equals(hex_to_dec('3'), 3);
+    assert_equals(hex_to_dec('4'), 4);
+    assert_equals(hex_to_dec('5'), 5);
+    assert_equals(hex_to_dec('6'), 6);
+    assert_equals(hex_to_dec('7'), 7);
+    assert_equals(hex_to_dec('8'), 8);
+    assert_equals(hex_to_dec('9'), 9);
+
+    assert_equals(hex_to_dec('a'), 10);
+    assert_equals(hex_to_dec('b'), 11);
+    assert_equals(hex_to_dec('c'), 12);
+    assert_equals(hex_to_dec('d'), 13);
+    assert_equals(hex_to_dec('e'), 14);
+    assert_equals(hex_to_dec('f'), 15);
+
+    assert_equals(hex_to_dec('A'), 10);
+    assert_equals(hex_to_dec('B'), 11);
+    assert_equals(hex_to_dec('C'), 12);
+    assert_equals(hex_to_dec('D'), 13);
+    assert_equals(hex_to_dec('E'), 14);
+    assert_equals(hex_to_dec('F'), 15);
+})
+
+TEST(test_dec_to_hex, {
+    assert_equals(dec_to_hex(0), '0');
+    assert_equals(dec_to_hex(1), '1');
+    assert_equals(dec_to_hex(2), '2');
+    assert_equals(dec_to_hex(3), '3');
+    assert_equals(dec_to_hex(4), '4');
+    assert_equals(dec_to_hex(5), '5');
+    assert_equals(dec_to_hex(6), '6');
+    assert_equals(dec_to_hex(7), '7');
+    assert_equals(dec_to_hex(8), '8');
+    assert_equals(dec_to_hex(9), '9');
+
+    assert_equals(dec_to_hex(10), 'a');
+    assert_equals(dec_to_hex(11), 'b');
+    assert_equals(dec_to_hex(12), 'c');
+    assert_equals(dec_to_hex(13), 'd');
+    assert_equals(dec_to_hex(14), 'e');
+    assert_equals(dec_to_hex(15), 'f');
+})
+
 
 RUN_TESTS(
         ADD_TEST(test_isclose),
@@ -852,4 +1029,12 @@ RUN_TESTS(
         ADD_TEST(test_vreflect),
         ADD_TEST(test_vproject),
         ADD_TEST(test_color_to_int),
+        ADD_TEST(test_is_decimal_valid),
+        ADD_TEST(test_is_decimal_valid_rand),
+        ADD_TEST(test_is_decimal_invalid),
+        ADD_TEST(test_change_brightness),
+        ADD_TEST(test_color_to_str),
+        ADD_TEST(test_is_whitespace),
+        ADD_TEST(test_hex_to_dec),
+        ADD_TEST(test_dec_to_hex),
 )

@@ -98,10 +98,9 @@ char *color_to_str(SDL_Color color, char *dst);
 bool is_whitespace(const char *buf);
 
 /**
- * @brief Determines whether a string contains a valid decimal number.
+ * @brief Determines whether a string contains a valid non-negative decimal integer.
  * @param buf the string to check.
  * @return true if the string contains a valid decimal number, false otherwise. Also returns false if buf is NULL.
- * @note whitespace is allowed.
  * @see isdigit(3)
  */
 bool is_decimal(const char *buf);
