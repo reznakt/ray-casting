@@ -2,45 +2,32 @@
 #define RAY_LOGGER_H
 
 
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-
-#ifdef NDEBUG
-#undef NDEBUG
-#endif
-
-#include <assert.h>
+#include <stdio.h>
 
 
 #include "util.h"
 
 
-#define LOG_LEVEL_NOLOG 0u
-#define LOG_LEVEL_FATAL 1u
-#define LOG_LEVEL_ERROR 2u
-#define LOG_LEVEL_WARN  3u
-#define LOG_LEVEL_INFO  4u
-#define LOG_LEVEL_DEBUG 5u
-
-
-#define LOG_LEVEL LOG_LEVEL_INFO
-
-
-#if (LOG_LEVEL < LOG_LEVEL_ERROR) || (LOG_LEVEL > LOG_LEVEL_DEBUG)
-#error LOG_LEVEL: Invalid log level
-#endif
-
-
-/* note: out-of-order assignment is a GNU extension */
-private const char *const LOG_PREFIXV[] = {
-        [LOG_LEVEL_NOLOG] = NULL,
-        [LOG_LEVEL_FATAL] = "FATAL",
-        [LOG_LEVEL_ERROR] = "ERROR",
-        [LOG_LEVEL_WARN] = "WARN",
-        [LOG_LEVEL_INFO] = "INFO",
-        [LOG_LEVEL_DEBUG] = "DEBUG"
+enum unused log_level_t {
+    LOG_LEVEL_NOLOG,
+    LOG_LEVEL_FATAL,
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_WARN,
+    LOG_LEVEL_INFO,
+    LOG_LEVEL_DEBUG
 };
+
+
+/**
+ * @brief Log a formatted message to a stream.
+ * @param level The log level of the message.
+ * @param file The file name.
+ * @param line The line number.
+ * @param func The function name.
+ * @param fmt The format string.
+ * @param ... The arguments to the format string.
+ */
+void logger_log(enum log_level_t level, const char *file, unsigned int line, const char *func, const char *fmt, ...);
 
 /**
  * @brief Print a formatted message to the standard error stream.
@@ -48,13 +35,7 @@ private const char *const LOG_PREFIXV[] = {
  * @param fmt The format string.
  * @param ... The arguments to the format string.
  */
-#define logger_printf(level, fmt, ...)                                                              \
-    do {                                                                                            \
-        assert(LOG_LEVEL >= LOG_LEVEL_NOLOG && LOG_LEVEL <= LOG_LEVEL_DEBUG);                       \
-        if (LOG_LEVEL < (unsigned int) (level)) { break; };                                         \
-        assert(fprintf(stderr, "%s:%d [%s] %s: " fmt,                                               \
-               basename(__FILE__), __LINE__, *(LOG_PREFIXV + (level)), __func__, __VA_ARGS__) > 0); \
-    } while (0)
+#define logger_printf(level, fmt, ...) logger_log((level), __FILE__, __LINE__, __func__, (fmt), __VA_ARGS__)
 
 /**
  * @brief Print a message to the standard error stream.
@@ -73,15 +54,7 @@ private const char *const LOG_PREFIXV[] = {
  * @brief Print a message based on the value of errno to the standard error stream.
  * @param msg Additional message to print.
  */
-#define logger_perror(msg)                                                  \
-    do {                                                                    \
-        logger_printf(LOG_LEVEL_ERROR, "%s: %s\n", (msg), strerror(errno)); \
-    } while (0)
-
-/**
- * @brief Print the stack trace to the standard error stream.
- */
-void print_stacktrace(void);
+#define logger_perror(msg) logger_printf(LOG_LEVEL_ERROR, "%s: %s\n", (msg), strerror(errno))
 
 
 #endif //RAY_LOGGER_H

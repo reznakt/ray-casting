@@ -28,7 +28,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wswitch-enum \
                     -Wconversion \
                     -Wunreachable-code \
-                    -Wformat=2 \
                     -Wreturn-type \
                     -Wcomment \
                     -Wchar-subscripts \
