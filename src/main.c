@@ -18,9 +18,13 @@
 
 
 private int init(struct game_t *const game) {
-    game->window = SDL_CreateWindow(SCREEN_TITLE, SDL_WINDOWPOS_UNDEFINED,
-                                    SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
+    game->window = SDL_CreateWindow(SCREEN_TITLE,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SCREEN_WIDTH,
+                                    SCREEN_HEIGHT,
                                     SCREEN_FLAGS);
+
     if (!game->window) {
         sdl_error("SDL_CreateWindow");
         return -1;
@@ -34,7 +38,6 @@ private int init(struct game_t *const game) {
     }
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
-
     return 0;
 }
 
