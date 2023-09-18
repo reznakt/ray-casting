@@ -1,9 +1,3 @@
-/**
- * @file conf.h
- * @brief Configuration parameters for the RayCastingSDL program.
- */
-
-
 #ifndef RAY_CONF_H
 #define RAY_CONF_H
 
@@ -127,7 +121,7 @@
 /**
  * @brief Default orientation of the camera.
  */
-#define CAMERA_HEADING 270 // north
+#define CAMERA_HEADING 270 // north/up
 
 /**
  * @brief Size of the walls in the game world.
@@ -163,20 +157,6 @@
 #define KEY_VIEW_2 SDLK_F2
 #define KEY_VIEW_3 SDLK_F3
 #define KEY_VIEW_4 SDLK_F4
-
-// Check if the camera field of view is within the allowed range
-#if CAMERA_FOV < FOV_MIN || CAMERA_FOV > FOV_MAX
-#error CAMERA_FOV: illegal value
-#endif
-
-// Check if the camera resolution multiplier is within the allowed range
-#if CAMERA_RESMULT < RESMULT_MIN || CAMERA_RESMULT > RESMULT_MAX
-#error CAMERA_RESMULT: illegal value
-#endif
-
-#if THREADS < 1
-#error THREADS: illegal value
-#endif
 
 
 #endif /* RAY_CONF_H */
