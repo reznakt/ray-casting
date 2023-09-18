@@ -31,15 +31,6 @@
  */
 #define stack_alloc(type, n) ((type [n]) {0})
 
-/**
- * @brief Macro for printing SDL errors.
- *
- * This macro prints the given error message and the SDL error message to the standard error stream.
- *
- * @param msg The error message to print.
- */
-#define sdl_error(msg) \
-    fprintf(stderr, msg ": %s\n", SDL_GetError())
 
 /**
  * @brief Macro for rendering formatted text to a game window.

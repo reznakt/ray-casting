@@ -25,15 +25,13 @@ private int init(struct game_t *const game) {
                                     SCREEN_HEIGHT,
                                     SCREEN_FLAGS);
 
-    if (!game->window) {
-        sdl_error("SDL_CreateWindow");
+    if (game->window == NULL) {
         return -1;
     }
 
     game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
 
-    if (!game->renderer) {
-        sdl_error("SDL_CreateRenderer");
+    if (game->renderer == NULL) {
         return -1;
     }
 
@@ -69,7 +67,6 @@ int main(int argc, char **argv) {
     const bool profile = argc >= 2 && get_flag(argv[1], "-p", "--profile");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        sdl_error("SDL_Init");
         return EXIT_FAILURE;
     }
 
