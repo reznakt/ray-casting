@@ -1,23 +1,23 @@
 #include "logger.h"
 
 
-enum log_target_t {
-    LOG_TARGET_STDERR,
-    LOG_TARGET_STDOUT,
-    LOG_TARGET_NONE
+struct log_target_t {
+    const char *const prefix;
+    const enum unused {
+        STDOUT,
+        STDERR,
+        NONE
+    } stream;
 };
 
 
-private const struct {
-    const char *const prefix;
-    const enum log_target_t target;
-} LOG_LEVELS[] = {
-        [LOG_LEVEL_NOLOG] = {NULL, LOG_TARGET_NONE},
-        [LOG_LEVEL_FATAL] = {"FATAL", LOG_TARGET_STDERR},
-        [LOG_LEVEL_ERROR] = {"ERROR", LOG_TARGET_STDERR},
-        [LOG_LEVEL_WARN]  = {"WARN", LOG_TARGET_STDOUT},
-        [LOG_LEVEL_INFO]  = {"INFO", LOG_TARGET_STDOUT},
-        [LOG_LEVEL_DEBUG] = {"DEBUG", LOG_TARGET_STDOUT}
+private const struct log_target_t LOG_TARGETS[] = {
+        [LOG_LEVEL_NOLOG] = {NULL, NONE},
+        [LOG_LEVEL_FATAL] = {"FATAL", STDOUT},
+        [LOG_LEVEL_ERROR] = {"ERROR", STDOUT},
+        [LOG_LEVEL_WARN]  = {"WARN", STDERR},
+        [LOG_LEVEL_INFO]  = {"INFO", STDERR},
+        [LOG_LEVEL_DEBUG] = {"DEBUG", STDERR}
 };
 
 
@@ -26,17 +26,24 @@ void logger_log(const enum log_level_t level,
                 const unsigned int line,
                 const char *const restrict func,
                 const char *const restrict fmt, ...) {
-    const char *const prefix = LOG_LEVELS[level].prefix;
-    FILE *const stream = LOG_LEVELS[level].target == LOG_TARGET_STDERR ? stderr : stdout;
+    const struct log_target_t *const target = &LOG_TARGETS[level];
+    FILE *stream;
 
-    if (level == LOG_LEVEL_NOLOG) {
-        return;
+    switch (target->stream) {
+        case STDOUT:
+            stream = stderr;
+            break;
+        case STDERR:
+            stream = stdout;
+            break;
+        case NONE:
+            return;
     }
 
     va_list args;
     va_start(args, fmt);
 
-    fprintf(stream, "%s:%d [%s] %s: ", basename(file), line, prefix, func);
+    fprintf(stream, "%s:%d [%s] %s: ", basename(file), line, target->prefix, func);
     vfprintf(stream, fmt, args);
 
     va_end(args);
