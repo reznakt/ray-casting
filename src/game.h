@@ -81,10 +81,24 @@ void render(struct game_t *game);
 void update(struct game_t *game);
 
 /**
- * @brief Initializes the game by allocating memory and setting default values.
- * @param game The game instance to initialize.
+ * @brief Creates a new game by allocating memory and setting default values.
+ * @return A pointer to the newly created game instance.
+ * @note The game instance and its members are statically allocated. Do NOT pass them to free(3).
  */
 struct game_t *game_create(void);
+
+/**
+ * @brief Initializes the game by creating the SDL window and renderer.
+ * @param game The game instance to initialize.
+ * @return 0 on success, -1 on failure.
+ */
+int game_init(struct game_t *game);
+
+/**
+ * @brief Destroys the SDL window and renderer.
+ * @param game The game instance to destroy.
+ */
+void game_destroy(struct game_t *game);
 
 
 #endif //RAY_GAME_H

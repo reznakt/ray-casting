@@ -352,3 +352,31 @@ struct game_t *game_create(void) {
 
     return &game;
 }
+
+int game_init(struct game_t *const game) {
+    game->window = SDL_CreateWindow(SCREEN_TITLE,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SCREEN_WIDTH,
+                                    SCREEN_HEIGHT,
+                                    SCREEN_FLAGS);
+
+    if (game->window == NULL) {
+        return -1;
+    }
+
+    game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
+
+    if (game->renderer == NULL) {
+        return -1;
+    }
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    return 0;
+}
+
+void game_destroy(struct game_t *const game) {
+    SDL_DestroyRenderer(game->renderer);
+    SDL_DestroyWindow(game->window);
+}

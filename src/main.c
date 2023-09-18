@@ -17,33 +17,6 @@
 #include "world.h"
 
 
-private int init(struct game_t *const game) {
-    game->window = SDL_CreateWindow(SCREEN_TITLE,
-                                    SDL_WINDOWPOS_UNDEFINED,
-                                    SDL_WINDOWPOS_UNDEFINED,
-                                    SCREEN_WIDTH,
-                                    SCREEN_HEIGHT,
-                                    SCREEN_FLAGS);
-
-    if (game->window == NULL) {
-        return -1;
-    }
-
-    game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
-
-    if (game->renderer == NULL) {
-        return -1;
-    }
-
-    SDL_SetRelativeMouseMode(SDL_TRUE);
-    return 0;
-}
-
-private void cleanup(const struct game_t *const game) {
-    SDL_DestroyRenderer(game->renderer);
-    SDL_DestroyWindow(game->window);
-}
-
 private bool get_flag(const char *const restrict arg,
                       const char *const restrict shortopt,
                       const char *const restrict longopt) {
@@ -91,7 +64,7 @@ int main(int argc, char **argv) {
     }
 
 
-    if (init(game) != 0) {
+    if (game_init(game) != 0) {
         return EXIT_FAILURE;
     }
 
@@ -135,7 +108,7 @@ int main(int argc, char **argv) {
         printf("ticks: %zu, frames: %zu, avg fps: %f\n",
                game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
     }
-    cleanup(game);
+    game_destroy(game);
     SDL_Quit();
 
     return EXIT_SUCCESS;
