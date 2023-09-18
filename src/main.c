@@ -35,9 +35,11 @@ private bool get_flag(const int argc,
 }
 
 private void display_help(const char *const argv0) {
-    printf("usage: %s [-h|--help] [-p|--profile]\n", argv0);
-    printf("\t-h, --help\t\tprint this help message and exit\n");
-    printf("\t-p, --profile\t\tprint profiling information and exit\n");
+    const char *const fmt = "usage: %s [-h|--help] [-p|--profile]\n" \
+                            "\t-h, --help\t\tprint this help message and exit\n" \
+                            "\t-p, --profile\t\tprint profiling information and exit\n";
+
+    printf(fmt, argv0);
 }
 
 int main(int argc, char **argv) {
