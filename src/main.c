@@ -42,7 +42,7 @@ private void display_help(const char *const argv0) {
     printf(fmt, argv0);
 }
 
-int main(int argc, char **argv) {
+int main(const int argc, char **const argv) {
     const bool help = get_flag(argc, argv, "-h", "--help");
 
     if (help) {
