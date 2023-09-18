@@ -328,15 +328,16 @@ struct game_t *game_create(void) {
     static struct camera_t camera = {0};
     static struct wobject_t objects[WORLD_NOBJECTS_MAX] = {0};
 
+    game.center = (struct vec_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};
+
     game.camera = &camera;
     game.camera->fov = CAMERA_FOV;
     game.camera->resmult = CAMERA_RESMULT;
     game.camera->nrays = game.camera->fov * game.camera->resmult;
-    game.camera->pos = game.center;
     game.camera->speed = CAMERA_MOVEMENT_SPEED;
     game.camera->rays = rays;
+    vmove(&game.camera->pos, &game.center);
 
-    game.center = (struct vec_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};
     game.render_mode = RENDER_MODE_TEXTURED;
     game.textbuf = textbuf;
     game.ceil_color = CEIL_COLOR;
