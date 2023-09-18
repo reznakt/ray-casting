@@ -17,10 +17,17 @@
 #include "world.h"
 
 
-private bool get_flag(const char *const restrict arg,
+private bool get_flag(const int argc,
+                      char *const *const restrict argv,
                       const char *const restrict shortopt,
                       const char *const restrict longopt) {
-    return strcmp(arg, shortopt) == 0 || strcmp(arg, longopt) == 0;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], shortopt) == 0 || strcmp(argv[i], longopt) == 0) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 private void display_help(const char *const argv0) {
@@ -30,14 +37,14 @@ private void display_help(const char *const argv0) {
 }
 
 int main(int argc, char **argv) {
-    const bool help = argc >= 2 && get_flag(argv[1], "-h", "--help");
+    const bool help = get_flag(argc, argv, "-h", "--help");
 
     if (help) {
         display_help(argv[0]);
         return EXIT_SUCCESS;
     }
 
-    const bool profile = argc >= 2 && get_flag(argv[1], "-p", "--profile");
+    const bool profile = get_flag(argc, argv, "-p", "--profile");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         return EXIT_FAILURE;
