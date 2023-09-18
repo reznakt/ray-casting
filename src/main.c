@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 
     while (true) {
         if (profile && game->ticks >= 10000) {
-            goto __cleanup;
+            goto cleanup;
         }
 
         update(game);
@@ -98,12 +98,12 @@ int main(int argc, char **argv) {
 
         while (SDL_PollEvent(&event)) {
             if (!on_event(game, &event)) {
-                goto __cleanup;
+                goto cleanup;
             }
         }
     }
 
-    __cleanup:
+    cleanup:
     if (profile) {
         printf("ticks: %zu, frames: %zu, avg fps: %f\n",
                game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
