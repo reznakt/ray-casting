@@ -22,7 +22,11 @@ private bool get_flag(const int argc,
                       const char *const restrict shortopt,
                       const char *const restrict longopt) {
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], shortopt) == 0 || strcmp(argv[i], longopt) == 0) {
+        if (shortopt != NULL && strcmp(argv[i], shortopt) == 0) {
+            return true;
+        }
+
+        if (longopt != NULL && strcmp(argv[i], longopt) == 0) {
             return true;
         }
     }
