@@ -72,7 +72,7 @@ private void render_walls(const struct game_t *const game) {
 private void render_hud(const struct game_t *const game, const SDL_Color color) {
     set_color(game, color);
 
-    render_printf(game, 10, 10,
+    render_printf(game, &((struct vec_t) {.x = 10.0F, .y = 10.0F}),
                   "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
                   game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
                   game->camera->fov, game->camera->resmult, game->camera->nrays,

@@ -43,11 +43,11 @@
  * @param fmt The format string.
  * @param ... The variadic arguments for the format string.
  */
-#define render_printf(game, x, y, fmt, ...)                     \
+#define render_printf(game, pos, fmt, ...)                      \
     do {                                                        \
         memset(game->textbuf, 0, TEXTBUFLEN);                   \
         snprintf(game->textbuf, TEXTBUFLEN, fmt, __VA_ARGS__);  \
-        render_string(game->renderer, x, y, game->textbuf);     \
+        render_string(game->renderer, pos, game->textbuf);      \
     } while (0)
 
 
