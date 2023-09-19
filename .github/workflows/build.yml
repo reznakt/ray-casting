@@ -23,6 +23,11 @@ jobs:
         cmake ..
         make -j $(nproc)
 
+    - name: Strip debugging symbols
+      run: |
+        strip ray-casting
+        strip test
+
     - name: Export test executable
       uses: actions/upload-artifact@v2
       with:
