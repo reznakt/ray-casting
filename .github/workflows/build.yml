@@ -23,9 +23,14 @@ jobs:
         cmake ..
         make -j $(nproc)
 
-    - name: Export executable
+    - name: Export test executable
       uses: actions/upload-artifact@v2
       with:
-        name: RayCastingSDL
-        path: build/ray-casting
+        name: test
+        path: build/test
 
+    - name: Export ray-casting executable
+      uses: actions/upload-artifact@v2
+      with:
+        name: ray-casting
+        path: build/ray-casting
