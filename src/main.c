@@ -99,9 +99,9 @@ int main(const int argc, char **const argv) {
     logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n", TEXTURE_ATLAS_FILE, surface->w,
                   surface->h);
 
-    while (true) {
+    while (!game->quit) {
         if (profile && game->ticks >= 10000) {
-            goto cleanup;
+            break;
         }
 
         update(game);
@@ -110,17 +110,15 @@ int main(const int argc, char **const argv) {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            if (!on_event(game, &event)) {
-                goto cleanup;
-            }
+            on_event(game, &event);
         }
     }
 
-    cleanup:
     if (profile) {
         printf("ticks: %zu, frames: %zu, avg fps: %f\n",
                game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
     }
+
     game_destroy(game);
     SDL_Quit();
 

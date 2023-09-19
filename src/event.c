@@ -15,10 +15,11 @@ private void camera_set_fov(struct game_t *const game, const size_t fov) {
 }
 
 
-bool on_event(struct game_t *const game, const SDL_Event *const event) {
+void on_event(struct game_t *const game, const SDL_Event *const event) {
     switch (event->type) {
         case SDL_QUIT:
-            return false;
+            game->quit = true;
+            break;
 
         case SDL_KEYDOWN:
             switch (event->key.keysym.sym) {
@@ -65,7 +66,8 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                     break;
                 case KEY_QUIT_1:
                 case KEY_QUIT_2:
-                    return false;
+                    game->quit = true;
+                    break;
                 case KEY_VIEW_1:
                     game->render_mode = RENDER_MODE_FLAT;
                     break;
@@ -112,6 +114,4 @@ bool on_event(struct game_t *const game, const SDL_Event *const event) {
                                 game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
             break;
     }
-
-    return true;
 }
