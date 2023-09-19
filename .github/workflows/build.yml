@@ -56,4 +56,6 @@ jobs:
           path: test
 
       - name: Run tests
-        run: ./test
+        run: |
+          mkdir build
+          build/test
