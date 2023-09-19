@@ -167,7 +167,7 @@ private int parse_record(char *const restrict record, struct wobject_t *const ds
 
 
 int load_world(const char *const restrict path,
-               struct wobject_t *const restrict objects,
+               struct wobject_t *const restrict *const restrict objects,
                size_t *const restrict nobjects) {
     if (path == NULL) {
         return -1;
@@ -210,7 +210,7 @@ int load_world(const char *const restrict path,
         }
 
         if (objects != NULL && nobjects != NULL) {
-            memcpy(&objects[(*nobjects)++], &object, sizeof object);
+            memcpy(objects[(*nobjects)++], &object, sizeof object);
         }
 
         next:

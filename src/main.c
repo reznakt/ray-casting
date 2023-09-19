@@ -66,10 +66,10 @@ int main(const int argc, char **const argv) {
     logger_printf(LOG_LEVEL_INFO, "loaded %zu objects from %s: \n", game->nobjects, WORLD_SPEC_FILE);
 
     for (size_t i = 0; i < game->nobjects; i++) {
-        const struct wobject_t object = game->objects[i];
+        const struct wobject_t *const object = game->objects[i];
 
-        if (object.type == WALL) {
-            const struct wall_t wall = object.data.wall;
+        if (object->type == WALL) {
+            const struct wall_t wall = object->data.wall;
 
             logger_printf(LOG_LEVEL_INFO, "\twall %.0f %.0f %.0f %.0f %s %u\n",
                           wall.a.x, wall.a.y, wall.b.x, wall.b.y, strcolor(wall.color), wall.type);

@@ -48,7 +48,7 @@ struct wobject_t {
  * @return 0 on success, -1 on error (objects and nobjects are not modified in this case).
  * @see parse_record
  */
-int load_world(const char *path, struct wobject_t *objects, size_t *nobjects);
+int load_world(const char *path, struct wobject_t *const restrict *objects, size_t *nobjects);
 
 
 #endif // RAY_WORLD_H

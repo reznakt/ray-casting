@@ -72,11 +72,11 @@ private float speed_coeff(const struct game_t *const game, const float coeff) {
 
 private void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nobjects; i++) {
-        if (game->objects[i].type != WALL) {
+        if (game->objects[i]->type != WALL) {
             continue;
         }
 
-        const struct wall_t *const wall = &game->objects[i].data.wall;
+        const struct wall_t *const wall = &game->objects[i]->data.wall;
 
         render_colored(game, wall->color, {
             SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
@@ -319,11 +319,11 @@ void update(struct game_t *const game) {
         float min_dist = INFINITY;
 
         for (size_t j = 0; j < game->nobjects; j++) {
-            if (game->objects[j].type != WALL) {
+            if (game->objects[j]->type != WALL) {
                 continue;
             }
 
-            const struct wall_t *const wall = &game->objects[j].data.wall;
+            const struct wall_t *const wall = &game->objects[j]->data.wall;
             const struct vec_t *const intersection = ray_intersection(&ray, wall, vector());
 
             if (intersection == NULL) {
@@ -351,7 +351,12 @@ struct game_t *game_create(void) {
     static char textbuf[TEXTBUFLEN] = {0};
     static struct ray_t rays[FOV_MAX * RESMULT_MAX] = {0};
     static struct camera_t camera = {0};
-    static struct wobject_t objects[WORLD_NOBJECTS_MAX] = {0};
+    static struct wobject_t *objects[WORLD_NOBJECTS_MAX] = {0};
+    static struct wobject_t objects_data[WORLD_NOBJECTS_MAX] = {0};
+
+    for (size_t i = 0; i < WORLD_NOBJECTS_MAX; i++) {
+        objects[i] = &objects_data[i];
+    }
 
     game.center = (struct vec_t) {(float) SCREEN_WIDTH / 2.0F, (float) SCREEN_HEIGHT / 2.0F};
 
