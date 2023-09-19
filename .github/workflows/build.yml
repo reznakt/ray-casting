@@ -49,6 +49,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.0.0
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-suggests --no-install-recommends libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+
       - name: Import test executable
         uses: actions/download-artifact@v2.1.1
         with:
