@@ -1,4 +1,4 @@
-name: Build with CMake and SDL2
+name: Build and test
 
 on:
   - push
@@ -49,13 +49,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.0.0
 
+      - name: Create build directory
+        run: mkdir build
+
       - name: Import test executable
         uses: actions/download-artifact@v2.1.1
         with:
           name: test
-          path: test
+          path: build/test
 
       - name: Run tests
-        run: |
-          mkdir build
-          build/test
+        run: build/test
