@@ -83,7 +83,7 @@ private void render_rays(const struct game_t *const game, const SDL_Color color)
     set_color(game, color);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
-        const struct ray_t *const ray = game->camera->rays + i;
+        const struct ray_t *const ray = &game->camera->rays[i];
         const struct intersection_t *const intersection = &ray->intersection;
 
         if (intersection->wall != NULL) {
