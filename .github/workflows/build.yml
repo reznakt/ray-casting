@@ -56,4 +56,6 @@ jobs:
           path: build/
 
       - name: Run tests
-        run: build/test
+        run: | 
+          chmod +x build/test
+          build/test
