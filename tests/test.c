@@ -27,74 +27,6 @@ TEST(test_isclose, {
     assert_not(isclose(1.0F, 1.0F - FLT_EPSILON + 0.00001F));
 })
 
-TEST(test_min, {
-    assert_equals(min(0, 0), 0);
-    assert_equals(min(0, 1), 0);
-    assert_equals(min(1, 0), 0);
-    assert_equals(min(1, 1), 1);
-    assert_equals(min(0, -1), -1);
-    assert_equals(min(-1, 0), -1);
-    assert_equals(min(-1, -1), -1);
-
-    assert_is_close(min(0.0F, 0.0F), 0.0F);
-    assert_is_close(min(0.0F, 1.0F), 0.0F);
-    assert_is_close(min(1.0F, 0.0F), 0.0F);
-    assert_is_close(min(1.0F, 1.0F), 1.0F);
-    assert_is_close(min(0.0F, -1.0F), -1.0F);
-    assert_is_close(min(-1.0F, 0.0F), -1.0F);
-
-})
-
-TEST(test_min_rand, {
-    const int a = rand();
-    const int b = rand();
-
-    if (a == b) {
-        assert(min(a, b) == a || min(a, b) == b);
-        assert(min(b, a) == a || min(b, a) == b);
-    } else if (a < b) {
-        assert_equals(min(a, b), a);
-        assert_equals(min(b, a), a);
-    } else {
-        assert_equals(min(a, b), b);
-        assert_equals(min(b, a), b);
-    }
-})
-
-TEST(test_max, {
-    assert_equals(max(0, 0), 0);
-    assert_equals(max(0, 1), 1);
-    assert_equals(max(1, 0), 1);
-    assert_equals(max(1, 1), 1);
-    assert_equals(max(0, -1), 0);
-    assert_equals(max(-1, 0), 0);
-    assert_equals(max(-1, -1), -1);
-
-    assert_is_close(max(0.0F, 0.0F), 0.0F);
-    assert_is_close(max(0.0F, 1.0F), 1.0F);
-    assert_is_close(max(1.0F, 0.0F), 1.0F);
-    assert_is_close(max(1.0F, 1.0F), 1.0F);
-    assert_is_close(max(0.0F, -1.0F), 0.0F);
-    assert_is_close(max(-1.0F, 0.0F), 0.0F);
-    assert_is_close(max(-1.0F, -1.0F), -1.0F);
-})
-
-TEST(test_max_rand, {
-    const int a = rand();
-    const int b = rand();
-
-    if (a == b) {
-        assert(max(a, b) == a || max(a, b) == b);
-        assert(max(b, a) == a || max(b, a) == b);
-    } else if (a < b) {
-        assert_equals(max(a, b), b);
-        assert_equals(max(b, a), b);
-    } else {
-        assert_equals(max(a, b), a);
-        assert_equals(max(b, a), a);
-    }
-})
-
 TEST(test_map, {
     assert_is_close(map(0.0F, 0.0F, 1.0F, 0.0F, 1.0F), 0.0F);
     assert_is_close(map(0.5F, 0.0F, 1.0F, 0.0F, 1.0F), 0.5F);
@@ -998,10 +930,6 @@ TEST(test_dec_to_hex, {
 
 RUN_TESTS(
         ADD_TEST(test_isclose),
-        ADD_TEST(test_min),
-        ADD_TEST(test_min_rand),
-        ADD_TEST(test_max),
-        ADD_TEST(test_max_rand),
         ADD_TEST(test_map),
         ADD_TEST(test_constrain),
         ADD_TEST(test_lerp),

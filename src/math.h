@@ -13,25 +13,6 @@
 
 
 /**
- * @brief Returns the smaller of two values.
- *
- * @param a The first value.
- * @param b The second value.
- * @return The smaller value.
- */
-#define min(a, b) ((a) < (b) ? (a) : (b))
-
-/**
- * @brief Returns the larger of two values.
- *
- * @param a The first value.
- * @param b The second value.
- * @return The larger value.
- */
-#define max(a, b) ((a) > (b) ? (a) : (b))
-
-
-/**
  * @brief Maps a value from one range to another.
  *
  * @param value The value to be mapped.

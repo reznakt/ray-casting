@@ -58,7 +58,9 @@ void on_event(struct game_t *const game, const SDL_Event *const event) {
                     game->nthreads++;
                     break;
                 case KEY_NTHREADS_DEC:
-                    game->nthreads = max(game->nthreads - 1, 1);
+                    if (game->nthreads > 1) {
+                        game->nthreads--;
+                    }
                     break;
                 case KEY_RESET:
                     game->camera->pos = game->center;
