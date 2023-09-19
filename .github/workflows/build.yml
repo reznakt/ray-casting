@@ -49,14 +49,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.0.0
 
-      - name: Create build directory
-        run: mkdir build
-
       - name: Import test executable
         uses: actions/download-artifact@v2.1.1
         with:
           name: test
-          path: build/test
+          path: build/
 
       - name: Run tests
         run: build/test
