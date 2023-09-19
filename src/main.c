@@ -76,7 +76,6 @@ int main(const int argc, char **const argv) {
         }
     }
 
-
     if (game_init(game) != 0) {
         return EXIT_FAILURE;
     }
@@ -96,8 +95,8 @@ int main(const int argc, char **const argv) {
         return EXIT_FAILURE;
     }
 
-    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n", TEXTURE_ATLAS_FILE, surface->w,
-                  surface->h);
+    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n",
+                  TEXTURE_ATLAS_FILE, surface->w, surface->h);
 
     while (!game->quit) {
         if (profile && game->ticks >= 10000) {
