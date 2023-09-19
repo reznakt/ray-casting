@@ -11,6 +11,23 @@
 
 
 /**
+ * @brief Render objects with a certain color. The color is restored after rendering.
+ * @param game A pointer to the game_t struct representing the game.
+ * @param color The color to use for rendering.
+ * @param ... The code to execute for rendering.
+ * @example render_colored(game, COLOR_RED, { SDL_RenderDrawLineF(...); });
+ */
+#define render_colored(game, color, ...)                                                                    \
+    do {                                                                                                    \
+        SDL_Color _old_color;                                                                               \
+        SDL_GetRenderDrawColor(game->renderer, &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a); \
+        SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, color.a);                         \
+        __VA_ARGS__                                                                                         \
+        SDL_SetRenderDrawColor(game->renderer, _old_color.r, _old_color.g, _old_color.b, _old_color.a);     \
+    } while (0)
+
+
+/**
  * @brief Renders a texture from the texture atlas to the screen.
  *
  * @param game A pointer to the game_t struct representing the game.
@@ -53,10 +70,6 @@ private float speed_coeff(const struct game_t *const game, const float coeff) {
     return coeff / (float) game->fps;
 }
 
-private void set_color(const struct game_t *const game, const SDL_Color color) {
-    SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, color.a);
-}
-
 private void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nobjects; i++) {
         if (game->objects[i].type != WALL) {
@@ -64,33 +77,36 @@ private void render_walls(const struct game_t *const game) {
         }
 
         const struct wall_t *const wall = &game->objects[i].data.wall;
-        set_color(game, wall->color);
-        SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
+
+        render_colored(game, wall->color, {
+            SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
+        });
     }
 }
 
 private void render_hud(const struct game_t *const game, const SDL_Color color) {
-    set_color(game, color);
-
-    render_printf(game, &((struct vec_t) {.x = 10.0F, .y = 10.0F}),
-                  "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
-                  game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y, game->camera->angle,
-                  game->camera->fov, game->camera->resmult, game->camera->nrays,
-                  (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads);
+    render_colored(game, color, {
+        render_printf(game, &((struct vec_t) {.x = 10.0F, .y = 10.0F}),
+                      "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
+                      game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y,
+                      game->camera->angle,
+                      game->camera->fov, game->camera->resmult, game->camera->nrays,
+                      (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads);
+    });
 }
 
 private void render_rays(const struct game_t *const game, const SDL_Color color) {
-    set_color(game, color);
+    render_colored(game, color, {
+        for (size_t i = 0; i < game->camera->nrays; i++) {
+            const struct ray_t *const ray = &game->camera->rays[i];
+            const struct intersection_t *const intersection = &ray->intersection;
 
-    for (size_t i = 0; i < game->camera->nrays; i++) {
-        const struct ray_t *const ray = &game->camera->rays[i];
-        const struct intersection_t *const intersection = &ray->intersection;
-
-        if (intersection->wall != NULL) {
-            SDL_RenderDrawLineF(game->renderer, ray->pos.x, ray->pos.y,
-                                ray->intersection.pos.x, ray->intersection.pos.y);
+            if (intersection->wall != NULL) {
+                SDL_RenderDrawLineF(game->renderer, ray->pos.x, ray->pos.y,
+                                    ray->intersection.pos.x, ray->intersection.pos.y);
+            }
         }
-    }
+    });
 }
 
 private void render_3d(struct game_t *const game) {
@@ -120,40 +136,42 @@ private void render_3d(struct game_t *const game) {
             change_brightness(&color, map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F));
         }
 
-        SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, 255);
-
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            SDL_RenderFillRectF(game->renderer, &stripe);
+            render_colored(game, color, {
+                SDL_RenderFillRectF(game->renderer, &stripe);
+            });
             continue;
         }
 
-        const float x = stripe.x + stripe.w;
-        const float y = stripe.y + stripe.h;
+        render_colored(game, color, {
+            const float x = stripe.x + stripe.w;
+            const float y = stripe.y + stripe.h;
 
-        // top horizontal line
-        SDL_RenderDrawLineF(game->renderer,
-                            stripe.x,
-                            stripe.y,
-                            x,
-                            stripe.y);
+            // top horizontal line
+            SDL_RenderDrawLineF(game->renderer,
+                                stripe.x,
+                                stripe.y,
+                                x,
+                                stripe.y);
 
-        // bottom horizontal line
-        SDL_RenderDrawLineF(game->renderer,
-                            stripe.x,
-                            y,
-                            x,
-                            y);
+            // bottom horizontal line
+            SDL_RenderDrawLineF(game->renderer,
+                                stripe.x,
+                                y,
+                                x,
+                                y);
 
-        const float dist_a2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->a);
-        const float dist_b2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->b);
-        const float min_dist2 = fminf(dist_a2, dist_b2);
+            const float dist_a2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->a);
+            const float dist_b2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->b);
+            const float min_dist2 = fminf(dist_a2, dist_b2);
 
-        // vertical line; only at the adge of a wall
-        // this is a bad approximation, which works poorly in lower resolutions
-        // TODO: find a better threshold than strip.w
-        if (min_dist2 <= stripe.w) {
-            SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
-        }
+            // vertical line; only at the adge of a wall
+            // this is a bad approximation, which works poorly in lower resolutions
+            // TODO: find a better threshold than strip.w
+            if (min_dist2 <= stripe.w) {
+                SDL_RenderDrawLineF(game->renderer, stripe.x, stripe.y, stripe.x, y);
+            }
+        });
     }
 }
 
@@ -170,8 +188,9 @@ private void render_camera(const struct game_t *const game, const SDL_Color came
     struct vec_t *const dir = vcopy(&game->camera->dir);
     const struct vec_t *const endpoint = vadd(pos, vmul(dir, 100.0F));
 
-    set_color(game, direction);
-    SDL_RenderDrawLineF(game->renderer, game->camera->pos.x, game->camera->pos.y, endpoint->x, endpoint->y);
+    render_colored(game, direction, {
+        SDL_RenderDrawLineF(game->renderer, pos->x, pos->y, endpoint->x, endpoint->y);
+    });
 }
 
 private void render_visual_fps(struct game_t *const game, const SDL_Color fg, const SDL_Color bg) {
@@ -184,11 +203,13 @@ private void render_visual_fps(struct game_t *const game, const SDL_Color fg, co
             .h = size
     };
 
-    set_color(game, fg);
-    SDL_RenderFillRectF(game->renderer, &rect);
+    render_colored(game, fg, {
+        SDL_RenderFillRectF(game->renderer, &rect);
+    });
 
-    set_color(game, bg);
-    SDL_RenderDrawRectF(game->renderer, &rect);
+    render_colored(game, bg, {
+        SDL_RenderDrawRectF(game->renderer, &rect);
+    });
 }
 
 private void render_flat(struct game_t *const game) {
@@ -198,8 +219,9 @@ private void render_flat(struct game_t *const game) {
 }
 
 private void render_floor_and_ceiling(struct game_t *const game) {
-    set_color(game, game->ceil_color);
-    SDL_RenderClear(game->renderer);
+    render_colored(game, game->ceil_color, {
+        SDL_RenderClear(game->renderer);
+    });
 
     const float height_diff = game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
 
@@ -210,8 +232,9 @@ private void render_floor_and_ceiling(struct game_t *const game) {
             .h = game->center.y + height_diff
     };
 
-    set_color(game, game->floor_color);
-    SDL_RenderFillRectF(game->renderer, &floor);
+    render_colored(game, game->floor_color, {
+        SDL_RenderFillRectF(game->renderer, &floor);
+    });
 }
 
 private void tick(struct game_t *const game) {
@@ -236,14 +259,16 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 void render(struct game_t *const game) {
     switch (game->render_mode) {
         case RENDER_MODE_FLAT:
-            set_color(game, COLOR_BLACK);
-            SDL_RenderClear(game->renderer);
+            render_colored(game, COLOR_BLACK, {
+                SDL_RenderClear(game->renderer);
+            });
             render_flat(game);
             break;
 
         case RENDER_MODE_WIREFRAME:
-            set_color(game, COLOR_BLACK);
-            SDL_RenderClear(game->renderer);
+            render_colored(game, COLOR_BLACK, {
+                SDL_RenderClear(game->renderer);
+            });
             render_3d(game);
             break;
 
