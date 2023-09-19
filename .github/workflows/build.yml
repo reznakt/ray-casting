@@ -1,4 +1,4 @@
-name: Build with CMake and SDL2
+name: Build and test
 
 on:
   - push
@@ -39,3 +39,19 @@ jobs:
       with:
         name: ray-casting
         path: build/ray-casting
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.0.0
+
+      - name: Import test executable
+        uses: actions/download-artifact@v2.1.1
+        with:
+          name: test
+          path: test
+
+      - name: Run tests
+        run: ./test
