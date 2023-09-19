@@ -1,13 +1,3 @@
-/**
- * @file ray.h
- * @brief Contains structures and functions for working with rays in 2D space.
- *
- * This header file contains definitions for the `ray_t` and `line_t` structures,
- * as well as functions for performing common operations with them, such as finding
- * the intersection point between a ray and a line.
- */
-
-
 #ifndef RAY_RAY_H
 #define RAY_RAY_H
 
