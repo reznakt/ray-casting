@@ -25,8 +25,8 @@ jobs:
 
     - name: Strip debugging symbols
       run: |
-        strip ray-casting
-        strip test
+        strip build/ray-casting
+        strip build/test
 
     - name: Export test executable
       uses: actions/upload-artifact@v2
