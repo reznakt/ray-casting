@@ -1,0 +1,21 @@
+name: Run the test suite
+
+on:
+  - push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.0.0
+
+    - name: Import test executable
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: test
+        path: test
+    
+    - name: Run tests
+      run: ./test
