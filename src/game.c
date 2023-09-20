@@ -80,11 +80,11 @@ private void render_walls(const struct game_t *const game) {
 private void render_hud(const struct game_t *const game, const SDL_Color color) {
     render_colored(game, color, {
         render_printf(game, &((struct vec_t) {.x = 10.0F, .y = 10.0F}),
-                      "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu",
+                      "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f",
                       game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y,
                       game->camera->angle,
                       game->camera->fov, game->camera->resmult, game->camera->nrays,
-                      (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads);
+                      (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads, game->camera->lightmult);
     });
 }
 
@@ -126,7 +126,8 @@ private void render_3d(struct game_t *const game) {
         memcpy(&color, &ray->intersection.wall->color, sizeof color);
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            change_brightness(&color, map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F));
+            const float brightness = map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F);
+            change_brightness(&color, brightness * game->camera->lightmult);
         }
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
@@ -360,6 +361,7 @@ struct game_t *game_create(void) {
     game.camera->speed = CAMERA_MOVEMENT_SPEED;
     game.camera->rays = rays;
     vmove(&game.camera->pos, &game.center);
+    game.camera->lightmult = CAMERA_LIGHTMULT;
 
     game.render_mode = RENDER_MODE_TEXTURED;
     game.textbuf = textbuf;

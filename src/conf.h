@@ -123,6 +123,8 @@
  */
 #define CAMERA_HEADING 270 // north/up
 
+#define CAMERA_LIGHTMULT 1.0F
+
 /**
  * @brief Size of the walls in the game world.
  */
@@ -157,6 +159,8 @@
 #define KEY_VIEW_2 SDLK_F2
 #define KEY_VIEW_3 SDLK_F3
 #define KEY_VIEW_4 SDLK_F4
+#define KEY_LIGHT_INC SDLK_HOME
+#define KEY_LIGHT_DEC SDLK_END
 
 
 #endif /* RAY_CONF_H */

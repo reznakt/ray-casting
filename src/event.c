@@ -82,6 +82,14 @@ void on_event(struct game_t *const game, const SDL_Event *const event) {
                 case KEY_VIEW_4:
                     game->render_mode = RENDER_MODE_TEXTURED;
                     break;
+                case KEY_LIGHT_INC:
+                    game->camera->lightmult += 0.1F;
+                    break;
+                case KEY_LIGHT_DEC:
+                    if (game->camera->lightmult >= 0.1F) {
+                        game->camera->lightmult -= 0.1F;
+                    }
+                    break;
             }
             break;
 
