@@ -189,12 +189,12 @@ private void render_camera(const struct game_t *const game, const SDL_Color came
             color_to_int(&camera)
     );
 
-    struct vec_t *const pos = vcopy(&game->camera->pos);
-    struct vec_t *const dir = vcopy(&game->camera->dir);
-    const struct vec_t *const endpoint = vadd(pos, vmul(dir, 100.0F));
-
     render_colored(game, direction, {
-        SDL_RenderDrawLineF(game->renderer, pos->x, pos->y, endpoint->x, endpoint->y);
+        SDL_RenderDrawLineF(game->renderer,
+                            game->camera->pos.x,
+                            game->camera->pos.y,
+                            game->camera->pos.x + 100.0F * game->camera->dir.x,
+                            game->camera->pos.y + 100.0F * game->camera->dir.y);
     });
 }
 
