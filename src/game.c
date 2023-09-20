@@ -78,13 +78,24 @@ private void render_walls(const struct game_t *const game) {
 }
 
 private void render_hud(const struct game_t *const game, const SDL_Color color) {
+    static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
+    static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
+                                   "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
+
     render_colored(game, color, {
-        render_printf(game, &((struct vec_t) {.x = 10.0F, .y = 10.0F}),
-                      "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu | resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f",
-                      game->fps, game->ticks, game->frames, game->camera->pos.x, game->camera->pos.y,
+        render_printf(game, &pos, fmt,
+                      game->fps,
+                      game->ticks,
+                      game->frames,
+                      game->camera->pos.x,
+                      game->camera->pos.y,
                       game->camera->angle,
-                      game->camera->fov, game->camera->resmult, game->camera->nrays,
-                      (float) SCREEN_WIDTH / (float) game->camera->nrays, game->nthreads, game->camera->lightmult);
+                      game->camera->fov,
+                      game->camera->resmult,
+                      game->camera->nrays,
+                      (float) SCREEN_WIDTH / (float) game->camera->nrays,
+                      game->nthreads,
+                      game->camera->lightmult);
     });
 }
 
