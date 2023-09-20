@@ -134,8 +134,8 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
     }
 
     const intmax_t elapsed = timer(TIMER_STOP);
+    putchar('\n');
 
-    puts("");
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
 
@@ -143,9 +143,8 @@ unused private int run_tests(struct test_t *const tests, const size_t ntests) {
             printf("\n%s\n", test->output);
         }
     }
-    puts("");
 
-    printf("\npassed: %s%zu%s, failed: %s%zu%s, total: %zu (%" PRIdMAX " ms)\n",
+    printf("\n\npassed: %s%zu%s, failed: %s%zu%s, total: %zu (%" PRIdMAX " ms)\n",
            HGRN, passed, CRESET,
            RED, failed, CRESET,
            total, elapsed);
