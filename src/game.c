@@ -37,25 +37,18 @@
  */
 unused private void render_texture(struct game_t *const restrict game,
                                    const uint8_t texno,
-                                   const SDL_Rect *restrict src,
+                                   const SDL_Rect *const restrict src,
                                    const SDL_FRect *const restrict dst) {
-    if (src->x < 0 || src->x > TEXTURE_ATLAS_WIDTH
-        || src->y < 0 || src->y > TEXTURE_ATLAS_WIDTH
-        || src->w < 0 || src->w > TEXTURE_ATLAS_WIDTH
-        || src->h < 0 || src->h > TEXTURE_ATLAS_WIDTH) {
-        return;
-    }
-
     static const int rowsize = TEXTURE_ATLAS_WIDTH * TEXTURE_SIZE;
 
-    src = &(SDL_Rect) {
+    const SDL_Rect adjusted_src = {
             .x = texno % rowsize + src->x,
             .y = texno / rowsize + src->y,
             .w = src->w,
             .h = src->h
     };
 
-    SDL_RenderCopyF(game->renderer, game->texture, src, dst);
+    SDL_RenderCopyF(game->renderer, game->texture, &adjusted_src, dst);
 }
 
 
