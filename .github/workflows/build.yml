@@ -9,7 +9,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.0.0
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -29,13 +29,13 @@ jobs:
         strip build/test
 
     - name: Export test executable
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v3
       with:
         name: test
         path: build/test
 
     - name: Export ray-casting executable
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v3
       with:
         name: ray-casting
         path: build/ray-casting
@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -55,7 +55,7 @@ jobs:
           sudo apt-get install -y --no-install-suggests --no-install-recommends libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
 
       - name: Import test executable
-        uses: actions/download-artifact@v2.1.1
+        uses: actions/download-artifact@v3
         with:
           name: test
           path: build/
