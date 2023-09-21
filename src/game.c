@@ -1,6 +1,9 @@
+#include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL_image.h>
 
 
+#include "logger.h"
 #include "math.h"
 #include "ray.h"
 #include "util.h"
@@ -399,6 +402,24 @@ int game_init(struct game_t *const game) {
     }
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    SDL_Surface *const surface = IMG_Load(TEXTURE_ATLAS_FILE);
+
+    if (surface == NULL) {
+        logger_printf(LOG_LEVEL_FATAL, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
+        return -1;
+    }
+
+    game->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+    SDL_FreeSurface(surface);
+
+    if (game->texture == NULL) {
+        logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
+        return -1;
+    }
+
+    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n",
+                  TEXTURE_ATLAS_FILE, surface->w, surface->h);
 
     return 0;
 }

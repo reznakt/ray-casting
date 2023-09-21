@@ -14,7 +14,6 @@
 #include "ray.h"
 #include "util.h"
 #include "vector.h"
-#include "world.h"
 
 
 private bool get_flag(const int argc,
@@ -63,40 +62,9 @@ int main(const int argc, char **const argv) {
 
     struct game_t *const game = game_create();
 
-    logger_printf(LOG_LEVEL_INFO, "loaded %zu objects from %s: \n", game->nobjects, WORLD_SPEC_FILE);
-
-    for (size_t i = 0; i < game->nobjects; i++) {
-        const struct wobject_t *const object = game->objects[i];
-
-        if (object->type == WALL) {
-            const struct wall_t wall = object->data.wall;
-
-            logger_printf(LOG_LEVEL_INFO, "\twall %.0f %.0f %.0f %.0f %s %u\n",
-                          wall.a.x, wall.a.y, wall.b.x, wall.b.y, strcolor(wall.color), wall.type);
-        }
-    }
-
     if (game_init(game) != 0) {
         return EXIT_FAILURE;
     }
-
-    SDL_Surface *const surface = IMG_Load(TEXTURE_ATLAS_FILE);
-
-    if (surface == NULL) {
-        logger_printf(LOG_LEVEL_FATAL, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
-        return EXIT_FAILURE;
-    }
-
-    game->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
-
-    if (game->texture == NULL) {
-        logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
-        return EXIT_FAILURE;
-    }
-
-    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n",
-                  TEXTURE_ATLAS_FILE, surface->w, surface->h);
 
     while (!game->quit) {
         if (profile && game->ticks >= 10000) {
