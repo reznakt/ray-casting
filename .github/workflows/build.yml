@@ -14,14 +14,13 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-suggests --no-install-recommends cmake libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+        sudo apt-get install -y --no-install-suggests --no-install-recommends libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
 
-    - name: Build with CMake
-      run: |
-        mkdir build
-        cd build
-        cmake ..
-        make -j $(nproc)
+    - name: Configure the project
+      uses: threeal/cmake-action@v1
+      with:
+        run-build: true
+        build-dir: build/
 
     - name: Strip debugging symbols
       run: |
