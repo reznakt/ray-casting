@@ -39,7 +39,7 @@ struct test_t {
 
 
 #define TEST(name, stmts)                               \
-unused private bool name(struct test_t *const test) {   \
+unused static bool name(struct test_t *const test) {   \
     stmts                                               \
     return true;                                        \
 }
@@ -97,7 +97,7 @@ do {                                                            \
 #define assert_str_not_contains(a, b) assert(strstr((a), (b)) == NULL)
 
 
-unused private int run_tests(struct test_t *const tests, const size_t ntests) {
+unused static int run_tests(struct test_t *const tests, const size_t ntests) {
     timer(TIMER_START);
     size_t passed = 0;
     size_t failed = 0;

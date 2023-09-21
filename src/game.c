@@ -38,7 +38,7 @@
  * @param src The source rectangle of the texture to render.
  * @param dst The destination rectangle at which to render the texture.
  */
-unused private void render_texture(struct game_t *const restrict game,
+unused static void render_texture(struct game_t *const restrict game,
                                    const uint8_t texno,
                                    const SDL_Rect *const restrict src,
                                    const SDL_FRect *const restrict dst) {
@@ -62,11 +62,11 @@ unused private void render_texture(struct game_t *const restrict game,
  * @param coeff The coefficient to use in the speed calculation.
  * @return The speed coefficient for the game.
  */
-private inline float speed_coeff(const struct game_t *const game, const float coeff) {
+static inline float speed_coeff(const struct game_t *const game, const float coeff) {
     return coeff / (float) game->fps;
 }
 
-private void render_walls(const struct game_t *const game) {
+static void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nobjects; i++) {
         if (game->objects[i]->type != WALL) {
             continue;
@@ -80,7 +80,7 @@ private void render_walls(const struct game_t *const game) {
     }
 }
 
-private void render_hud(const struct game_t *const game, const SDL_Color color) {
+static void render_hud(const struct game_t *const game, const SDL_Color color) {
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
     static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
@@ -102,7 +102,7 @@ private void render_hud(const struct game_t *const game, const SDL_Color color) 
     });
 }
 
-private void render_rays(const struct game_t *const game, const SDL_Color color) {
+static void render_rays(const struct game_t *const game, const SDL_Color color) {
     render_colored(game, color, {
         for (size_t i = 0; i < game->camera->nrays; i++) {
             const struct ray_t *const ray = &game->camera->rays[i];
@@ -116,7 +116,7 @@ private void render_rays(const struct game_t *const game, const SDL_Color color)
     });
 }
 
-private void render_3d(struct game_t *const game) {
+static void render_3d(struct game_t *const game) {
     const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
 
     for (size_t i = 0; i < game->camera->nrays; i++) {
@@ -182,7 +182,7 @@ private void render_3d(struct game_t *const game) {
     }
 }
 
-private void render_camera(const struct game_t *const game, const SDL_Color camera, const SDL_Color direction) {
+static void render_camera(const struct game_t *const game, const SDL_Color camera, const SDL_Color direction) {
     filledCircleColor(game->renderer,
                       (int16_t) game->camera->pos.x,
                       (int16_t) game->camera->pos.y,
@@ -198,7 +198,7 @@ private void render_camera(const struct game_t *const game, const SDL_Color came
     });
 }
 
-private void render_visual_fps(struct game_t *const game, const SDL_Color fg, const SDL_Color bg) {
+static void render_visual_fps(struct game_t *const game, const SDL_Color fg, const SDL_Color bg) {
     const float size = (float) game->fps / 5.0F;
 
     const SDL_FRect rect = {
@@ -217,7 +217,7 @@ private void render_visual_fps(struct game_t *const game, const SDL_Color fg, co
     });
 }
 
-private void render_floor_and_ceiling(struct game_t *const game) {
+static void render_floor_and_ceiling(struct game_t *const game) {
     render_colored(game, game->ceil_color, {
         SDL_RenderClear(game->renderer);
     });
@@ -236,7 +236,7 @@ private void render_floor_and_ceiling(struct game_t *const game) {
     });
 }
 
-private void tick(struct game_t *const game) {
+static void tick(struct game_t *const game) {
     const uint64_t ticks = SDL_GetTicks64();
     const uint64_t tick_delta = ticks - game->ticks;
 

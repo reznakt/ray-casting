@@ -10,7 +10,7 @@
 #include "test.h"
 
 
-private float randf(void) {
+static float randf(void) {
     return (float) rand() / (float) RAND_MAX;
 }
 
@@ -784,7 +784,7 @@ TEST(test_is_decimal_invalid, {
     assert_false(is_decimal("-1"));
 })
 
-private bool color_equals(const SDL_Color a, const SDL_Color b) {
+static bool color_equals(const SDL_Color a, const SDL_Color b) {
     return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
 }
 

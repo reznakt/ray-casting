@@ -4,12 +4,12 @@
 #include "event.h"
 
 
-private void camera_set_resmult(struct game_t *const game, const size_t resmult) {
+static void camera_set_resmult(struct game_t *const game, const size_t resmult) {
     game->camera->resmult = (size_t) constrain((float) resmult, RESMULT_MIN, RESMULT_MAX);
     game->camera->nrays = game->camera->fov * game->camera->resmult;
 }
 
-private void camera_set_fov(struct game_t *const game, const size_t fov) {
+static void camera_set_fov(struct game_t *const game, const size_t fov) {
     game->camera->fov = (size_t) constrain((float) fov, FOV_MIN, FOV_MAX);
     game->camera->nrays = game->camera->fov * game->camera->resmult;
 }

@@ -11,7 +11,7 @@ struct log_target_t {
 };
 
 
-private const struct log_target_t LOG_TARGETS[] = {
+static const struct log_target_t LOG_TARGETS[] = {
         [LOG_LEVEL_NOLOG] = {NULL, NONE},
         [LOG_LEVEL_FATAL] = {"FATAL", STDOUT},
         [LOG_LEVEL_ERROR] = {"ERROR", STDOUT},

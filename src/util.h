@@ -10,7 +10,6 @@
 
 
 #define unused __attribute__((__unused__))
-#define private static
 
 
 #define rgba(r, g, b, a) (SDL_Color) {(r), (g), (b), (a)}

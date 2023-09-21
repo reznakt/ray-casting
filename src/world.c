@@ -25,7 +25,7 @@ do {                                                                            
 } while (0)
 
 
-private int parse_coordinate(float *const restrict dst, const char *const restrict token) {
+static int parse_coordinate(float *const restrict dst, const char *const restrict token) {
     if (token == NULL) {
         return -1;
     }
@@ -63,7 +63,7 @@ private int parse_coordinate(float *const restrict dst, const char *const restri
  * @param dst pointer to a SDL_Color struct to store the parsed color, or NULL, if the color should not be stored.
  * @return 0 on success, -1 on error (dst is not modified in this case).
  */
-private int parse_color(const char *const colorstr, SDL_Color *const dst) {
+static int parse_color(const char *const colorstr, SDL_Color *const dst) {
     if (strlen(colorstr) != 7 || *colorstr != '#') {
         return -1;
     }
@@ -93,7 +93,7 @@ private int parse_color(const char *const colorstr, SDL_Color *const dst) {
  * @param dst pointer to a wobject_t struct to store the parsed object, or NULL, if the object should not be stored.
  * @return 0 on success, -1 on error (dst is not modified in this case).
  */
-private int parse_record(char *const restrict record, struct wobject_t *const dst) {
+static int parse_record(char *const restrict record, struct wobject_t *const dst) {
     if (record == NULL) {
         return -1;
     }
