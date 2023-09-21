@@ -181,13 +181,11 @@ private void render_3d(struct game_t *const game) {
 }
 
 private void render_camera(const struct game_t *const game, const SDL_Color camera, const SDL_Color direction) {
-    filledCircleColor(
-            game->renderer,
-            (int16_t) game->camera->pos.x,
-            (int16_t) game->camera->pos.y,
-            5,
-            color_to_int(&camera)
-    );
+    filledCircleColor(game->renderer,
+                      (int16_t) game->camera->pos.x,
+                      (int16_t) game->camera->pos.y,
+                      5,
+                      color_to_int(&camera));
 
     render_colored(game, direction, {
         SDL_RenderDrawLineF(game->renderer,
