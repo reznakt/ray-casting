@@ -59,7 +59,7 @@ unused private void render_texture(struct game_t *const restrict game,
  * @param coeff The coefficient to use in the speed calculation.
  * @return The speed coefficient for the game.
  */
-private float speed_coeff(const struct game_t *const game, const float coeff) {
+private inline float speed_coeff(const struct game_t *const game, const float coeff) {
     return coeff / (float) game->fps;
 }
 
