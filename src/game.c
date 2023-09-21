@@ -217,12 +217,6 @@ private void render_visual_fps(struct game_t *const game, const SDL_Color fg, co
     });
 }
 
-private void render_flat(struct game_t *const game) {
-    render_walls(game);
-    render_rays(game, COLOR_WHITE);
-    render_camera(game, COLOR_RED, COLOR_GREEN);
-}
-
 private void render_floor_and_ceiling(struct game_t *const game) {
     render_colored(game, game->ceil_color, {
         SDL_RenderClear(game->renderer);
@@ -267,7 +261,9 @@ void render(struct game_t *const game) {
             render_colored(game, COLOR_BLACK, {
                 SDL_RenderClear(game->renderer);
             });
-            render_flat(game);
+            render_walls(game);
+            render_rays(game, COLOR_WHITE);
+            render_camera(game, COLOR_RED, COLOR_GREEN);
             break;
 
         case RENDER_MODE_WIREFRAME:
