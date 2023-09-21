@@ -39,7 +39,7 @@ struct test_t {
 
 
 #define TEST(name, stmts)                               \
-unused static bool name(struct test_t *const test) {   \
+unused static bool name(struct test_t *const test) {    \
     stmts                                               \
     return true;                                        \
 }
