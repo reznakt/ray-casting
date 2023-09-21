@@ -36,9 +36,8 @@ To get a local copy up and running, follow these simple steps:
 
 ```shell
 git clone https://github.com/reznakt/ray-casting.git && cd ray-casting
-mkdir build && cd build
-cmake ..
-make -j$(nproc)
+cmake -B build/
+cmake --build build/ -j$(nproc)
 ```
 
 ## 🎮 How to Play
