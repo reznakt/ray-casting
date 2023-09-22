@@ -1,5 +1,8 @@
 name: Build and test
 
+env:
+  APT_PACKAGES: libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+
 on:
   - push
 
@@ -14,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-suggests --no-install-recommends libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+        sudo apt-get install -y --no-install-suggests --no-install-recommends $APT_PACKAGES
 
     - name: Build with CMake
       uses: threeal/cmake-action@v1.3.0
@@ -51,7 +54,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-suggests --no-install-recommends libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+          sudo apt-get install -y --no-install-suggests --no-install-recommends $APT_PACKAGES
 
       - name: Import test executable
         uses: actions/download-artifact@v3
