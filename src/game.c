@@ -258,18 +258,23 @@ static void update_player_position(const struct game_t *const game) {
     }
 }
 
+static float get_ray_angle(const struct game_t *const game, const size_t rayno) {
+    const float resmult = (float) game->camera->resmult;
+    const float fov = (float) game->camera->fov;
+    const float angle = (float) game->camera->angle;
+
+    return radians((float) rayno / resmult - fov / 2.0F + angle);
+}
+
 static void update_ray_intersections(const struct game_t *const game) {
 #pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
     for (size_t i = 0; i < game->camera->nrays; i++) {
         struct ray_t ray;
-        struct intersection_t ray_int = {.wall = NULL};
-
-        ray.pos = (struct vec_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vfromangle(vector(), radians(
-                (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0F)
-        );
-
+        struct intersection_t ray_int = {0};
         float min_dist = INFINITY;
+
+        vmove(&ray.pos, &game->camera->pos);
+        vfromangle(&ray.dir, get_ray_angle(game, i));
 
         for (size_t j = 0; j < game->nobjects; j++) {
             if (game->objects[j]->type != WALL) {
