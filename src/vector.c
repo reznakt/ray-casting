@@ -7,7 +7,7 @@
 #include "vector.h"
 
 
-const struct vec_t vzero = {0, 0};
+const struct vec_t vzero = {0.0F, 0.0F};
 
 
 struct vec_t *vclear(struct vec_t *const vec) {
@@ -63,8 +63,9 @@ struct vec_t *vnorm(struct vec_t *const vec) {
 struct vec_t *vnorm_weak(struct vec_t *const vec) {
     const float length = vlen(vec);
 
-    if (isclose(length, 0)) {
-        vec->x = vec->y = 0;
+    if (isclose(length, 0.0F)) {
+        vec->x = 0.0F;
+        vec->y = 0.0F;
         return vec;
     }
 
@@ -76,19 +77,19 @@ float vdist(const struct vec_t *const restrict vec1, const struct vec_t *const r
 }
 
 float vdist2(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
-    return powf(vec2->x - vec1->x, 2) + powf(vec2->y - vec1->y, 2);
+    return powf(vec2->x - vec1->x, 2.0F) + powf(vec2->y - vec1->y, 2.0F);
 }
 
 float vangle(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
     const float length1 = vlen(vec1);
 
-    if (isclose(length1, 0)) {
+    if (isclose(length1, 0.0F)) {
         return NAN;
     }
 
     const float length2 = vlen(vec2);
 
-    if (isclose(length2, 0)) {
+    if (isclose(length2, 0.0F)) {
         return NAN;
     }
 
