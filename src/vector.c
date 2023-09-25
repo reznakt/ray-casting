@@ -122,9 +122,7 @@ struct vec_t *vlerp(struct vec_t *const restrict dst, const struct vec_t *const 
 
 struct vec_t *vscale(struct vec_t *const vec, const float length) {
     vnorm_weak(vec);
-    vmul(vec, length);
-
-    return vec;
+    return vmul(vec, length);
 }
 
 struct vec_t *vreflect(struct vec_t *const restrict vec, const struct vec_t *const restrict normal) {
