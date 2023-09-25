@@ -1,10 +1,3 @@
-/**
- * @file math.h
- *
- * @brief Provides commonly used mathematical functions and constants.
- */
-
-
 #ifndef RAY_MATH_H
 #define RAY_MATH_H
 
