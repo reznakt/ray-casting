@@ -9,10 +9,6 @@
 
 
 void render_char(SDL_Renderer *const restrict renderer, const struct vec_t *const restrict pos, const int chr) {
-    if (chr < 0 || chr >= FONT_CHARS) {
-        return;
-    }
-
     for (int i = 0; i < FONT_BYTES; i++) {
         for (int j = 0; j < FONT_BYTES; j++) {
             if (font8x8_basic[chr][i] & 1 << j) {
