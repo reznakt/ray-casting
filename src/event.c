@@ -19,7 +19,7 @@ static void camera_set_lightmult(struct game_t *const game, const float lightmul
 }
 
 
-void on_event(struct game_t *const game, const SDL_Event *const event) {
+void on_event(struct game_t *const restrict game, const SDL_Event *const restrict event) {
     switch (event->type) {
         case SDL_QUIT:
             game->quit = true;
@@ -122,8 +122,7 @@ void on_event(struct game_t *const game, const SDL_Event *const event) {
             break;
 
         case SDL_MOUSEMOTION:
-            camera_update_angle(game,
-                                game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
+            camera_update_angle(game, game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
             break;
     }
 }
