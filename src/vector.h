@@ -1,19 +1,3 @@
-/**
- * @file vector.h
- * @brief Contains functions for working with 2D vectors and lines.
- *
- * This file defines the `struct vec_t` and `struct ivector_t` structs, which represent 2D vectors
- * with `float` and `long` components, respectively. It also defines the `struct line_t` and `struct iline_t`
- * structs, which represent lines defined by two points.
- *
- * In addition to the struct definitions, this file provides functions for performing operations on 2D vectors,
- * including addition, multiplication, division, dot product, length calculation, normalization, distance calculation,
- * angle calculation, copying, and rotation.
- *
- * It also includes constant definitions for the zero vector.
- */
-
-
 #include "util.h"
 
 
