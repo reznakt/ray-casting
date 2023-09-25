@@ -4,7 +4,6 @@
 
 #include "logger.h"
 #include "util.h"
-#include "vector.h"
 
 
 #include "world.h"
