@@ -7,19 +7,17 @@
 #include <SDL2/SDL_image.h>
 
 
-#include "conf.h"
 #include "event.h"
 #include "game.h"
 #include "logger.h"
 #include "ray.h"
-#include "util.h"
 #include "vector.h"
 
 
 static bool get_flag(const int argc,
-                      char *const *const restrict argv,
-                      const char *const restrict shortopt,
-                      const char *const restrict longopt) {
+                     char *const *const restrict argv,
+                     const char *const restrict shortopt,
+                     const char *const restrict longopt) {
     for (int i = 1; i < argc; i++) {
         if (shortopt != NULL && strcmp(argv[i], shortopt) == 0) {
             return true;
