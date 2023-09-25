@@ -14,6 +14,10 @@ static void camera_set_fov(struct game_t *const game, const size_t fov) {
     game->camera->nrays = game->camera->fov * game->camera->resmult;
 }
 
+static void camera_set_lightmult(struct game_t *const game, const float lightmult) {
+    game->camera->lightmult = constrain(lightmult, 0.0F, INFINITY);
+}
+
 
 void on_event(struct game_t *const game, const SDL_Event *const event) {
     switch (event->type) {
@@ -83,12 +87,10 @@ void on_event(struct game_t *const game, const SDL_Event *const event) {
                     game->render_mode = RENDER_MODE_TEXTURED;
                     break;
                 case KEY_LIGHT_INC:
-                    game->camera->lightmult += 0.1F;
+                    camera_set_lightmult(game, game->camera->lightmult + 0.1F);
                     break;
                 case KEY_LIGHT_DEC:
-                    if (game->camera->lightmult >= 0.1F) {
-                        game->camera->lightmult -= 0.1F;
-                    }
+                    camera_set_lightmult(game, game->camera->lightmult - 0.1F);
                     break;
             }
             break;
