@@ -39,9 +39,9 @@
  * @param dst The destination rectangle at which to render the texture.
  */
 unused static void render_texture(struct game_t *const restrict game,
-                                   const uint8_t texno,
-                                   const SDL_Rect *const restrict src,
-                                   const SDL_FRect *const restrict dst) {
+                                  const uint8_t texno,
+                                  const SDL_Rect *const restrict src,
+                                  const SDL_FRect *const restrict dst) {
     static const int rowsize = TEXTURE_ATLAS_WIDTH * TEXTURE_SIZE;
 
     const SDL_Rect adjusted_src = {
@@ -236,6 +236,67 @@ static void render_floor_and_ceiling(struct game_t *const game) {
     });
 }
 
+static void update_player_position(const struct game_t *const game) {
+    struct vec_t *const dirvect = vmul(vcopy(&game->camera->dir), speed_coeff(game, game->camera->speed));
+
+    if (game->camera->movement.forward ^ game->camera->movement.backward) {
+        if (game->camera->movement.forward) { /* forward */
+            vadd(&game->camera->pos, dirvect);
+        } else { /* backward */
+            vsub(&game->camera->pos, dirvect);
+        }
+    }
+
+    if (game->camera->movement.left ^ game->camera->movement.right) {
+        vrotate(dirvect, radians(90));
+
+        if (game->camera->movement.left) { /* left */
+            vsub(&game->camera->pos, dirvect);
+        } else { /* right */
+            vadd(&game->camera->pos, dirvect);
+        }
+    }
+}
+
+static void update_ray_intersections(const struct game_t *const game) {
+#pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
+    for (size_t i = 0; i < game->camera->nrays; i++) {
+        struct ray_t ray;
+        struct intersection_t ray_int = {.wall = NULL};
+
+        ray.pos = (struct vec_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
+        ray.dir = *vfromangle(vector(), radians(
+                (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0F)
+        );
+
+        float min_dist = INFINITY;
+
+        for (size_t j = 0; j < game->nobjects; j++) {
+            if (game->objects[j]->type != WALL) {
+                continue;
+            }
+
+            const struct wall_t *const wall = &game->objects[j]->data.wall;
+            const struct vec_t *const intersection = ray_intersection(&ray, wall, vector());
+
+            if (intersection == NULL) {
+                continue;
+            }
+
+            const float dist = vdist(&ray.pos, intersection);
+
+            if (dist < min_dist) {
+                ray_int.pos = *intersection;
+                ray_int.wall = wall;
+                min_dist = ray_int.dist = dist;
+            }
+        }
+
+        ray.intersection = ray_int;
+        game->camera->rays[i] = ray;
+    }
+}
+
 static void tick(struct game_t *const game) {
     const uint64_t ticks = SDL_GetTicks64();
     const uint64_t tick_delta = ticks - game->ticks;
@@ -287,63 +348,8 @@ void render(struct game_t *const game) {
 }
 
 void update(struct game_t *const game) {
-    struct vec_t *const dirvect = vmul(vcopy(&game->camera->dir), speed_coeff(game, game->camera->speed));
-
-    if (game->camera->movement.forward ^ game->camera->movement.backward) {
-        if (game->camera->movement.forward) { /* forward */
-            vadd(&game->camera->pos, dirvect);
-        } else { /* backward */
-            vsub(&game->camera->pos, dirvect);
-        }
-    }
-
-    if (game->camera->movement.left ^ game->camera->movement.right) {
-        vrotate(dirvect, radians(90));
-
-        if (game->camera->movement.left) { /* left */
-            vsub(&game->camera->pos, dirvect);
-        } else { /* right */
-            vadd(&game->camera->pos, dirvect);
-        }
-    }
-
-#pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
-    for (size_t i = 0; i < game->camera->nrays; i++) {
-        struct ray_t ray;
-        struct intersection_t ray_int = {.wall = NULL};
-
-        ray.pos = (struct vec_t) {.x = (float) game->camera->pos.x, .y = (float) game->camera->pos.y};
-        ray.dir = *vfromangle(vector(), radians(
-                (float) i / (float) game->camera->resmult + game->camera->angle - (float) game->camera->fov / 2.0F)
-        );
-
-        float min_dist = INFINITY;
-
-        for (size_t j = 0; j < game->nobjects; j++) {
-            if (game->objects[j]->type != WALL) {
-                continue;
-            }
-
-            const struct wall_t *const wall = &game->objects[j]->data.wall;
-            const struct vec_t *const intersection = ray_intersection(&ray, wall, vector());
-
-            if (intersection == NULL) {
-                continue;
-            }
-
-            const float dist = vdist(&ray.pos, intersection);
-
-            if (dist < min_dist) {
-                ray_int.pos = *intersection;
-                ray_int.wall = wall;
-                min_dist = ray_int.dist = dist;
-            }
-        }
-
-        ray.intersection = ray_int;
-        game->camera->rays[i] = ray;
-    }
-
+    update_player_position(game);
+    update_ray_intersections(game);
     tick(game);
 }
 
