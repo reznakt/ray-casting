@@ -9,7 +9,6 @@
 
 
 #define FONT_BYTES 8 /**< The number of bytes required to represent a single character. */
-#define FONT_CHARS 128 /**< The number of characters in the basic font set. */
 
 
 /**
