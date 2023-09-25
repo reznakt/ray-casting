@@ -12,26 +12,6 @@ SDL_Color *change_brightness(SDL_Color *const color, const float alpha) {
     return color;
 }
 
-
-char *color_to_str(const SDL_Color color, char *const dst) {
-    if (dst == NULL) {
-        return NULL;
-    }
-
-    const char buf[] = {
-            '#',
-            (char) dec_to_hex(color.r / 16),
-            (char) dec_to_hex(color.r % 16),
-            (char) dec_to_hex(color.g / 16),
-            (char) dec_to_hex(color.g % 16),
-            (char) dec_to_hex(color.b / 16),
-            (char) dec_to_hex(color.b % 16),
-            '\0'
-    };
-
-    return memcpy(dst, buf, sizeof buf);
-}
-
 bool is_whitespace(const char *const buf) {
     if (buf == NULL) {
         return false;
@@ -72,14 +52,6 @@ int hex_to_dec(char hexnum) {
     }
 
     return -1;
-}
-
-int dec_to_hex(const int decnum) {
-    if (decnum < 0 || decnum > 16) {
-        return -1;
-    }
-
-    return decnum < 10 ? '0' + decnum : 'a' + decnum - 10;
 }
 
 uint32_t color_to_int(const SDL_Color *const color) {

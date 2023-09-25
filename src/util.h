@@ -65,21 +65,6 @@
 SDL_Color *change_brightness(SDL_Color *color, float alpha);
 
 /**
- * Converts an SDL_Color to a string in the format #rrggbb.
- * @see color_to_str
- */
-#define strcolor(color) color_to_str((color), stack_alloc(char, sizeof "#rrggbb"))
-
-/**
- * @brief Converts an SDL_Color to a string in the format #rrggbb.
- * @param color the color to convert.
- * @param dst the destination buffer. Must be at least 8 bytes long.
- * @return dst on success, NULL on error. In the latter case, dst is not modified.
- * @see strcolor, dec_to_hex
- */
-char *color_to_str(SDL_Color color, char *dst);
-
-/**
  * @brief Determines whether a string contains only whitespace.
  * @param buf the string to check.
  * @return true if the string contains only whitespace, false otherwise. Also returns false if buf is NULL.
@@ -101,13 +86,6 @@ bool is_decimal(const char *buf);
  * @return Decimal number corresponding to the hexadecimal digit, or -1 if the digit is invalid.
  */
 int hex_to_dec(char hexnum);
-
-/**
- * @brief Converts a decimal number to a hexadecimal digit.
- * @param hexnum Decimal digit to convert.
- * @return Hexadecimal digit (character) corresponding to the decimal number, or -1 if `hexnum` is invalid.
- */
-int dec_to_hex(int decnum);
 
 /**
  * @brief Converts an SDL_Color to a uint32_t.
