@@ -113,9 +113,7 @@ struct vec_t *vrotate(struct vec_t *const vec, const float angle) {
     return vec;
 }
 
-struct vec_t *vlerp(struct vec_t *const restrict dst,
-                    const struct vec_t *const restrict src,
-                    const float t) {
+struct vec_t *vlerp(struct vec_t *const restrict dst, const struct vec_t *const restrict src, const float t) {
     dst->x = lerp(dst->x, src->x, t);
     dst->y = lerp(dst->y, src->y, t);
 
