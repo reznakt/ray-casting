@@ -101,8 +101,11 @@ struct vec_t *vmove(struct vec_t *const restrict dst, const struct vec_t *const 
 }
 
 struct vec_t *vrotate(struct vec_t *const vec, const float angle) {
-    const float sin_a = sinf(angle), cos_a = cosf(angle);
-    const float x = vec->x, y = vec->y;
+    const float sin_a = sinf(angle);
+    const float cos_a = cosf(angle);
+
+    const float x = vec->x;
+    const float y = vec->y;
 
     vec->x = x * cos_a - y * sin_a;
     vec->y = x * sin_a + y * cos_a;
