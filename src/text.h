@@ -8,9 +8,6 @@
 #include "vector.h"
 
 
-#define FONT_BYTES 8 /**< The number of bytes required to represent a single character. */
-
-
 /**
  * @brief Renders a single character at the specified coordinates using the given renderer.
  *
