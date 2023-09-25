@@ -1,8 +1,8 @@
-#include "util.h"
-
-
 #ifndef RAY_VECTOR_H
 #define RAY_VECTOR_H
+
+
+#include "util.h"
 
 
 /**
