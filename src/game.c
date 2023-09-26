@@ -180,6 +180,21 @@ static void render_3d(struct game_t *const game) {
             }
         });
     }
+
+    filledCircleColor(game->renderer,
+                      (int16_t) game->center.x,
+                      (int16_t) game->center.y,
+                      3,
+                      color_to_int(&COLOR_WHITE));
+
+    const struct ray_t *const center_ray = &game->camera->rays[game->camera->nrays / 2];
+    const struct wall_t *const center_wall = center_ray->intersection.wall;
+    const struct vec_t *const center_pos = vadd(vcopy(&game->center), &(struct vec_t) {10.0F, 10.0F});
+
+    render_colored(game, COLOR_WHITE, {
+        render_printf(game->renderer, center_pos, "%.2f m",
+                      center_wall == NULL ? INFINITY : center_ray->intersection.dist / 100.0F);
+    });
 }
 
 static void render_camera(const struct game_t *const game, const SDL_Color camera, const SDL_Color direction) {
