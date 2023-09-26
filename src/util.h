@@ -32,25 +32,6 @@
 
 
 /**
- * @brief Macro for rendering formatted text to a game window.
- *
- * This macro renders the formatted text using the specified game renderer and position.
- *
- * @param game The game object.
- * @param x The x-coordinate of the text position.
- * @param y The y-coordinate of the text position.
- * @param fmt The format string.
- * @param ... The variadic arguments for the format string.
- */
-#define render_printf(game, pos, fmt, ...)                      \
-    do {                                                        \
-        memset(game->textbuf, 0, TEXTBUFLEN);                   \
-        snprintf(game->textbuf, TEXTBUFLEN, fmt, __VA_ARGS__);  \
-        render_string(game->renderer, pos, game->textbuf);      \
-    } while (0)
-
-
-/**
  * @brief Changes the brightness of an SDL_Color object by a given factor.
  *
  * This function multiplies the RGB values of the given SDL_Color object by the given alpha factor

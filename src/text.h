@@ -32,4 +32,18 @@ void render_char(SDL_Renderer *renderer, const struct vec_t *pos, int chr);
 void render_string(SDL_Renderer *renderer, const struct vec_t *pos, const char *str);
 
 
+/**
+ * @brief Macro for rendering formatted text to a game window.
+ *
+ * This macro renders the formatted text using the specified game renderer and position.
+ *
+ * @param game The game object.
+ * @param x The x-coordinate of the text position.
+ * @param y The y-coordinate of the text position.
+ * @param fmt The format string.
+ * @param ... The variadic arguments for the format string.
+ */
+void render_printf(SDL_Renderer *renderer, const struct vec_t *pos, const char *fmt, ...);
+
+
 #endif // RAY_FONT_H

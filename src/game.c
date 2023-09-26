@@ -86,7 +86,7 @@ static void render_hud(const struct game_t *const game, const SDL_Color color) {
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
 
     render_colored(game, color, {
-        render_printf(game, &pos, fmt,
+        render_printf(game->renderer, &pos, fmt,
                       game->fps,
                       game->ticks,
                       game->frames,
