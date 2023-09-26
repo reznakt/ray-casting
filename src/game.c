@@ -20,13 +20,13 @@
  * @param ... The code to execute for rendering.
  * @example render_colored(game, COLOR_RED, { SDL_RenderDrawLineF(...); });
  */
-#define render_colored(game, color, ...)                                                                    \
-    do {                                                                                                    \
-        SDL_Color _old_color;                                                                               \
-        SDL_GetRenderDrawColor(game->renderer, &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a); \
-        SDL_SetRenderDrawColor(game->renderer, color->r, color->g, color->b, color->a);                     \
-        __VA_ARGS__                                                                                         \
-        SDL_SetRenderDrawColor(game->renderer, _old_color.r, _old_color.g, _old_color.b, _old_color.a);     \
+#define render_colored(game, color, ...)                                                                        \
+    do {                                                                                                        \
+        SDL_Color _old_color;                                                                                   \
+        SDL_GetRenderDrawColor((game)->renderer, &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a);   \
+        SDL_SetRenderDrawColor((game)->renderer, (color)->r, (color)->g, (color)->b, (color)->a);               \
+        __VA_ARGS__                                                                                             \
+        SDL_SetRenderDrawColor((game)->renderer, _old_color.r, _old_color.g, _old_color.b, _old_color.a);       \
     } while (0)
 
 
@@ -74,7 +74,7 @@ static void render_walls(const struct game_t *const game) {
 
         const struct wall_t *const wall = &game->objects[i]->data.wall;
 
-        render_colored(game, (&wall->color), {
+        render_colored(game, &wall->color, {
             SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
         });
     }
@@ -145,13 +145,13 @@ static void render_3d(struct game_t *const game) {
         }
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            render_colored(game, (&color), {
+            render_colored(game, &color, {
                 SDL_RenderFillRectF(game->renderer, &stripe);
             });
             continue;
         }
 
-        render_colored(game, (&color), {
+        render_colored(game, &color, {
             const float x = stripe.x + stripe.w;
             const float y = stripe.y + stripe.h;
 
@@ -237,7 +237,7 @@ static void render_visual_fps(struct game_t *const restrict game,
 }
 
 static void render_floor_and_ceiling(struct game_t *const game) {
-    render_colored(game, (&game->ceil_color), {
+    render_colored(game, &game->ceil_color, {
         SDL_RenderClear(game->renderer);
     });
 
@@ -250,7 +250,7 @@ static void render_floor_and_ceiling(struct game_t *const game) {
             .h = game->center.y + height_diff
     };
 
-    render_colored(game, (&game->floor_color), {
+    render_colored(game, &game->floor_color, {
         SDL_RenderFillRectF(game->renderer, &floor);
     });
 }
