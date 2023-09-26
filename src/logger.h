@@ -2,6 +2,7 @@
 #define RAY_LOGGER_H
 
 
+#include <errno.h>
 #include <stdio.h>
 
 
