@@ -11,24 +11,18 @@
 
 #define unused __attribute__((__unused__))
 
-
-#define rgba(r, g, b, a) (&(SDL_Color) {(r), (g), (b), (a)})
-#define rgb(r, g, b) rgba((r), (g), (b), 255)
-
-#define COLOR_RED rgb(255, 0, 0)
-#define COLOR_GREEN rgb(0, 255, 0)
-#define COLOR_BLUE rgb(0, 0, 255)
-#define COLOR_WHITE rgb(255, 255, 255)
-#define COLOR_BLACK rgb(0, 0, 0)
-#define COLOR_YELLOW rgb(255, 255, 0)
-#define COLOR_CYAN rgb(0, 255, 255)
-#define COLOR_MAGENTA rgb(255, 0, 255)
-
-
 /**
  * Allocate `n` new objects of type `type` on the stack.
  */
 #define stack_alloc(type, n) ((type [n]) {0})
+#define rgba(r, g, b, a) (&(SDL_Color) {(r), (g), (b), (a)})
+#define rgb(r, g, b) rgba((r), (g), (b), 255)
+
+
+static const SDL_Color *const COLOR_RED = rgb(255, 0, 0);
+static const SDL_Color *const COLOR_GREEN = rgb(0, 255, 0);
+static const SDL_Color *const COLOR_WHITE = rgb(255, 255, 255);
+static const SDL_Color *const COLOR_BLACK = rgb(0, 0, 0);
 
 
 /**
