@@ -360,7 +360,6 @@ void update(struct game_t *const game) {
 
 struct game_t *game_create(void) {
     static struct game_t game = {0};
-    static char textbuf[TEXTBUFLEN] = {0};
     static struct ray_t rays[FOV_MAX * RESMULT_MAX] = {0};
     static struct camera_t camera = {0};
     static struct wobject_t *objects[WORLD_NOBJECTS_MAX] = {0};
@@ -382,7 +381,6 @@ struct game_t *game_create(void) {
     game.camera->lightmult = CAMERA_LIGHTMULT;
 
     game.render_mode = RENDER_MODE_TEXTURED;
-    game.textbuf = textbuf;
     game.ceil_color = CEIL_COLOR;
     game.floor_color = FLOOR_COLOR;
     game.nthreads = THREADS;

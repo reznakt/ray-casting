@@ -14,7 +14,7 @@
 static const size_t FONT_BYTES = 8;
 
 
-void render_char(SDL_Renderer *const restrict renderer, const struct vec_t *const restrict pos, const int chr) {
+void render_putchar(SDL_Renderer *const restrict renderer, const struct vec_t *const restrict pos, int chr) {
     for (size_t i = 0; i < FONT_BYTES; i++) {
         for (size_t j = 0; j < FONT_BYTES; j++) {
             if (font8x8_basic[chr][i] & 1 << j) {
@@ -24,12 +24,12 @@ void render_char(SDL_Renderer *const restrict renderer, const struct vec_t *cons
     }
 }
 
-void render_string(SDL_Renderer *const restrict renderer,
-                   const struct vec_t *const restrict pos,
-                   const char *const restrict str) {
+void render_puts(SDL_Renderer *const restrict renderer,
+                 const struct vec_t *const restrict pos,
+                 const char *const restrict str) {
     for (size_t i = 0; i < strlen(str); i++) {
         const struct vec_t char_pos = {pos->x + 10.0F * (float) i, pos->y};
-        render_char(renderer, &char_pos, str[i]);
+        render_putchar(renderer, &char_pos, str[i]);
     }
 }
 
@@ -45,5 +45,5 @@ void render_printf(SDL_Renderer *const restrict renderer,
 
     va_end(args);
 
-    render_string(renderer, pos, buf);
+    render_puts(renderer, pos, buf);
 }

@@ -45,7 +45,6 @@ struct game_t {
     struct camera_t *camera; /**< The camera used for rendering the game. */
     struct wobject_t **objects; /**< The objects in the game world. */
     struct vec_t center; /**< The center of the game window. */
-    char *textbuf; /**< The buffer used for rendering text to the game window. */
     size_t nobjects; /**< The number of objects in the game world. */
     size_t nthreads; /**< The number of threads to use for parallel computation. */
     uint64_t fps; /**< The current frames per second (FPS) of the game. */
@@ -54,7 +53,7 @@ struct game_t {
     uint64_t ticks; /**< The total number of ticks elapsed since the start of the game. */
     SDL_Color ceil_color; /**< The color of the ceiling/sky. */
     SDL_Color floor_color; /**< The color of the floor/ground. */
-    unused enum {
+    enum {
         RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED, RENDER_MODE_TEXTURED
     } render_mode; /**< The current render mode. */
     bool quit; /**< Boolean flag indicating whether the game should quit. */

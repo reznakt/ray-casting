@@ -19,7 +19,7 @@ struct vec_t; // Forward declaration because of circular dependencies.
  * @param y The y-coordinate at which to render the character.
  * @param chr The ASCII code for the character to render.
  */
-void render_char(SDL_Renderer *renderer, const struct vec_t *pos, int chr);
+void render_putchar(SDL_Renderer *renderer, const struct vec_t *pos, int chr);
 
 /**
  * @brief Renders a null-terminated string at the specified coordinates using the given renderer.
@@ -29,13 +29,11 @@ void render_char(SDL_Renderer *renderer, const struct vec_t *pos, int chr);
  * @param y The y-coordinate at which to start rendering the string.
  * @param str A pointer to the null-terminated string to render.
  */
-void render_string(SDL_Renderer *renderer, const struct vec_t *pos, const char *str);
+void render_puts(SDL_Renderer *renderer, const struct vec_t *pos, const char *str);
 
 
 /**
- * @brief Macro for rendering formatted text to a game window.
- *
- * This macro renders the formatted text using the specified game renderer and position.
+ * @brief This function renders the formatted text using the specified game renderer and position.
  *
  * @param game The game object.
  * @param x The x-coordinate of the text position.
