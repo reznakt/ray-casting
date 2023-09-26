@@ -19,17 +19,6 @@ enum unused log_level_t {
 
 
 /**
- * @brief Log a formatted message to a stream.
- * @param level The log level of the message.
- * @param file The file name.
- * @param line The line number.
- * @param func The function name.
- * @param fmt The format string.
- * @param ... The arguments to the format string.
- */
-void logger_log(enum log_level_t level, const char *file, unsigned int line, const char *func, const char *fmt, ...);
-
-/**
  * @brief Log a formatted message to one of the standard streams.
  * @param level The log level of the message.
  * @param fmt The format string.
@@ -55,6 +44,18 @@ void logger_log(enum log_level_t level, const char *file, unsigned int line, con
  * @param msg Additional message to print.
  */
 #define logger_perror(msg) logger_printf(LOG_LEVEL_ERROR, "%s: %s\n", (msg), strerror(errno))
+
+
+/**
+ * @brief Log a formatted message to a stream.
+ * @param level The log level of the message.
+ * @param file The file name.
+ * @param line The line number.
+ * @param func The function name.
+ * @param fmt The format string.
+ * @param ... The arguments to the format string.
+ */
+void logger_log(enum log_level_t level, const char *file, unsigned int line, const char *func, const char *fmt, ...);
 
 
 #endif //RAY_LOGGER_H
