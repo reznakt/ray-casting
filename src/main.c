@@ -11,7 +11,6 @@
 #include "game.h"
 #include "logger.h"
 #include "ray.h"
-#include "vector.h"
 
 
 static bool get_flag(const int argc,
