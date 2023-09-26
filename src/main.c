@@ -31,9 +31,9 @@ static bool get_flag(const int argc,
 }
 
 static void display_help(const char *const argv0) {
-    const char *const fmt = "usage: %s [-h|--help] [-p|--profile]\n"
-                            "\t-h, --help\t\tprint this help message and exit\n"
-                            "\t-p, --profile\t\tprint profiling information and exit\n";
+    static const char *const fmt = "usage: %s [-h|--help] [-p|--profile]\n"
+                                   "\t-h, --help\t\tprint this help message and exit\n"
+                                   "\t-p, --profile\t\tprint profiling information and exit\n";
 
     printf(fmt, argv0);
 }
