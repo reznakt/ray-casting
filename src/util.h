@@ -12,7 +12,7 @@
 #define unused __attribute__((__unused__))
 
 
-#define rgba(r, g, b, a) (SDL_Color) {(r), (g), (b), (a)}
+#define rgba(r, g, b, a) (&(SDL_Color) {(r), (g), (b), (a)})
 #define rgb(r, g, b) rgba((r), (g), (b), 255)
 
 #define COLOR_RED rgb(255, 0, 0)
