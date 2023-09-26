@@ -55,7 +55,6 @@ static int parse_coordinate(float *const restrict dst, const char *const restric
     return 0;
 }
 
-
 /**
  * @brief Parses a color string.
  * @param colorstr a string containing a color in hexadecimal format (e.g. #ff0000 for red).
@@ -84,7 +83,6 @@ static int parse_color(const char *const colorstr, SDL_Color *const dst) {
 
     return 0;
 }
-
 
 /**
  * @brief Parses a record (line) in the world specification.
@@ -163,7 +161,6 @@ static int parse_record(char *const restrict record, struct wobject_t *const dst
 
     return 0;
 }
-
 
 int load_world(const char *const restrict path,
                struct wobject_t *const restrict *const restrict objects,
