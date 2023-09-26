@@ -31,7 +31,6 @@ void render_putchar(SDL_Renderer *renderer, const struct vec_t *pos, int chr);
  */
 void render_puts(SDL_Renderer *renderer, const struct vec_t *pos, const char *str);
 
-
 /**
  * @brief This function renders the formatted text using the specified game renderer and position.
  *
