@@ -7,6 +7,7 @@
 
 
 #include "world.h"
+#include "fs.h"
 
 
 /**
@@ -169,10 +170,9 @@ int load_world(const char *const restrict path,
         return -1;
     }
 
-    FILE *const stream = fopen(path, "r");
+    FILE *const stream = load_file(path, "r");
 
     if (stream == NULL) {
-        logger_perror("fopen");
         return -1;
     }
 
