@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.0)
 
 project(ray-casting C)
 
-set(CMAKE_C_COMPILER "clang")
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
@@ -10,21 +9,16 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -std=c99 \
                     -g \
                     -O3 \
-                    -masm=intel \
-                    -march=native \
-                    -mtune=native \
                     -fopenmp \
                     -pedantic \
                     -pedantic-errors \
                     -Wall \
                     -Wextra \
                     -Werror \
-                    -Wfloat-equal \
                     -Wundef \
                     -Wshadow \
                     -Wwrite-strings \
                     -Wcast-qual \
-                    -Wswitch-default \
                     -Wswitch-enum \
                     -Wconversion \
                     -Wunreachable-code \
