@@ -19,6 +19,8 @@ intmax_t timer(const enum timer_op_t op) {
             clock_gettime(CLOCK_MONOTONIC_RAW, &end);
             return (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
     }
+
+    return -1; // unreachable
 }
 
 unsigned int get_seed(void) {
