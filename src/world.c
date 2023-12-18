@@ -170,7 +170,7 @@ int load_world(const char *const restrict path,
         return -1;
     }
 
-    FILE *const stream = load_file(path, "r");
+    FILE *const stream = open_file(path, "r");
 
     if (stream == NULL) {
         return -1;

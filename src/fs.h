@@ -10,6 +10,6 @@
  * @param mode The mode to open the file in. One of "r", "w", "a", "r+", "w+", "a+".
  * @return A FILE stream on success, NULL on error.
  */
-FILE *load_file(const char *path, const char *mode);
+FILE *open_file(const char *path, const char *mode);
 
 #endif //RAY_FS_H

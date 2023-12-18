@@ -41,7 +41,7 @@ static int mode_to_flags(const char *const mode) {
     return -1;
 }
 
-FILE *load_file(const char *const restrict path, const char *const restrict mode) {
+FILE *open_file(const char *const restrict path, const char *const restrict mode) {
     if (path == NULL || mode == NULL) {
         return NULL;
     }
