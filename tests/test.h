@@ -55,6 +55,9 @@ do {                            \
     }                           \
 } while (0)
 
+
+#define fail() assert(false)
+
 #define assert_true(cond) assert(cond)
 #define assert_false(cond) assert(!(cond))
 #define assert_not assert_false

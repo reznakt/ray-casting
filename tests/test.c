@@ -17,12 +17,13 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
 
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
-        const size_t nrepeats = strstr(test->name, "rand") ? (size_t) NTESTS : 1;
+        const size_t max_repeats = strstr(test->name, "rand") ? (size_t) NTESTS : 1;
+        size_t repeats;
 
         printf("[%3zu] ", i + 1);
         print_justified(test->name, 60, '.');
 
-        for (size_t j = 0; j < nrepeats; j++) {
+        for (repeats = 0; repeats < max_repeats; repeats++) {
             test->func(test);
 
             if (test->failed) {
@@ -38,8 +39,15 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
             passed++;
         }
 
-        if (nrepeats > 1) {
-            printf(" (%.0e runs)", (double) nrepeats);
+        switch (repeats) {
+            case 1:
+                break;
+            case (size_t) NTESTS:
+                printf(" (%.0e runs)", (double) NTESTS);
+                break;
+            default:
+                printf(" (after %.0e runs)", (double) repeats);
+                break;
         }
 
         putchar('\n');
