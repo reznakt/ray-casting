@@ -7,20 +7,20 @@
 #include "util.h"
 
 
-intmax_t timer(const enum timer_op_t op) {
-    static struct timespec start;
+#define TIMER_CLOCK CLOCK_MONOTONIC_RAW
+
+
+static struct timespec start;
+
+
+void timer_start(void) {
+    clock_gettime(TIMER_CLOCK, &start);
+}
+
+intmax_t timer_stop(void) {
     struct timespec end;
-
-    switch (op) {
-        case TIMER_START:
-            clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-            return 0;
-        case TIMER_STOP:
-            clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-            return (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
-    }
-
-    return -1; // unreachable
+    clock_gettime(TIMER_CLOCK, &end);
+    return (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
 }
 
 unsigned int get_seed(void) {

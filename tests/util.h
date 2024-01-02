@@ -2,18 +2,17 @@
 #define RAY_TESTS_UTIL_H
 
 
-enum timer_op_t {
-    TIMER_START,
-    TIMER_STOP
-};
-
+/**
+ * @brief Starts a timer. Call timer_stop() to get the elapsed time.
+ * Only one timer can be active at any given time.
+ */
+void timer_start(void);
 
 /**
- * @brief Measures the time elapsed between calls to this function with TIMER_START and TIMER_STOP.
- * @param op TIMER_START to start the timer, TIMER_STOP to stop it.
- * @return If op is TIMER_START, returns 0. If op is TIMER_STOP, returns the elapsed time in milliseconds.
+ * @brief Stops the timer started by timer_start() and returns the elapsed time in milliseconds.
+ * @return The elapsed time in milliseconds.
  */
-intmax_t timer(enum timer_op_t op);
+intmax_t timer_stop(void);
 
 /**
  * @brief Returns a random seed obtained from /dev/urandom.

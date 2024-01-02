@@ -98,7 +98,7 @@ do {                                                            \
 
 
 unused static int run_tests(struct test_t *const tests, const size_t ntests) {
-    timer(TIMER_START);
+    timer_start();
     size_t passed = 0;
     size_t failed = 0;
     size_t total = 0;
@@ -133,7 +133,7 @@ unused static int run_tests(struct test_t *const tests, const size_t ntests) {
         total++;
     }
 
-    const intmax_t elapsed = timer(TIMER_STOP);
+    const intmax_t elapsed = timer_stop();
     putchar('\n');
 
     for (size_t i = 0; i < ntests; i++) {
