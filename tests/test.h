@@ -38,8 +38,16 @@ static void name(unused struct test_t *const test) {    \
     __VA_ARGS__                                         \
 }
 
-#define ADD_REPEATED_TEST(test, _runs) { .func = (test), .name = #test, .failed = false, .runs = _runs, .output = {0} }
-#define ADD_TEST(test) ADD_REPEATED_TEST(test, 1)
+// a bit of macro magic to allow for both ADD_TEST(test) and ADD_TEST(test, runs)
+#define ADD_TEST_2(test, _runs) { .func = (test), .name = #test, .failed = false, .runs = _runs, .output = {0} }
+#define ADD_TEST_1(test) ADD_TEST_2(test, 1)
+
+#define add_test_get_3rd_arg(arg1, arg2, arg3, ...) arg3
+#define add_test_chooser(...) add_test_get_3rd_arg(__VA_ARGS__, ADD_TEST_2, ADD_TEST_1, )
+
+#define ADD_TEST(...) add_test_chooser(__VA_ARGS__)(__VA_ARGS__)
+// end of macro magic
+
 
 #define RUN_TESTS(...)                                      \
 int main(void) {                                            \
