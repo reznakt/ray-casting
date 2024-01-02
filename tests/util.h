@@ -27,7 +27,7 @@ unsigned int get_seed(void);
  * @param width The total desired width of the string.
  * @param pad The character used to pad the string.
  */
-void print_justified(const char *str, size_t width, char pad);
+void print_justified(const char *str, unsigned int width, char pad);
 
 
 #endif //RAY_TESTS_UTIL_H

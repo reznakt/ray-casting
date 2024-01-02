@@ -41,7 +41,7 @@ unsigned int get_seed(void) {
     return seed;
 }
 
-void print_justified(const char *const str, const size_t width, const char pad) {
+void print_justified(const char *const str, const unsigned int width, const char pad) {
     const size_t len = strlen(str);
 
     if (len >= width) {
