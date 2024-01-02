@@ -29,22 +29,25 @@
 #define OUTPUT_MAXLEN 1024
 
 
-struct test_t {
-    bool (*const func)(struct test_t *const test);
+struct test_t;
 
+typedef void (*test_func_t)(struct test_t *const test);
+
+
+struct test_t {
+    test_func_t func;
     const char *const name;
-    bool passed;
+    bool failed;
     char output[OUTPUT_MAXLEN];
 };
 
 
 #define TEST(name, stmts)                               \
-unused static bool name(struct test_t *const test) {    \
+static void name(unused struct test_t *const test) {    \
     stmts                                               \
-    return true;                                        \
 }
 
-#define ADD_TEST(func) { (func), #func, true, {0} }
+#define ADD_TEST(test) { .func = (test), .name = #test, .failed = false, .output = {0} }
 
 #define RUN_TESTS(...)                                      \
 int main(void) {                                            \
@@ -56,11 +59,11 @@ int main(void) {                                            \
 #define assert(cond)                                            \
 do {                                                            \
     if (!(cond)) {                                              \
+        test->failed = true;                                    \
         snprintf(test->output,                                  \
                 OUTPUT_MAXLEN,                                  \
                 "%s%s:%d:\n\t%sassert(%s)%s ",                  \
                 HBLU, __func__, __LINE__, HYEL, #cond, CRESET); \
-        return false;                                           \
     }                                                           \
 } while (0)
 
@@ -111,18 +114,19 @@ unused static int run_tests(struct test_t *const tests, const size_t ntests) {
         print_justified(test->name, 60, '.');
 
         for (size_t j = 0; j < nrepeats; j++) {
-            if (!test->func(test)) {
-                test->passed = false;
+            test->func(test);
+
+            if (test->failed) {
                 break;
             }
         }
 
-        if (test->passed) {
-            fputs(HGRN " PASS" CRESET, stdout);
-            passed++;
-        } else {
+        if (test->failed) {
             fputs(RED " FAIL" CRESET, stdout);
             failed++;
+        } else {
+            fputs(HGRN " PASS" CRESET, stdout);
+            passed++;
         }
 
         if (nrepeats > 1) {
@@ -139,7 +143,7 @@ unused static int run_tests(struct test_t *const tests, const size_t ntests) {
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
 
-        if (!test->passed) {
+        if (test->failed) {
             printf("\n%s\n", test->output);
         }
     }
