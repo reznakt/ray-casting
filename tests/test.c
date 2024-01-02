@@ -71,3 +71,11 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
 
     return failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+void test_fail(struct test_t *const restrict test, const char *const restrict condstr) {
+    test->failed = true;
+    snprintf(test->output,
+             OUTPUT_MAXLEN,
+             "%s%s:%d:\n\t%sassert(%s)%s ",
+             HBLU, __func__, __LINE__, HYEL, condstr, CRESET);
+}

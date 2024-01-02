@@ -24,13 +24,9 @@
 #define OUTPUT_MAXLEN 1024
 
 
-struct test_t;
-
-typedef void (*test_func_t)(struct test_t *const test);
-
-
 struct test_t {
-    test_func_t func;
+    void (*const func)(struct test_t *const test);
+
     const char *const name;
     bool failed;
     char output[OUTPUT_MAXLEN];
@@ -51,15 +47,12 @@ int main(void) {                                            \
     return run_tests(tests, sizeof tests / sizeof *tests);  \
 }
 
-#define assert(cond)                                            \
-do {                                                            \
-    if (!(cond)) {                                              \
-        test->failed = true;                                    \
-        snprintf(test->output,                                  \
-                OUTPUT_MAXLEN,                                  \
-                "%s%s:%d:\n\t%sassert(%s)%s ",                  \
-                HBLU, __func__, __LINE__, HYEL, #cond, CRESET); \
-    }                                                           \
+#define assert(cond)            \
+do {                            \
+    if (!(cond)) {              \
+        test_fail(test, #cond); \
+        return;                 \
+    }                           \
 } while (0)
 
 #define assert_true(cond) assert(cond)
@@ -95,6 +88,8 @@ do {                                                            \
 
 
 int run_tests(struct test_t *tests, size_t ntests);
+
+void test_fail(struct test_t *test, const char *condstr);
 
 
 #endif //RAY_TESTS_TEST_H
