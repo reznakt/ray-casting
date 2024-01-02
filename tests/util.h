@@ -2,6 +2,9 @@
 #define RAY_TESTS_UTIL_H
 
 
+#include <inttypes.h>
+
+
 /**
  * @brief Starts a timer. Call timer_stop() to get the elapsed time.
  * Only one timer can be active at any given time.

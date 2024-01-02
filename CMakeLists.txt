@@ -28,8 +28,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wparentheses \
                     -Wmissing-prototypes \
                     -Wpointer-arith \
-                    -Wno-unknown-pragmas \
-                    -Wno-keyword-macro")
+                    -Wno-unknown-pragmas")
 
 find_package(SDL2 REQUIRED)
 find_library(SDL2_GFX_LIBRARY NAMES SDL2_gfx)
