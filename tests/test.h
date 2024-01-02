@@ -42,9 +42,9 @@ struct test_t {
 };
 
 
-#define TEST(name, stmts)                               \
+#define TEST(name, ...)                                 \
 static void name(unused struct test_t *const test) {    \
-    stmts                                               \
+    __VA_ARGS__                                         \
 }
 
 #define ADD_TEST(test) { .func = (test), .name = #test, .failed = false, .output = {0} }
