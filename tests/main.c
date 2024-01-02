@@ -723,7 +723,7 @@ TEST(test_vproject, {
     assert_is_close(vec.y, 0.0F);
 })
 
-const struct {
+static const struct {
     const SDL_Color *const input;
     const uint32_t output;
 } test_color_to_int_cases[] = {
