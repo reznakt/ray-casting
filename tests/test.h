@@ -20,7 +20,6 @@
 #endif
 
 
-#define NTESTS 1e6
 #define OUTPUT_MAXLEN 1024
 
 
@@ -29,6 +28,7 @@ struct test_t {
 
     const char *const name;
     bool failed;
+    size_t runs;
     char output[OUTPUT_MAXLEN];
 };
 
@@ -38,7 +38,8 @@ static void name(unused struct test_t *const test) {    \
     __VA_ARGS__                                         \
 }
 
-#define ADD_TEST(test) { .func = (test), .name = #test, .failed = false, .output = {0} }
+#define ADD_REPEATED_TEST(test, _runs) { .func = (test), .name = #test, .failed = false, .runs = _runs, .output = {0} }
+#define ADD_TEST(test) ADD_REPEATED_TEST(test, 1)
 
 #define RUN_TESTS(...)                                      \
 int main(void) {                                            \

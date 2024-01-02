@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 
@@ -17,13 +16,12 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
 
     for (size_t i = 0; i < ntests; i++) {
         struct test_t *const test = &tests[i];
-        const size_t max_repeats = strstr(test->name, "rand") ? (size_t) NTESTS : 1;
         size_t repeats;
 
         printf("[%3zu] ", i + 1);
         print_justified(test->name, 60, '.');
 
-        for (repeats = 0; repeats < max_repeats; repeats++) {
+        for (repeats = 0; repeats < test->runs; repeats++) {
             test->func(test);
 
             if (test->failed) {
@@ -39,15 +37,12 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
             passed++;
         }
 
-        switch (repeats) {
-            case 1:
-                break;
-            case (size_t) NTESTS:
-                printf(" (%.0e runs)", (double) NTESTS);
-                break;
-            default:
-                printf(" (after %.0e runs)", (double) repeats);
-                break;
+        if (test->runs > 1) {
+            if (repeats == test->runs) {
+                printf(" (%.0e runs)", (double) repeats);
+            } else if (test->failed) {
+                printf(" (after %.0e of %.0e runs)", (double) repeats, (double) test->runs);
+            }
         }
 
         putchar('\n');

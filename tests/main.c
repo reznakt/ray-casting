@@ -9,6 +9,9 @@
 #include "test.h"
 
 
+#define REPEATS 1e6
+
+
 static float randf(void) {
     return (float) rand() / (float) RAND_MAX;
 }
@@ -872,38 +875,38 @@ TEST(test_hex_to_dec, {
 
 
 RUN_TESTS(
-        ADD_TEST(test_isclose),
-        ADD_TEST(test_map),
+        ADD_REPEATED_TEST(test_is_decimal_valid_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vadd_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vclear_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vdiv_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vlen2_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vlen_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vmove_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vmul_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vnorm_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vnorm_weak_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vprod_rand, REPEATS),
+        ADD_REPEATED_TEST(test_vsub_rand, REPEATS),
+        ADD_TEST(test_change_brightness),
+        ADD_TEST(test_color_to_int),
         ADD_TEST(test_constrain),
-        ADD_TEST(test_lerp),
         ADD_TEST(test_degrees),
+        ADD_TEST(test_hex_to_dec),
+        ADD_TEST(test_is_decimal_invalid),
+        ADD_TEST(test_is_decimal_valid),
+        ADD_TEST(test_is_whitespace),
+        ADD_TEST(test_isclose),
+        ADD_TEST(test_lerp),
+        ADD_TEST(test_map),
         ADD_TEST(test_radians),
-        ADD_TEST(test_vzero),
-        ADD_TEST(test_vclear_rand),
-        ADD_TEST(test_vadd_rand),
-        ADD_TEST(test_vsub_rand),
-        ADD_TEST(test_vmul_rand),
-        ADD_TEST(test_vdiv_rand),
-        ADD_TEST(test_vprod_rand),
-        ADD_TEST(test_vlen_rand),
-        ADD_TEST(test_vlen2_rand),
-        ADD_TEST(test_vfromangle),
-        ADD_TEST(test_vnorm_rand),
-        ADD_TEST(test_vnorm_weak_rand),
+        ADD_TEST(test_vangle),
         ADD_TEST(test_vdist),
         ADD_TEST(test_vdist2),
-        ADD_TEST(test_vangle),
-        ADD_TEST(test_vmove_rand),
-        ADD_TEST(test_vrotate),
+        ADD_TEST(test_vfromangle),
         ADD_TEST(test_vlerp),
-        ADD_TEST(test_vscale),
-        ADD_TEST(test_vreflect),
         ADD_TEST(test_vproject),
-        ADD_TEST(test_color_to_int),
-        ADD_TEST(test_is_decimal_valid),
-        ADD_TEST(test_is_decimal_valid_rand),
-        ADD_TEST(test_is_decimal_invalid),
-        ADD_TEST(test_change_brightness),
-        ADD_TEST(test_is_whitespace),
-        ADD_TEST(test_hex_to_dec),
+        ADD_TEST(test_vreflect),
+        ADD_TEST(test_vrotate),
+        ADD_TEST(test_vscale),
+        ADD_TEST(test_vzero),
 )
