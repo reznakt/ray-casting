@@ -14,7 +14,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -pedantic-errors \
                     -Wall \
                     -Wextra \
-                    -Werror \
                     -Wundef \
                     -Wshadow \
                     -Wwrite-strings \
