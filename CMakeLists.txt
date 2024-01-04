@@ -11,7 +11,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -O3 \
                     -fopenmp \
                     -pedantic \
-                    -pedantic-errors \
                     -Wall \
                     -Wextra \
                     -Wundef \
