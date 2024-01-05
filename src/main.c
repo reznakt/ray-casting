@@ -30,7 +30,7 @@ static bool get_flag(const int argc,
     return false;
 }
 
-static void display_help(const char *const argv0) {
+static inline void usage(const char *const argv0) {
     static const char *const fmt = "usage: %s [-h|--help] [-p|--profile]\n"
                                    "\t-h, --help\t\tprint this help message and exit\n"
                                    "\t-p, --profile\t\tprint profiling information and exit\n";
@@ -42,7 +42,7 @@ int main(const int argc, char **const argv) {
     const bool help = get_flag(argc, argv, "-h", "--help");
 
     if (help) {
-        display_help(argv[0]);
+        usage(argv[0]);
         return EXIT_SUCCESS;
     }
 
