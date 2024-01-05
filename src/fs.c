@@ -25,6 +25,11 @@
 #include "logger.h"
 
 
+/**
+ * @brief Converts a mode string to the corresponding flags for open(2).
+ * @param mode The mode string to convert.
+ * @return The corresponding flags for open(2) or -1 if the mode string is invalid.
+ */
 static int mode_to_flags(const char *const mode) {
     if (mode == NULL) {
         return -1;
@@ -57,7 +62,10 @@ static int mode_to_flags(const char *const mode) {
     return -1;
 }
 
-
+/**
+ * @brief Returns the path to the application executable.
+ * @return The path to the executable or NULL if an error occurred.
+ */
 static char *executable_path(void) {
     char *const buf = calloc(PATH_MAX + 1, sizeof *buf);
 
@@ -84,6 +92,10 @@ static char *executable_path(void) {
     return NULL;
 }
 
+/**
+ * @brief Returns the directory containing the application executable.
+ * @return The directory containing the executable or NULL if an error occurred.
+ */
 static char *executable_dir(void) {
     char *const path = executable_path();
 
