@@ -34,17 +34,17 @@
 #define TEXTURE_ATLAS_WIDTH 6
 
 /**
- * @brief Width of the window in pixels.
+ * Width of the window in pixels.
  */
 #define SCREEN_WIDTH 1920
 
 /**
- * @brief Height of the window in pixels.
+ * Height of the window in pixels.
  */
 #define SCREEN_HEIGHT 1080
 
 /**
- * @brief Flags used for creating the window.
+ * Flags used for creating the window.
  */
 #define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN)
 
