@@ -42,3 +42,17 @@ add_executable(test ${TEST_SOURCES} "src/math.c" "src/vector.c" "src/util.c")
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX} ${SDL2_IMG} m)
 target_link_libraries(test ${SDL2_LIBRARIES} ${SDL2_GFX} ${SDL2_IMG} m)
+
+add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets/"
+)
+
+file(GLOB ASSETS "assets/*")
+
+foreach (FILE ${ASSETS})
+    add_custom_command(
+            TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy ${FILE} "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets/"
+    )
+endforeach ()

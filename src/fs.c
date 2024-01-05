@@ -5,6 +5,22 @@
 #include <unistd.h>
 
 
+#ifdef __linux__
+
+#include <linux/limits.h>
+
+#else
+
+#include <limits.h>
+
+#endif
+
+
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
+
 #include "fs.h"
 #include "logger.h"
 
@@ -41,6 +57,51 @@ static int mode_to_flags(const char *const mode) {
     return -1;
 }
 
+
+static char *executable_path(void) {
+    char *const buf = calloc(PATH_MAX + 1, sizeof *buf);
+
+    if (buf == NULL) {
+        logger_perror("calloc");
+        return NULL;
+    }
+
+    switch (readlink("/proc/self/exe", buf, PATH_MAX)) {
+        case -1:
+            logger_perror("readlink");
+            goto bailout;
+        case PATH_MAX:
+            logger_printf(LOG_LEVEL_ERROR, "readlink: path too long (PATH_MAX = %u)\n", PATH_MAX);
+            goto bailout;
+        default:
+            break;
+    }
+
+    return buf;
+
+    bailout:
+    free(buf);
+    return NULL;
+}
+
+static char *executable_dir(void) {
+    char *const path = executable_path();
+
+    if (path == NULL) {
+        return NULL;
+    }
+
+    char *const dir = dirname(path);
+
+    if (dir == NULL) {
+        logger_perror("dirname");
+        free(path);
+        return NULL;
+    }
+
+    return dir;
+}
+
 FILE *open_file(const char *const restrict path, const char *const restrict mode) {
     if (path == NULL || mode == NULL) {
         return NULL;
@@ -53,11 +114,9 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
         return NULL;
     }
 
-    char filepath[] = __FILE__;
-    const char *const dirpath = dirname(filepath);
+    char *const dirpath = executable_dir();
 
     if (dirpath == NULL) {
-        logger_perror("dirname");
         return NULL;
     }
 
@@ -65,17 +124,20 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
 
     if (dir_fd == -1) {
         logger_perror("open");
+        free(dirpath);
         return NULL;
     }
 
+    free(dirpath);
     const int fd = openat(dir_fd, path, flags);
-    close(dir_fd);
 
     if (fd == -1) {
         logger_perror("openat");
+        close(dir_fd);
         return NULL;
     }
 
+    close(dir_fd);
     FILE *const stream = fdopen(fd, mode);
 
     if (stream == NULL) {
