@@ -32,6 +32,9 @@ sudo apt-get install -y clang cmake libsdl2-dev libsdl2-gfx-dev libsdl2-image-de
 
 ## 🚀 Getting Started
 
+> [!TIP]
+> You can also download a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/build/main/ray-casting.zip).
+
 To get a local copy up and running, follow these simple steps:
 
 ```shell
