@@ -123,6 +123,9 @@
  */
 #define CAMERA_HEADING 270 // north/up
 
+/**
+ * @brief Default multiplier for the light intensity emitted by the camera/player.
+ */
 #define CAMERA_LIGHTMULT 1.0F
 
 /**
