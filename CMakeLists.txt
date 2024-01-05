@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.18)
 
 project(ray-casting C)
 
@@ -29,16 +29,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                     -Wno-unknown-pragmas")
 
 find_package(SDL2 REQUIRED)
-find_library(SDL2_GFX_LIBRARY NAMES SDL2_gfx)
-find_library(SDL2_IMG_LIBRARY NAMES SDL2_image)
-
-if (NOT SDL2_GFX_LIBRARY)
-    message(FATAL_ERROR " SDL2_gfx library not found ")
-endif ()
-
-if (NOT SDL2_IMG_LIBRARY)
-    message(FATAL_ERROR " SDL2_image library not found ")
-endif ()
+find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
+find_library(SDL2_IMG NAMES SDL2_image REQUIRED)
 
 file(GLOB SOURCES "src/*.c")
 file(GLOB TEST_SOURCES "tests/*.c")
@@ -48,5 +40,5 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 add_executable(test ${TEST_SOURCES} "src/math.c" "src/vector.c" "src/util.c")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)
-target_link_libraries(test ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARY} ${SDL2_IMG_LIBRARY} m)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX} ${SDL2_IMG} m)
+target_link_libraries(test ${SDL2_LIBRARIES} ${SDL2_GFX} ${SDL2_IMG} m)
