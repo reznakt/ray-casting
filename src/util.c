@@ -4,12 +4,13 @@
 #include "util.h"
 
 
-SDL_Color *change_brightness(SDL_Color *const color, const float alpha) {
-    color->r = (uint8_t) constrain(alpha * (float) color->r, 0.0F, 255.0F);
-    color->g = (uint8_t) constrain(alpha * (float) color->g, 0.0F, 255.0F);
-    color->b = (uint8_t) constrain(alpha * (float) color->b, 0.0F, 255.0F);
-
-    return color;
+SDL_Color change_brightness(const SDL_Color color, const float alpha) {
+    return (SDL_Color) {
+            .r = (uint8_t) constrain(alpha * (float) color.r, 0.0F, 255.0F),
+            .g = (uint8_t) constrain(alpha * (float) color.g, 0.0F, 255.0F),
+            .b = (uint8_t) constrain(alpha * (float) color.b, 0.0F, 255.0F),
+            .a = color.a
+    };
 }
 
 bool is_whitespace(const char *const buf) {
@@ -54,6 +55,6 @@ int hex_to_dec(char hexnum) {
     return -1;
 }
 
-uint32_t color_to_int(const SDL_Color *const color) {
-    return (uint32_t) color->r << 24 | (uint32_t) color->g << 16 | (uint32_t) color->b << 8 | (uint32_t) color->a;
+uint32_t color_to_int(const SDL_Color color) {
+    return (uint32_t) color.r << 24 | (uint32_t) color.g << 16 | (uint32_t) color.b << 8 | (uint32_t) color.a;
 }

@@ -16,6 +16,10 @@ static float randf(void) {
     return (float) rand() / (float) RAND_MAX;
 }
 
+static bool colors_equal(const SDL_Color a, const SDL_Color b) {
+    return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
+}
+
 
 TEST(test_isclose, {
     assert(isclose(0.0F, 0.0F));
@@ -727,7 +731,7 @@ TEST(test_vproject, {
 })
 
 static const struct {
-    const SDL_Color *const input;
+    const SDL_Color input;
     const uint32_t output;
 } test_color_to_int_cases[] = {
         {.input = rgba(0, 0, 0, 0), .output=0x00000000},
@@ -745,7 +749,7 @@ TEST(test_color_to_int, {
     const size_t ncases = sizeof test_color_to_int_cases / sizeof *test_color_to_int_cases;
 
     for (size_t i = 0; i < ncases; i++) {
-        const SDL_Color *const input = test_color_to_int_cases[i].input;
+        const SDL_Color input = test_color_to_int_cases[i].input;
         const uint32_t output = test_color_to_int_cases[i].output;
 
         assert_equals(color_to_int(input), output);
@@ -786,40 +790,14 @@ TEST(test_is_decimal_invalid, {
     assert_false(is_decimal("-1"));
 })
 
-static bool color_equals(const SDL_Color *const restrict a, const SDL_Color *const restrict b) {
-    return a->r == b->r && a->g == b->g && a->b == b->b && a->a == b->a;
-}
-
 TEST(test_change_brightness, {
-    SDL_Color *color;
-
-    color = rgb(0, 0, 0);
-    assert_equals(change_brightness(color, 0.0F), color);
-    assert_true(color_equals(color, rgb(0, 0, 0)));
-
-    color = rgb(255, 255, 255);
-    assert_equals(change_brightness(color, 1.0F), color);
-    assert_true(color_equals(color, rgb(255, 255, 255)));
-
-    color = rgb(255, 255, 255);
-    assert_equals(change_brightness(color, 0.5F), color);
-    assert_true(color_equals(color, rgb(127, 127, 127)));
-
-    color = rgb(255, 255, 255);
-    assert_equals(change_brightness(color, 0.1F), color);
-    assert_true(color_equals(color, rgb(25, 25, 25)));
-
-    color = rgb(255, 0, 0);
-    assert_equals(change_brightness(color, 0.5F), color);
-    assert_true(color_equals(color, rgb(127, 0, 0)));
-
-    color = rgb(0, 255, 0);
-    assert_equals(change_brightness(color, 0.5F), color);
-    assert_true(color_equals(color, rgb(0, 127, 0)));
-
-    color = rgb(0, 0, 255);
-    assert_equals(change_brightness(color, 0.5F), color);
-    assert_true(color_equals(color, rgb(0, 0, 127)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(0, 0, 0), 0.0F), (SDL_Color) rgb(0, 0, 0)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(255, 255, 255), 1.0F), (SDL_Color) rgb(255, 255, 255)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(255, 255, 255), 0.5F), (SDL_Color) rgb(127, 127, 127)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(255, 255, 255), 0.1F), (SDL_Color) rgb(25, 25, 25)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(255, 0, 0), 0.5F), (SDL_Color) rgb(127, 0, 0)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(0, 255, 0), 0.5F), (SDL_Color) rgb(0, 127, 0)));
+    assert_true(colors_equal(change_brightness((SDL_Color) rgb(0, 0, 255), 0.5F), (SDL_Color) rgb(0, 0, 127)));
 })
 
 TEST(test_is_whitespace, {

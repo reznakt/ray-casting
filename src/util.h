@@ -15,29 +15,28 @@
  * Allocate `n` new objects of type `type` on the stack.
  */
 #define stack_alloc(type, n) ((type [n]) {0})
-#define rgba(r, g, b, a) (&(SDL_Color) {(r), (g), (b), (a)})
-#define rgb(r, g, b) rgba((r), (g), (b), 255)
+#define rgba(r, g, b, a) {(r), (g), (b), (a)}
+#define rgb(r, g, b) rgba((r), (g), (b), SDL_ALPHA_OPAQUE)
 
 
-static const SDL_Color *const COLOR_RED = rgb(255, 0, 0);
-static const SDL_Color *const COLOR_GREEN = rgb(0, 255, 0);
-static const SDL_Color *const COLOR_WHITE = rgb(255, 255, 255);
-static const SDL_Color *const COLOR_BLACK = rgb(0, 0, 0);
+static const SDL_Color COLOR_RED = rgb(255, 0, 0);
+static const SDL_Color COLOR_GREEN = rgb(0, 255, 0);
+static const SDL_Color COLOR_WHITE = rgb(255, 255, 255);
+static const SDL_Color COLOR_BLACK = rgb(0, 0, 0);
 
 
 /**
  * @brief Changes the brightness of an SDL_Color object by a given factor.
  *
  * This function multiplies the RGB values of the given SDL_Color object by the given alpha factor
- * and constrains the resulting values to be within the valid range of 0 to 255. The original
- * SDL_Color object is modified in place.
+ * and constrains the resulting values to be within the valid range of 0 to 255.
  *
- * @param color A pointer to the SDL_Color object to modify.
+ * @param color The source color.
  * @param alpha The brightness factor to apply to the color.
  *
- * @return A pointer to the modified SDL_Color object.
+ * @return The new color.
  */
-SDL_Color *change_brightness(SDL_Color *color, float alpha);
+SDL_Color change_brightness(SDL_Color color, float alpha);
 
 /**
  * @brief Determines whether a string contains only whitespace.
@@ -67,7 +66,7 @@ int hex_to_dec(char hexnum);
  * @param color The color to convert.
  * @return The converted color.
  */
-uint32_t color_to_int(const SDL_Color *color);
+uint32_t color_to_int(SDL_Color color);
 
 
 #endif //RAY_UTIL_H

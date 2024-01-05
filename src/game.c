@@ -24,7 +24,7 @@
     do {                                                                                                        \
         SDL_Color _old_color;                                                                                   \
         SDL_GetRenderDrawColor((game)->renderer, &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a);   \
-        SDL_SetRenderDrawColor((game)->renderer, (color)->r, (color)->g, (color)->b, (color)->a);               \
+        SDL_SetRenderDrawColor((game)->renderer, (color).r, (color).g, (color).b, (color).a);                   \
         __VA_ARGS__                                                                                             \
         SDL_SetRenderDrawColor((game)->renderer, _old_color.r, _old_color.g, _old_color.b, _old_color.a);       \
     } while (0)
@@ -74,13 +74,13 @@ static void render_walls(const struct game_t *const game) {
 
         const struct wall_t *const wall = &game->objects[i]->data.wall;
 
-        render_colored(game, &wall->color, {
+        render_colored(game, wall->color, {
             SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
         });
     }
 }
 
-static void render_hud(const struct game_t *const restrict game, const SDL_Color *const restrict color) {
+static void render_hud(const struct game_t *const restrict game, const SDL_Color color) {
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
     static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
@@ -102,7 +102,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     });
 }
 
-static void render_rays(const struct game_t *const restrict game, const SDL_Color *const restrict color) {
+static void render_rays(const struct game_t *const restrict game, const SDL_Color color) {
     render_colored(game, color, {
         for (size_t i = 0; i < game->camera->nrays; i++) {
             const struct ray_t *const ray = &game->camera->rays[i];
@@ -141,17 +141,17 @@ static void render_3d(struct game_t *const game) {
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
             const float brightness = map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F);
-            change_brightness(&color, brightness * game->camera->lightmult);
+            color = change_brightness(color, brightness * game->camera->lightmult);
         }
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            render_colored(game, &color, {
+            render_colored(game, color, {
                 SDL_RenderFillRectF(game->renderer, &stripe);
             });
             continue;
         }
 
-        render_colored(game, &color, {
+        render_colored(game, color, {
             const float x = stripe.x + stripe.w;
             const float y = stripe.y + stripe.h;
 
@@ -197,9 +197,7 @@ static void render_3d(struct game_t *const game) {
     });
 }
 
-static void render_camera(const struct game_t *const restrict game,
-                          const SDL_Color *const restrict camera,
-                          const SDL_Color *const restrict direction) {
+static void render_camera(const struct game_t *const restrict game, const SDL_Color camera, const SDL_Color direction) {
     filledCircleColor(game->renderer,
                       (int16_t) game->camera->pos.x,
                       (int16_t) game->camera->pos.y,
@@ -216,8 +214,8 @@ static void render_camera(const struct game_t *const restrict game,
 }
 
 static void render_visual_fps(struct game_t *const restrict game,
-                              const SDL_Color *const restrict fg,
-                              const SDL_Color *const restrict bg) {
+                              const SDL_Color fg,
+                              const SDL_Color bg) {
     const float size = (float) game->fps / 5.0F;
 
     const SDL_FRect rect = {
@@ -237,7 +235,7 @@ static void render_visual_fps(struct game_t *const restrict game,
 }
 
 static void render_floor_and_ceiling(struct game_t *const game) {
-    render_colored(game, &game->ceil_color, {
+    render_colored(game, game->ceil_color, {
         SDL_RenderClear(game->renderer);
     });
 
@@ -250,7 +248,7 @@ static void render_floor_and_ceiling(struct game_t *const game) {
             .h = game->center.y + height_diff
     };
 
-    render_colored(game, &game->floor_color, {
+    render_colored(game, game->floor_color, {
         SDL_RenderFillRectF(game->renderer, &floor);
     });
 }
@@ -400,8 +398,8 @@ struct game_t *game_create(void) {
     game.camera->lightmult = CAMERA_LIGHTMULT;
 
     game.render_mode = RENDER_MODE_TEXTURED;
-    game.ceil_color = *CEIL_COLOR;
-    game.floor_color = *FLOOR_COLOR;
+    game.ceil_color = (SDL_Color) CEIL_COLOR;
+    game.floor_color = (SDL_Color) FLOOR_COLOR;
     game.nthreads = THREADS;
     game.objects = objects;
 
