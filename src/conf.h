@@ -111,12 +111,12 @@
 /**
  * @brief Movement speed multiplier for the camera while crouching.
  */
-#define CAMERA_CROUCH_MOVEMENT_SPEED (0.5 * CAMERA_MOVEMENT_SPEED)
+#define CAMERA_CROUCH_MOVEMENT_SPEED (CAMERA_MOVEMENT_SPEED / 2)
 
 /**
  * @brief The difference in height between standing and crouching.
  */
-#define CAMERA_CROUCH_HEIGHT_DELTA (SCREEN_HEIGHT / 10.0F)
+#define CAMERA_CROUCH_HEIGHT_DELTA (SCREEN_HEIGHT / 10)
 
 /**
  * @brief Default orientation of the camera.
@@ -165,5 +165,7 @@
 #define KEY_LIGHT_INC SDLK_HOME
 #define KEY_LIGHT_DEC SDLK_END
 
+
+#include "confvalidate.h"
 
 #endif /* RAY_CONF_H */
