@@ -19,6 +19,20 @@
 #define rgb(r, g, b) rgba((r), (g), (b), SDL_ALPHA_OPAQUE)
 
 
+#define float_literal_internal(dbl) dbl##F
+
+/**
+ * @brief Converts a double literal to a float literal.
+ *
+ * This macro is used to convert double literals to float literals,
+ * mainly for compatibility with -Wunsuffixed-float-constants.
+ *
+ * @param dbl The double literal to convert.
+ * @return The converted float literal.
+ */
+#define float_literal(dbl) float_literal_internal(dbl)
+
+
 unused static const SDL_Color COLOR_RED = rgb(255, 0, 0);
 unused static const SDL_Color COLOR_GREEN = rgb(0, 255, 0);
 unused static const SDL_Color COLOR_WHITE = rgb(255, 255, 255);

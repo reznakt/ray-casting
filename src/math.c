@@ -6,12 +6,6 @@
 #include "math.h"
 
 
-#define float_literal_internal(x) x##F
-#define float_literal(x) float_literal_internal(x)
-
-#define PI float_literal(M_PI) // (mainly) for compatibility with -Wunsuffixed-float-constants
-
-
 float map(const float value, const float old_low, const float old_high, const float new_low, const float new_high) {
     if (value > old_high) {
         return new_high;

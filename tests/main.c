@@ -3,13 +3,12 @@
 
 
 #include "../src/math.h"
-#include "../src/util.h"
 
 
 #include "test.h"
 
 
-#define REPEATS 1e6
+#define REPEATS 1e6F
 
 
 static float randf(void) {
@@ -54,7 +53,7 @@ TEST(test_map, {
 })
 
 TEST(test_constrain, {
-    assert_equals(constrain(500.0F, 0.0F, 1.0F), 1.0F);
+    assert_is_close(constrain(500.0F, 0.0F, 1.0F), 1.0F);
     assert_is_close(constrain(0.5F, 0.0F, 1.0F), 0.5F);
     assert_is_close(constrain(0.0F, 0.0F, 1.0F), 0.0F);
     assert_is_close(constrain(500.0F, 0.0F, 2.0F), 2.0F);
@@ -93,12 +92,12 @@ TEST(test_lerp, {
 })
 
 TEST(test_degrees, {
-    assert_is_close(degrees((float) M_PI / 2.0F), 90.0F);
-    assert_is_close(degrees((float) M_PI / 3.0F), 60.0F);
-    assert_is_close(degrees((float) M_PI / 4.0F), 45.0F);
+    assert_is_close(degrees(PI / 2.0F), 90.0F);
+    assert_is_close(degrees(PI / 3.0F), 60.0F);
+    assert_is_close(degrees(PI / 4.0F), 45.0F);
     assert_is_close(degrees(0.0F), 0.0F);
-    assert_is_close(degrees((float) M_PI), 180.0F);
-    assert_is_close(degrees(2.0F * (float) M_PI), 360.0F);
+    assert_is_close(degrees(PI), 180.0F);
+    assert_is_close(degrees(2.0F * PI), 360.0F);
 
     assert_is_close(degrees(0.0F), 0.0F);
     assert_is_close(degrees(1.0F), 57.295776F);
@@ -127,12 +126,12 @@ TEST(test_degrees, {
 })
 
 TEST(test_radians, {
-    assert_is_close(radians(90.0F), (float) M_PI / 2.0F);
-    assert_is_close(radians(60.0F), (float) M_PI / 3.0F);
-    assert_is_close(radians(45.0F), (float) M_PI / 4.0F);
+    assert_is_close(radians(90.0F), PI / 2.0F);
+    assert_is_close(radians(60.0F), PI / 3.0F);
+    assert_is_close(radians(45.0F), PI / 4.0F);
     assert_is_close(radians(0.0F), 0.0F);
-    assert_is_close(radians(180.0F), (float) M_PI);
-    assert_is_close(radians(360.0F), 2.0F * (float) M_PI);
+    assert_is_close(radians(180.0F), PI);
+    assert_is_close(radians(360.0F), 2.0F * PI);
 
     assert_is_close(radians(0.0F), 0.0F);
     assert_is_close(radians(57.295776F), 1.0F);
@@ -161,8 +160,8 @@ TEST(test_radians, {
 })
 
 TEST(test_vzero, {
-    assert_equals(vzero.x, 0.0F);
-    assert_equals(vzero.y, 0.0F);
+    assert_is_close(vzero.x, 0.0F);
+    assert_is_close(vzero.y, 0.0F);
 })
 
 TEST(test_vclear_rand, {
@@ -171,8 +170,8 @@ TEST(test_vclear_rand, {
     vec.y = randf();
 
     assert_equals(vclear(&vec), &vec);
-    assert_equals(vec.x, 0.0F);
-    assert_equals(vec.y, 0.0F);
+    assert_is_close(vec.x, 0.0F);
+    assert_is_close(vec.y, 0.0F);
 })
 
 TEST(test_vadd_rand, {
@@ -246,7 +245,7 @@ TEST(test_vdiv_rand, {
 
     do {
         d = randf();
-    } while (d == 0.0F);
+    } while (isclose(d, 0.0F));
 
     vec.x = x;
     vec.y = y;
@@ -340,19 +339,19 @@ TEST(test_vfromangle, {
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
-    assert_equals(vfromangle(&vec, (float) M_PI / 2.0F), &vec);
+    assert_equals(vfromangle(&vec, PI / 2.0F), &vec);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 1.0F);
 
-    assert_equals(vfromangle(&vec, (float) M_PI), &vec);
+    assert_equals(vfromangle(&vec, PI), &vec);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 0.0F);
 
-    assert_equals(vfromangle(&vec, 3.0F * (float) M_PI / 2.0F), &vec);
+    assert_equals(vfromangle(&vec, 3.0F * PI / 2.0F), &vec);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, -1.0F);
 
-    assert_equals(vfromangle(&vec, 2.0F * (float) M_PI), &vec);
+    assert_equals(vfromangle(&vec, 2.0F * PI), &vec);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 })
@@ -366,7 +365,7 @@ TEST(test_vnorm_rand, {
     do {
         x = randf();
         y = randf();
-    } while (x == 0.0F || y == 0.0F);
+    } while (isclose(x, 0.0F) || isclose(y, 0.0F));
 
     vec.x = x;
     vec.y = y;
@@ -526,14 +525,14 @@ TEST(test_vangle, {
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), (float) M_PI / 2.0F);
+    assert_is_close(vangle(&vec1, &vec2), PI / 2.0F);
 
     vec1.x = 1.0F;
     vec1.y = 0.0F;
     vec2.x = -1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), (float) M_PI);
+    assert_is_close(vangle(&vec1, &vec2), PI);
 })
 
 TEST(test_vmove_rand, {
@@ -562,28 +561,28 @@ TEST(test_vrotate, {
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, (float) M_PI / 2.0F), &vec);
+    assert_equals(vrotate(&vec, PI / 2.0F), &vec);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 1.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, (float) M_PI), &vec);
+    assert_equals(vrotate(&vec, PI), &vec);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, 3.0F * (float) M_PI / 2.0F), &vec);
+    assert_equals(vrotate(&vec, 3.0F * PI / 2.0F), &vec);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, -1.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, 2.0F * (float) M_PI), &vec);
+    assert_equals(vrotate(&vec, 2.0F * PI), &vec);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 })

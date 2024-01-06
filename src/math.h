@@ -5,6 +5,12 @@
 #include <stdbool.h>
 
 
+#include "util.h"
+
+
+#define PI float_literal(M_PI)
+
+
 /**
  * @brief Maps a value from one range to another.
  *
