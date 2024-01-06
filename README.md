@@ -3,8 +3,8 @@
 ![GitHub](https://img.shields.io/github/license/reznakt/ray-casting)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reznakt/ray-casting/build.yml)
 ![GitHub repo size](https://img.shields.io/github/repo-size/reznakt/ray-casting)
-![GitHub repo file count](https://img.shields.io/github/directory-file-count/reznakt/ray-casting)
-![GitHub repo LOC](https://tokei.rs/b1/github/reznakt/ray-casting)
+![GitHub repo file count](https://tokei.rs/b1/github/reznakt/ray-casting?category=files)
+![GitHub repo LOC](https://tokei.rs/b1/github/reznakt/ray-casting?category=lines)
 
 > A simple experiment with ray casting and C.
 
