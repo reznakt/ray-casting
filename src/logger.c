@@ -24,6 +24,7 @@ static const struct log_target_t LOG_TARGETS[] = {
 };
 
 
+__attribute__((__format__(__printf__, 5, 6)))
 void logger_log(const enum log_level_t level,
                 const char *const restrict file,
                 const unsigned int line,
@@ -53,7 +54,7 @@ void logger_log(const enum log_level_t level,
         return;
     }
 
-    fprintf(stream, "%s:%d [%s] %s: ", basename(path), line, target->prefix, func);
+    fprintf(stream, "%s:%u [%s] %s: ", basename(path), line, target->prefix, func);
     vfprintf(stream, fmt, args);
 
     va_end(args);
