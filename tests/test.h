@@ -1,6 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedMacroInspection"
-
 #ifndef RAY_TESTS_TEST_H
 #define RAY_TESTS_TEST_H
 
@@ -105,4 +102,3 @@ void test_fail(struct test_t *test, const char *condstr);
 
 
 #endif //RAY_TESTS_TEST_H
-#pragma clang diagnostic pop
