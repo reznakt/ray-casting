@@ -55,6 +55,7 @@ void logger_log(const enum log_level_t level,
     }
 
     fprintf(stream, "%s:%u [%s] %s: ", basename(path), line, target->prefix, func);
+    free(path);
     vfprintf(stream, fmt, args);
 
     va_end(args);
