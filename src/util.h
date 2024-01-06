@@ -19,10 +19,10 @@
 #define rgb(r, g, b) rgba((r), (g), (b), SDL_ALPHA_OPAQUE)
 
 
-static const SDL_Color COLOR_RED = rgb(255, 0, 0);
-static const SDL_Color COLOR_GREEN = rgb(0, 255, 0);
-static const SDL_Color COLOR_WHITE = rgb(255, 255, 255);
-static const SDL_Color COLOR_BLACK = rgb(0, 0, 0);
+unused static const SDL_Color COLOR_RED = rgb(255, 0, 0);
+unused static const SDL_Color COLOR_GREEN = rgb(0, 255, 0);
+unused static const SDL_Color COLOR_WHITE = rgb(255, 255, 255);
+unused static const SDL_Color COLOR_BLACK = rgb(0, 0, 0);
 
 
 /**
