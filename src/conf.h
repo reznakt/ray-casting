@@ -96,7 +96,7 @@
 /**
  * @brief Rotation speed multiplier for the camera.
  */
-#define CAMERA_ROTATION_SPEED 0.5
+#define CAMERA_ROTATION_SPEED 0.5F
 
 /**
  * @brief Movement speed multiplier for the camera.
