@@ -1,6 +1,9 @@
 #include <libgen.h>
 
 
+#include "color.h"
+
+
 #include "logger.h"
 
 
@@ -16,11 +19,11 @@ struct log_target_t {
 
 static const struct log_target_t LOG_TARGETS[] = {
         [LOG_LEVEL_NOLOG] = {NULL, NONE},
-        [LOG_LEVEL_FATAL] = {"FATAL", STDOUT},
-        [LOG_LEVEL_ERROR] = {"ERROR", STDOUT},
-        [LOG_LEVEL_WARN]  = {"WARN", STDERR},
-        [LOG_LEVEL_INFO]  = {"INFO", STDERR},
-        [LOG_LEVEL_DEBUG] = {"DEBUG", STDERR}
+        [LOG_LEVEL_FATAL] = {BRED "fatal" CRESET, STDERR},
+        [LOG_LEVEL_ERROR] = {RED "error" CRESET, STDERR},
+        [LOG_LEVEL_WARN]  = {HYEL "warn" CRESET, STDOUT},
+        [LOG_LEVEL_INFO]  = {HBLU "info" CRESET, STDOUT},
+        [LOG_LEVEL_DEBUG] = {HBLK "debug" CRESET, STDOUT}
 };
 
 
@@ -35,10 +38,10 @@ void logger_log(const enum log_level_t level,
 
     switch (target->stream) {
         case STDOUT:
-            stream = stderr;
+            stream = stdout;
             break;
         case STDERR:
-            stream = stdout;
+            stream = stderr;
             break;
         case NONE:
             return;
@@ -54,7 +57,7 @@ void logger_log(const enum log_level_t level,
         return;
     }
 
-    fprintf(stream, "%s:%u [%s] %s: ", basename(path), line, target->prefix, func);
+    fprintf(stream, HGRN "%s:%u" CRESET " [%s] " BHMAG "%s" CRESET ": ", basename(path), line, target->prefix, func);
     free(path);
     vfprintf(stream, fmt, args);
 
