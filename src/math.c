@@ -6,6 +6,12 @@
 #include "math.h"
 
 
+#define float_literal_internal(x) x##F
+#define float_literal(x) float_literal_internal(x)
+
+#define PI float_literal(M_PI) // (mainly) for compatibility with -Wunsuffixed-float-constants
+
+
 float map(const float value, const float old_low, const float old_high, const float new_low, const float new_high) {
     if (value > old_high) {
         return new_high;
@@ -35,9 +41,9 @@ bool isclose(const float a, const float b) {
 }
 
 float degrees(const float angle) {
-    return angle * 180.0F / (float) M_PI;
+    return angle * 180.0F / PI;
 }
 
 float radians(const float angle) {
-    return angle * (float) M_PI / 180.0F;
+    return angle * PI / 180.0F;
 }
