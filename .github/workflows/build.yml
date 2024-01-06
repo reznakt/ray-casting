@@ -24,7 +24,7 @@ jobs:
       with:
         run-build: true
         build-dir: build/
-        options: -DSTRICT=ON
+        options: STRICT=ON
 
     - name: Strip debugging symbols
       run: |
