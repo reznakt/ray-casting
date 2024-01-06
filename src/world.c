@@ -194,11 +194,11 @@ int load_world(const char *const restrict path,
             continue;
         }
 
+        struct wobject_t object = {0};
+
         if (is_whitespace(line)) {
             goto next;
         }
-
-        struct wobject_t object = {0};
 
         if (parse_record(line, &object) != 0) {
             fclose(stream);
