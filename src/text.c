@@ -70,6 +70,7 @@ void render_puts(SDL_Renderer *const restrict renderer,
     }
 }
 
+__attribute__((__format__(__printf__, 3, 4)))
 void render_printf(SDL_Renderer *const restrict renderer,
                    const struct vec_t *const restrict pos,
                    const char *const restrict fmt, ...) {
