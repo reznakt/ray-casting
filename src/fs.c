@@ -132,7 +132,7 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
         return NULL;
     }
 
-    const int dir_fd = open(dirpath, O_DIRECTORY | O_PATH);
+    const int dir_fd = open(dirpath, O_DIRECTORY);
 
     if (dir_fd == -1) {
         logger_perror("open");

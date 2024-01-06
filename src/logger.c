@@ -1,3 +1,6 @@
+#include <libgen.h>
+
+
 #include "logger.h"
 
 
@@ -43,7 +46,14 @@ void logger_log(const enum log_level_t level,
     va_list args;
     va_start(args, fmt);
 
-    fprintf(stream, "%s:%d [%s] %s: ", basename(file), line, target->prefix, func);
+    char *const path = strdup(file);
+
+    if (path == NULL) {
+        perror("strdup");
+        return;
+    }
+
+    fprintf(stream, "%s:%d [%s] %s: ", basename(path), line, target->prefix, func);
     vfprintf(stream, fmt, args);
 
     va_end(args);
