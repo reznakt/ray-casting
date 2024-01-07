@@ -9,13 +9,15 @@
 #include "util.h"
 
 
+/**
+ * @brief Log levels used by the logger_* family of functions.
+ */
 enum unused log_level_t {
-    LOG_LEVEL_NOLOG,
-    LOG_LEVEL_FATAL,
-    LOG_LEVEL_ERROR,
-    LOG_LEVEL_WARN,
-    LOG_LEVEL_INFO,
-    LOG_LEVEL_DEBUG
+    LOG_LEVEL_FATAL, /**< A fatal error that causes the program to exit. */
+    LOG_LEVEL_ERROR, /**< An error that may or may not cause the program to exit. */
+    LOG_LEVEL_WARN, /**< A suspicious condition that should be brought to the user's attention. */
+    LOG_LEVEL_INFO, /**< An informational message. */
+    LOG_LEVEL_DEBUG /**< A message intended for debugging purposes. */
 };
 
 

@@ -11,14 +11,12 @@ struct log_target_t {
     const char *const prefix;
     const enum unused {
         STDOUT,
-        STDERR,
-        NONE
+        STDERR
     } stream;
 };
 
 
 static const struct log_target_t LOG_TARGETS[] = {
-        [LOG_LEVEL_NOLOG] = {NULL, NONE},
         [LOG_LEVEL_FATAL] = {BRED "fatal" CRESET, STDERR},
         [LOG_LEVEL_ERROR] = {RED "error" CRESET, STDERR},
         [LOG_LEVEL_WARN]  = {HYEL "warn" CRESET, STDOUT},
@@ -34,18 +32,7 @@ void logger_log(const enum log_level_t level,
                 const char *const restrict func,
                 const char *const restrict fmt, ...) {
     const struct log_target_t *const target = &LOG_TARGETS[level];
-    FILE *stream;
-
-    switch (target->stream) {
-        case STDOUT:
-            stream = stdout;
-            break;
-        case STDERR:
-            stream = stderr;
-            break;
-        case NONE:
-            return;
-    }
+    FILE *const stream = target->stream == STDOUT ? stdout : stderr;
 
     va_list args;
     va_start(args, fmt);
