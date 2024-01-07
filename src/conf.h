@@ -143,6 +143,12 @@
  */
 #define FLOOR_COLOR rgb(0, 0, 0)
 
+/**
+ * @brief If profiling is enabled, specifies the number of ticks to run
+ * the game for before exiting and dumping profiling information.
+ */
+#define PROFILE_TICKS 10000
+
 #define KEY_FORWARD SDLK_UP
 #define KEY_BACKWARD SDLK_DOWN
 #define KEY_LEFT SDLK_LEFT

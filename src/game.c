@@ -418,12 +418,15 @@ int game_init(struct game_t *const game) {
                                     SCREEN_FLAGS);
 
     if (game->window == NULL) {
+        logger_print(LOG_LEVEL_ERROR, "unable to create SDL window");
         return -1;
     }
 
+    logger_printf(LOG_LEVEL_INFO, "created SDL window '%s' (%dx%d px)\n", SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
     game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
 
     if (game->renderer == NULL) {
+        logger_print(LOG_LEVEL_ERROR, "unable to create SDL renderer");
         return -1;
     }
 
@@ -432,7 +435,7 @@ int game_init(struct game_t *const game) {
     SDL_Surface *const surface = IMG_Load(TEXTURE_ATLAS_FILE);
 
     if (surface == NULL) {
-        logger_printf(LOG_LEVEL_FATAL, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
+        logger_printf(LOG_LEVEL_ERROR, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
         return -1;
     }
 
@@ -440,11 +443,11 @@ int game_init(struct game_t *const game) {
     SDL_FreeSurface(surface);
 
     if (game->texture == NULL) {
-        logger_print(LOG_LEVEL_FATAL, "unable to create texture from surface");
+        logger_print(LOG_LEVEL_ERROR, "unable to create texture from surface");
         return -1;
     }
 
-    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d)\n",
+    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d px)\n",
                   TEXTURE_ATLAS_FILE, surface->w, surface->h);
 
     return 0;

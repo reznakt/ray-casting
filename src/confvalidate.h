@@ -77,6 +77,10 @@
 #error "WALL_SIZE must be positive"
 #endif
 
+#if PROFILE_TICKS < 1
+#error "PROFILE_TICKS must be positive"
+#endif
+
 
 STATIC_ASSERT((intmax_t) CAMERA_ROTATION_SPEED >= 0); // CAMERA_ROTATION_SPEED must be non-negative
 STATIC_ASSERT((intmax_t) CAMERA_MOVEMENT_SPEED >= 0); // CAMERA_MOVEMENT_SPEED must be non-negative

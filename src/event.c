@@ -2,6 +2,7 @@
 
 
 #include "event.h"
+#include "logger.h"
 
 
 static void camera_set_resmult(struct game_t *const game, const size_t resmult) {
@@ -20,13 +21,23 @@ static void camera_set_lightmult(struct game_t *const game, const float lightmul
 
 
 void on_event(struct game_t *const restrict game, const SDL_Event *const restrict event) {
+    static SDL_Keycode last_key = SDLK_UNKNOWN;
+    SDL_Keycode key;
+
     switch (event->type) {
         case SDL_QUIT:
             game->quit = true;
             break;
 
         case SDL_KEYDOWN:
-            switch (event->key.keysym.sym) {
+            key = event->key.keysym.sym;
+
+            if (key != last_key) {
+                logger_printf(LOG_LEVEL_DEBUG, "key event: %s\n", SDL_GetKeyName(key));
+                last_key = key;
+            }
+
+            switch (key) {
                 case KEY_FORWARD:
                     game->camera->movement.forward = true;
                     break;
@@ -91,6 +102,8 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     break;
                 case KEY_LIGHT_DEC:
                     camera_set_lightmult(game, game->camera->lightmult - 0.1F);
+                    break;
+                default:
                     break;
             }
             break;

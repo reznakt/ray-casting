@@ -39,48 +39,100 @@ static inline void usage(const char *const argv0) {
 }
 
 int main(const int argc, char **const argv) {
-    const bool help = get_flag(argc, argv, "-h", "--help");
-
-    if (help) {
+    if (get_flag(argc, argv, "-h", "--help")) {
         usage(argv[0]);
         return EXIT_SUCCESS;
     }
 
-    const bool profile = get_flag(argc, argv, "-p", "--profile");
+    for (int i = 0; i < argc; i++) {
+        logger_printf(LOG_LEVEL_DEBUG, "argv[%d]: %s\n", i, argv[i]);
+    }
+
+    logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d, SDL_Image version %d.%d.%d\n",
+                  SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL,
+                  SDL_IMAGE_MAJOR_VERSION, SDL_IMAGE_MINOR_VERSION, SDL_IMAGE_PATCHLEVEL);
+
+    logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
+    logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
+    logger_print(LOG_LEVEL_INFO, "initializing SDL...");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        logger_print(LOG_LEVEL_FATAL, "SDL: unable to initialize SDL_INIT_VIDEO");
         return EXIT_FAILURE;
     }
+
+    logger_printf(LOG_LEVEL_DEBUG, "initialized video driver: %s\n", SDL_GetCurrentVideoDriver());
+    const int displays = SDL_GetNumVideoDisplays();
+
+    if (displays < 1) {
+        logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get number of video displays (reason: '%s')", SDL_GetError());
+    } else {
+        for (int i = 0; i < displays; i++) {
+            const char *const name = SDL_GetDisplayName(i);
+
+            if (name == NULL) {
+                logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get display name for display %d (reason: '%s')",
+                              i, SDL_GetError());
+                continue;
+            }
+
+            SDL_DisplayMode mode;
+
+            if (SDL_GetDesktopDisplayMode(i, &mode) != 0) {
+                logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get desktop display mode for display %d (reason: '%s')",
+                              i, SDL_GetError());
+                continue;
+            }
+
+            logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%dx%d px @ %dHz)\n",
+                          i, name, mode.w, mode.h, mode.refresh_rate);
+
+        }
+    }
+
+    logger_print(LOG_LEVEL_INFO, "initializing SDL_Image...");
 
     if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
         logger_print(LOG_LEVEL_FATAL, "SDL_Image: unable to initialize IMG_INIT_PNG");
         return EXIT_FAILURE;
     }
 
+    logger_print(LOG_LEVEL_INFO, "creating and initializing game objects...");
     struct game_t *const game = game_create();
 
     if (game_init(game) != 0) {
+        logger_print(LOG_LEVEL_FATAL, "unable to initialize game");
         return EXIT_FAILURE;
     }
 
+    const bool profile = get_flag(argc, argv, "-p", "--profile");
+
+    if (profile) {
+        logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %zu ticks\n", PROFILE_TICKS);
+    }
+
+    logger_print(LOG_LEVEL_INFO, "starting main loop...");
+
     while (!game->quit) {
-        if (profile && game->ticks >= 10000) {
+        if (profile && game->ticks >= PROFILE_TICKS) {
             break;
         }
-
-        update(game);
-        render(game);
 
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
             on_event(game, &event);
         }
+
+        update(game);
+        render(game);
     }
 
+    logger_print(LOG_LEVEL_INFO, "quitting...");
+
     if (profile) {
-        printf("ticks: %zu, frames: %zu, avg fps: %f\n",
-               game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
+        logger_printf(LOG_LEVEL_DEBUG, "ticks: %zu, frames: %zu, avg fps: %f\n",
+                      game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
     }
 
     game_destroy(game);
