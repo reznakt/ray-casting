@@ -24,14 +24,21 @@ static void camera_set_lightmult(struct game_t *const game, const float lightmul
 
 static void log_event(const SDL_Event *const event) {
     static SDL_Keycode last_key = SDLK_UNKNOWN;
+    SDL_Keycode key;
 
-    if (event->type == SDL_KEYDOWN) {
-        const SDL_Keycode key = event->key.keysym.sym;
+    switch (event->type) {
+        case SDL_QUIT:
+            logger_print(LOG_LEVEL_DEBUG, "SDL_QUIT");
+            break;
 
-        if (key != last_key) {
-            logger_printf(LOG_LEVEL_DEBUG, "key event: %s\n", SDL_GetKeyName(key));
-            last_key = key;
-        }
+        case SDL_KEYDOWN:
+            key = event->key.keysym.sym;
+
+            if (key != last_key) {
+                logger_printf(LOG_LEVEL_DEBUG, "key event: %s\n", SDL_GetKeyName(key));
+                last_key = key;
+            }
+            break;
     }
 }
 
