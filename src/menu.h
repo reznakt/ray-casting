@@ -36,7 +36,6 @@ struct menu_line_t {
 struct menu_t {
     struct vec_t pos;
     struct vec_t size;
-    const char *title;
     size_t num_buttons;
     size_t num_texts;
     size_t num_lines;

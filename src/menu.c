@@ -187,7 +187,6 @@ void menu_create(struct menu_t *const restrict menu,
                  void *const restrict on_close_arg) {
     menu->pos = pos;
     menu->size = size;
-    menu->title = title;
     menu->num_buttons = 0;
     menu->num_texts = 0;
     menu->num_lines = 0;
