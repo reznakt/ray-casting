@@ -111,11 +111,11 @@ static void render_3d(struct game_t *const game) {
         }
 
         const float height = map(1.0F / ray->intersection.dist, 0.0F, 0.005F, 0.0F, (float) WALL_SIZE);
+        const float height_diff = game->camera->movement.crouch ? (float) CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
 
         const SDL_FRect stripe = {
                 .x = width * (float) i,
-                .y = game->center.y - height / 2.0F
-                     - (game->camera->movement.crouch ? CAMERA_CROUCH_HEIGHT_DELTA : 0.0F),
+                .y = game->center.y - height / 2.0F - height_diff,
                 .h = height,
                 .w = width
         };
