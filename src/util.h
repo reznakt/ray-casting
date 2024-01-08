@@ -2,6 +2,9 @@
 #define RAY_UTIL_H
 
 
+#include <SDL2/SDL.h>
+
+
 #include <stdbool.h>
 
 
@@ -31,6 +34,22 @@
  * @return The converted float literal.
  */
 #define float_literal(dbl) float_literal_internal(dbl)
+
+/**
+ * @brief Render objects with a certain color. The color is restored after rendering.
+ * @param game A pointer to a renderer to use.
+ * @param color The color to use for rendering.
+ * @param ... The code to execute for rendering.
+ * @example render_colored(game, COLOR_RED, { SDL_RenderDrawLineF(...); });
+ */
+#define render_colored(renderer, color, ...)                                                            \
+    do {                                                                                                \
+        SDL_Color _old_color;                                                                           \
+        SDL_GetRenderDrawColor((renderer), &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a); \
+        SDL_SetRenderDrawColor((renderer), (color).r, (color).g, (color).b, (color).a);                 \
+        __VA_ARGS__                                                                                     \
+        SDL_SetRenderDrawColor((renderer), _old_color.r, _old_color.g, _old_color.b, _old_color.a);     \
+    } while (0)
 
 
 unused static const SDL_Color COLOR_RED = rgb(255, 0, 0);

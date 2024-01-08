@@ -5,29 +5,13 @@
 
 #include "logger.h"
 #include "math.h"
+#include "menu.h"
 #include "ray.h"
 #include "util.h"
 #include "vector.h"
 
 
 #include "game.h"
-
-
-/**
- * @brief Render objects with a certain color. The color is restored after rendering.
- * @param game A pointer to the game_t struct representing the game.
- * @param color The color to use for rendering.
- * @param ... The code to execute for rendering.
- * @example render_colored(game, COLOR_RED, { SDL_RenderDrawLineF(...); });
- */
-#define render_colored(game, color, ...)                                                                        \
-    do {                                                                                                        \
-        SDL_Color _old_color;                                                                                   \
-        SDL_GetRenderDrawColor((game)->renderer, &_old_color.r, &_old_color.g, &_old_color.b, &_old_color.a);   \
-        SDL_SetRenderDrawColor((game)->renderer, (color).r, (color).g, (color).b, (color).a);                   \
-        __VA_ARGS__                                                                                             \
-        SDL_SetRenderDrawColor((game)->renderer, _old_color.r, _old_color.g, _old_color.b, _old_color.a);       \
-    } while (0)
 
 
 /**
@@ -74,7 +58,7 @@ static void render_walls(const struct game_t *const game) {
 
         const struct wall_t *const wall = &game->objects[i]->data.wall;
 
-        render_colored(game, wall->color, {
+        render_colored(game->renderer, wall->color, {
             SDL_RenderDrawLineF(game->renderer, wall->a.x, wall->a.y, wall->b.x, wall->b.y);
         });
     }
@@ -85,7 +69,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
 
-    render_colored(game, color, {
+    render_colored(game->renderer, color, {
         render_printf(game->renderer, &pos, fmt,
                       game->fps,
                       game->ticks,
@@ -103,7 +87,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
 }
 
 static void render_rays(const struct game_t *const restrict game, const SDL_Color color) {
-    render_colored(game, color, {
+    render_colored(game->renderer, color, {
         for (size_t i = 0; i < game->camera->nrays; i++) {
             const struct ray_t *const ray = &game->camera->rays[i];
             const struct intersection_t *const intersection = &ray->intersection;
@@ -145,13 +129,13 @@ static void render_3d(struct game_t *const game) {
         }
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
-            render_colored(game, color, {
+            render_colored(game->renderer, color, {
                 SDL_RenderFillRectF(game->renderer, &stripe);
             });
             continue;
         }
 
-        render_colored(game, color, {
+        render_colored(game->renderer, color, {
             const float x = stripe.x + stripe.w;
             const float y = stripe.y + stripe.h;
 
@@ -191,7 +175,7 @@ static void render_3d(struct game_t *const game) {
     const struct wall_t *const center_wall = center_ray->intersection.wall;
     const struct vec_t *const center_pos = vadd(vcopy(&game->center), &(struct vec_t) {10.0F, 10.0F});
 
-    render_colored(game, COLOR_WHITE, {
+    render_colored(game->renderer, COLOR_WHITE, {
         render_printf(game->renderer, center_pos, "%.2f m",
                       center_wall == NULL ? INFINITY : center_ray->intersection.dist / 100.0F);
     });
@@ -204,7 +188,7 @@ static void render_camera(const struct game_t *const restrict game, const SDL_Co
                       5,
                       color_to_int(camera));
 
-    render_colored(game, direction, {
+    render_colored(game->renderer, direction, {
         SDL_RenderDrawLineF(game->renderer,
                             game->camera->pos.x,
                             game->camera->pos.y,
@@ -225,17 +209,17 @@ static void render_visual_fps(struct game_t *const restrict game,
             .h = size
     };
 
-    render_colored(game, fg, {
+    render_colored(game->renderer, fg, {
         SDL_RenderFillRectF(game->renderer, &rect);
     });
 
-    render_colored(game, bg, {
+    render_colored(game->renderer, bg, {
         SDL_RenderDrawRectF(game->renderer, &rect);
     });
 }
 
 static void render_floor_and_ceiling(struct game_t *const game) {
-    render_colored(game, game->ceil_color, {
+    render_colored(game->renderer, game->ceil_color, {
         SDL_RenderClear(game->renderer);
     });
 
@@ -248,7 +232,7 @@ static void render_floor_and_ceiling(struct game_t *const game) {
             .h = game->center.y + height_diff
     };
 
-    render_colored(game, game->floor_color, {
+    render_colored(game->renderer, game->floor_color, {
         SDL_RenderFillRectF(game->renderer, &floor);
     });
 }
@@ -341,7 +325,7 @@ void camera_update_angle(struct game_t *const game, const float angle) {
 void render(struct game_t *const game) {
     switch (game->render_mode) {
         case RENDER_MODE_FLAT:
-            render_colored(game, COLOR_BLACK, {
+            render_colored(game->renderer, COLOR_BLACK, {
                 SDL_RenderClear(game->renderer);
             });
             render_walls(game);
@@ -350,7 +334,7 @@ void render(struct game_t *const game) {
             break;
 
         case RENDER_MODE_WIREFRAME:
-            render_colored(game, COLOR_BLACK, {
+            render_colored(game->renderer, COLOR_BLACK, {
                 SDL_RenderClear(game->renderer);
             });
             render_3d(game);
@@ -365,6 +349,10 @@ void render(struct game_t *const game) {
 
     render_visual_fps(game, COLOR_WHITE, COLOR_BLACK);
     render_hud(game, COLOR_WHITE);
+
+    if (game->paused) {
+        menu_render(game->renderer, &game->menu);
+    }
 
     SDL_RenderPresent(game->renderer);
 }

@@ -1,8 +1,11 @@
 #include "math.h"
 
 
-#include "event.h"
+#include "menu.h"
 #include "logger.h"
+
+
+#include "event.h"
 
 
 static void camera_set_resmult(struct game_t *const game, const size_t resmult) {
@@ -21,6 +24,10 @@ static void camera_set_lightmult(struct game_t *const game, const float lightmul
 
 
 void on_event(struct game_t *const restrict game, const SDL_Event *const restrict event) {
+    if (game->paused) {
+        menu_handle_event(&game->menu, event);
+    }
+
     static SDL_Keycode last_key = SDLK_UNKNOWN;
     SDL_Keycode key;
 
@@ -81,9 +88,12 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     game->camera->pos = game->center;
                     camera_update_angle(game, CAMERA_HEADING);
                     break;
-                case KEY_QUIT_1:
-                case KEY_QUIT_2:
+                case KEY_QUIT:
                     game->quit = true;
+                    break;
+                case KEY_PAUSE:
+                    game->paused = !game->paused;
+                    SDL_SetRelativeMouseMode(game->paused ? SDL_FALSE : SDL_TRUE);
                     break;
                 case KEY_VIEW_1:
                     game->render_mode = RENDER_MODE_FLAT;

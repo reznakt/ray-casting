@@ -10,6 +10,7 @@
 #include "event.h"
 #include "game.h"
 #include "logger.h"
+#include "menu.h"
 #include "ray.h"
 
 
@@ -36,6 +37,50 @@ static inline void usage(const char *const argv0) {
                                    "\t-p, --profile\t\tprint profiling information and exit\n";
 
     printf(fmt, argv0);
+}
+
+static void menu_close(void *const arg) {
+    struct game_t *const game = arg;
+    game->paused = false;
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+static void menu_quit(void *const arg) {
+    struct game_t *const game = arg;
+    game->quit = true;
+}
+
+static void menu_add_centered_button(struct menu_t *const menu,
+                                     struct vec_t pos,
+                                     const char *const name,
+                                     void (*const on_click)(void *arg),
+                                     void *const on_click_arg) {
+    const size_t width = menu_button_width(name);
+    pos.x -= (float) width / 2.0F;
+    menu_add_button(menu, pos, name, on_click, on_click_arg);
+}
+
+
+static void add_menu(struct game_t *const game) {
+    static const size_t width = SCREEN_WIDTH / 4;
+    static const size_t height = SCREEN_HEIGHT / 4;
+
+    const struct vec_t pos = {
+            .x = (float) SCREEN_WIDTH / 2.0F - (float) width / 2.0F,
+            .y = (float) SCREEN_HEIGHT / 2.0F - (float) height / 2.0F
+    };
+    const struct vec_t size = {.x = (float) width, .y = (float) height};
+
+    struct menu_t menu;
+    menu_create(&menu, pos, size, "Menu", menu_close, game);
+
+    struct vec_t position = {.x = size.x / 2.0F, .y = size.y / 3.0F};
+    menu_add_centered_button(&menu, position, "Resume", menu_close, game);
+
+    position.y += BUTTON_HEIGHT * 2;
+    menu_add_centered_button(&menu, position, "Quit", menu_quit, game);
+
+    game->menu = menu;
 }
 
 int main(const int argc, char **const argv) {
@@ -104,6 +149,8 @@ int main(const int argc, char **const argv) {
         logger_print(LOG_LEVEL_FATAL, "unable to initialize game");
         return EXIT_FAILURE;
     }
+
+    add_menu(game);
 
     const bool profile = get_flag(argc, argv, "-p", "--profile");
 

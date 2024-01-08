@@ -12,6 +12,32 @@ struct vec_t; // Forward declaration because of circular dependencies.
 
 
 /**
+ * The width of a single character in pixels.
+ */
+#define CHAR_WIDTH 8
+
+/**
+ * The height of a single character in pixels.
+ */
+#define CHAR_HEIGHT 8
+
+/**
+ * The number of pixels between two characters on the x-axis.
+ */
+#define CHAR_HORIZONTAL_SPACING 2
+
+/**
+ * The number of pixels between two characters on the y-axis.
+ */
+#define CHAR_VERTICAL_SPACING CHAR_HEIGHT
+
+/**
+ * The size of the tab character in spaces.
+ */
+#define TAB_WIDTH 4
+
+
+/**
  * @brief Renders a single character at the specified coordinates using the given renderer.
  *
  * @param renderer Pointer to the SDL_Renderer to use for rendering.
