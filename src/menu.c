@@ -33,10 +33,13 @@ int menu_add_text(struct menu_t *const restrict menu, struct vec_t pos, const ch
     return 0;
 }
 
-static void render_button(SDL_Renderer *const restrict renderer, const struct menu_button_t *const restrict button) {
+static void render_button(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
+                          const struct menu_button_t *const restrict button) {
+    const struct vec_t pos = vadd(menu->pos, button->pos);
+
     const SDL_FRect box_pos = {
-            .x = button->pos.x,
-            .y = button->pos.y,
+            .x = pos.x,
+            .y = pos.y,
             .w = (float) menu_button_width(button->name),
             .h = CHAR_HEIGHT + 2 * BUTTON_PADDING
     };
@@ -61,14 +64,19 @@ static void render_button(SDL_Renderer *const restrict renderer, const struct me
     });
 }
 
-static void render_line(SDL_Renderer *const restrict renderer, const struct menu_line_t *const restrict line) {
+static void render_line(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
+                        const struct menu_line_t *const restrict line) {
+    const struct vec_t start = vadd(menu->pos, line->start);
+    const struct vec_t end = vadd(menu->pos, line->end);
+
     render_colored(renderer, COLOR_WHITE, {
-        SDL_RenderDrawLineF(renderer, line->start.x, line->start.y, line->end.x, line->end.y);
+        SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
     });
 }
 
-static void render_text(SDL_Renderer *const restrict renderer, const struct menu_text_t *const restrict text) {
-    render_puts(renderer, text->pos, text->value);
+static void render_text(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
+                        const struct menu_text_t *const restrict text) {
+    render_puts(renderer, vadd(menu->pos, text->pos), text->value);
 }
 
 void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *const restrict menu) {
@@ -91,27 +99,17 @@ void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *con
 
     // buttons
     for (size_t i = 0; i < menu->num_buttons; i++) {
-        struct menu_button_t button = menu->buttons[i];
-        button.pos = vadd(button.pos, menu->pos);
-
-        render_button(renderer, &button);
+        render_button(menu, renderer, &menu->buttons[i]);
     }
 
     // lines
     for (size_t i = 0; i < menu->num_lines; i++) {
-        struct menu_line_t line = menu->lines[i];
-        line.start = vadd(line.start, menu->pos);
-        line.end = vadd(line.end, menu->pos);
-
-        render_line(renderer, &line);
+        render_line(menu, renderer, &menu->lines[i]);
     }
 
     // text
     for (size_t i = 0; i < menu->num_texts; i++) {
-        struct menu_text_t text = menu->texts[i];
-        text.pos = vadd(text.pos, menu->pos);
-
-        render_text(renderer, &text);
+        render_text(menu, renderer, &menu->texts[i]);
     }
 }
 
