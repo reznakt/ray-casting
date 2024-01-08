@@ -22,29 +22,36 @@ static void camera_set_lightmult(struct game_t *const game, const float lightmul
     game->camera->lightmult = constrain(lightmult, 0.0F, INFINITY);
 }
 
+static void log_event(const SDL_Event *const event) {
+    static SDL_Keycode last_key = SDLK_UNKNOWN;
+
+    if (event->type == SDL_KEYDOWN) {
+        const SDL_Keycode key = event->key.keysym.sym;
+
+        if (key != last_key) {
+            logger_printf(LOG_LEVEL_DEBUG, "key event: %s\n", SDL_GetKeyName(key));
+            last_key = key;
+        }
+    }
+}
+
 
 void on_event(struct game_t *const restrict game, const SDL_Event *const restrict event) {
-    if (game->paused) {
-        menu_handle_event(&game->menu, event);
+    log_event(event);
+
+    if (event->type == SDL_QUIT) {
+        game->quit = true;
+        return;
     }
 
-    static SDL_Keycode last_key = SDLK_UNKNOWN;
-    SDL_Keycode key;
+    if (game->paused) {
+        menu_handle_event(&game->menu, event);
+        return;
+    }
 
     switch (event->type) {
-        case SDL_QUIT:
-            game->quit = true;
-            break;
-
         case SDL_KEYDOWN:
-            key = event->key.keysym.sym;
-
-            if (key != last_key) {
-                logger_printf(LOG_LEVEL_DEBUG, "key event: %s\n", SDL_GetKeyName(key));
-                last_key = key;
-            }
-
-            switch (key) {
+            switch (event->key.keysym.sym) {
                 case KEY_FORWARD:
                     game->camera->movement.forward = true;
                     break;
@@ -87,9 +94,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_RESET:
                     game->camera->pos = game->center;
                     camera_update_angle(game, CAMERA_HEADING);
-                    break;
-                case KEY_QUIT:
-                    game->quit = true;
                     break;
                 case KEY_PAUSE:
                     game->paused = !game->paused;
