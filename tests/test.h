@@ -53,12 +53,12 @@ int main(void) {                                            \
     return run_tests(tests, sizeof tests / sizeof *tests);  \
 }
 
-#define assert(cond)            \
-do {                            \
-    if (!(cond)) {              \
-        test_fail(test, #cond); \
-        return;                 \
-    }                           \
+#define assert(cond)                                \
+do {                                                \
+    if (!(cond)) {                                  \
+        test_fail(test, __func__, __LINE__, #cond); \
+        return;                                     \
+    }                                               \
 } while (0)
 
 
@@ -98,7 +98,7 @@ do {                            \
 
 int run_tests(struct test_t *tests, size_t ntests);
 
-void test_fail(struct test_t *test, const char *condstr);
+void test_fail(struct test_t *test, const char *func, unsigned int line, const char *condstr);
 
 
 #endif //RAY_TESTS_TEST_H

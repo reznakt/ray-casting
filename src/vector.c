@@ -10,127 +10,96 @@
 const struct vec_t vzero = {0.0F, 0.0F};
 
 
-struct vec_t *vclear(struct vec_t *const vec) {
-    return vmove(vec, &vzero);
+struct vec_t vadd(const struct vec_t a, const struct vec_t b) {
+    return (struct vec_t) {a.x + b.x, a.y + b.y};
 }
 
-struct vec_t *vadd(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
-    dst->x += src->x;
-    dst->y += src->y;
-    return dst;
+struct vec_t vsub(const struct vec_t a, const struct vec_t b) {
+    return (struct vec_t) {a.x - b.x, a.y - b.y};
 }
 
-struct vec_t *vsub(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
-    dst->x -= src->x;
-    dst->y -= src->y;
-    return dst;
+struct vec_t vmul(const struct vec_t vec, const float x) {
+    return (struct vec_t) {vec.x * x, vec.y * x};
 }
 
-struct vec_t *vmul(struct vec_t *const vec, const float x) {
-    vec->x *= x;
-    vec->y *= x;
-    return vec;
+struct vec_t vdiv(const struct vec_t vec, const float d) {
+    return (struct vec_t) {vec.x / d, vec.y / d};
 }
 
-struct vec_t *vdiv(struct vec_t *const vec, const float d) {
-    vec->x /= d;
-    vec->y /= d;
-    return vec;
+float vprod(const struct vec_t a, const struct vec_t b) {
+    return a.x * b.x + a.y * b.y;
 }
 
-float vprod(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
-    return vec1->x * vec2->x + vec1->y * vec2->y;
-}
-
-float vlen(const struct vec_t *const vec) {
+float vlen(const struct vec_t vec) {
     return sqrtf(vlen2(vec));
 }
 
-float vlen2(const struct vec_t *const vec) {
+float vlen2(const struct vec_t vec) {
     return vprod(vec, vec);
 }
 
-struct vec_t *vfromangle(struct vec_t *const dst, const float angle) {
-    dst->x = cosf(angle);
-    dst->y = sinf(angle);
-    return dst;
+struct vec_t vfromangle(const float angle) {
+    return (struct vec_t) {cosf(angle), sinf(angle)};
 }
 
-struct vec_t *vnorm(struct vec_t *const vec) {
+struct vec_t vnorm(const struct vec_t vec) {
     return vdiv(vec, vlen(vec));
 }
 
-struct vec_t *vnorm_weak(struct vec_t *const vec) {
+struct vec_t vnorm_weak(const struct vec_t vec) {
     const float length = vlen(vec);
 
     if (isclose(length, 0.0F)) {
-        vec->x = 0.0F;
-        vec->y = 0.0F;
-        return vec;
+        return vzero;
     }
 
     return vdiv(vec, length);
 }
 
-float vdist(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
-    return sqrtf(vdist2(vec1, vec2));
+float vdist(const struct vec_t a, const struct vec_t b) {
+    return sqrtf(vdist2(a, b));
 }
 
-float vdist2(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
-    return powf(vec2->x - vec1->x, 2.0F) + powf(vec2->y - vec1->y, 2.0F);
+float vdist2(const struct vec_t a, const struct vec_t b) {
+    return powf(b.x - a.x, 2.0F) + powf(b.y - a.y, 2.0F);
 }
 
-float vangle(const struct vec_t *const restrict vec1, const struct vec_t *const restrict vec2) {
-    const float length1 = vlen(vec1);
+float vangle(const struct vec_t a, const struct vec_t b) {
+    const float length1 = vlen(a);
 
     if (isclose(length1, 0.0F)) {
         return NAN;
     }
 
-    const float length2 = vlen(vec2);
+    const float length2 = vlen(b);
 
     if (isclose(length2, 0.0F)) {
         return NAN;
     }
 
-    const float product = vprod(vec1, vec2);
+    const float product = vprod(a, b);
     return acosf(product / (length1 * length2));
 }
 
-struct vec_t *vmove(struct vec_t *const restrict dst, const struct vec_t *const restrict src) {
-    return memcpy(dst, src, sizeof *dst);
-}
-
-struct vec_t *vrotate(struct vec_t *const vec, const float angle) {
+struct vec_t vrotate(const struct vec_t vec, const float angle) {
     const float sin_a = sinf(angle);
     const float cos_a = cosf(angle);
 
-    const float x = vec->x;
-    const float y = vec->y;
-
-    vec->x = x * cos_a - y * sin_a;
-    vec->y = x * sin_a + y * cos_a;
-
-    return vec;
+    return (struct vec_t) {vec.x * cos_a - vec.y * sin_a, vec.x * sin_a + vec.y * cos_a};
 }
 
-struct vec_t *vlerp(struct vec_t *const restrict dst, const struct vec_t *const restrict src, const float t) {
-    dst->x = lerp(dst->x, src->x, t);
-    dst->y = lerp(dst->y, src->y, t);
-
-    return dst;
+struct vec_t vlerp(const struct vec_t a, const struct vec_t b, const float t) {
+    return (struct vec_t) {lerp(a.x, b.x, t), lerp(a.y, b.y, t)};
 }
 
-struct vec_t *vscale(struct vec_t *const vec, const float length) {
-    vnorm_weak(vec);
-    return vmul(vec, length);
+struct vec_t vscale(const struct vec_t vec, const float length) {
+    return vmul(vnorm_weak(vec), length);
 }
 
-struct vec_t *vreflect(struct vec_t *const restrict vec, const struct vec_t *const restrict normal) {
-    struct vec_t *const ncopy = vcopy(normal);
-    return vsub(vec, vscale(ncopy, 2.0F * vprod(vec, normal)));
+struct vec_t vreflect(const struct vec_t vec, const struct vec_t normal) {
+    return vsub(vec, vscale(normal, 2.0F * vprod(vec, normal)));
 }
 
-struct vec_t *vproject(struct vec_t *const restrict normal, const struct vec_t *const restrict vec) {
+struct vec_t vproject(const struct vec_t normal, const struct vec_t vec) {
     return vscale(normal, vprod(vec, normal) / vprod(normal, normal));
 }

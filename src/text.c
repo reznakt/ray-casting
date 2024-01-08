@@ -8,18 +8,18 @@
 #include "vector.h"
 
 
-void render_putchar(SDL_Renderer *const restrict renderer, const struct vec_t *const restrict pos, int chr) {
+void render_putchar(SDL_Renderer *const renderer, const struct vec_t pos, int chr) {
     for (size_t i = 0; i < CHAR_HEIGHT; i++) {
         for (size_t j = 0; j < CHAR_WIDTH; j++) {
             if (font8x8_basic[chr][i] & 1 << j) {
-                SDL_RenderDrawPointF(renderer, pos->x + (float) j, pos->y + (float) i);
+                SDL_RenderDrawPointF(renderer, pos.x + (float) j, pos.y + (float) i);
             }
         }
     }
 }
 
 void render_puts(SDL_Renderer *const restrict renderer,
-                 const struct vec_t *const restrict pos,
+                 const struct vec_t pos,
                  const char *const restrict str) {
     size_t x_off = 0;
     size_t y_off = 0;
@@ -42,7 +42,7 @@ void render_puts(SDL_Renderer *const restrict renderer,
                 x_off -= CHAR_HORIZONTAL_SPACING + CHAR_WIDTH;
                 continue;
             default:
-                render_putchar(renderer, &(struct vec_t) {pos->x + (float) x_off, pos->y + (float) y_off}, ch);
+                render_putchar(renderer, (struct vec_t) {pos.x + (float) x_off, pos.y + (float) y_off}, ch);
                 x_off += CHAR_HORIZONTAL_SPACING + CHAR_WIDTH;
                 break;
         }
@@ -51,7 +51,7 @@ void render_puts(SDL_Renderer *const restrict renderer,
 
 __attribute__((__format__(__printf__, 3, 4)))
 void render_printf(SDL_Renderer *const restrict renderer,
-                   const struct vec_t *const restrict pos,
+                   const struct vec_t pos,
                    const char *const restrict fmt, ...) {
     char buf[TEXTBUFLEN] = {0};
 

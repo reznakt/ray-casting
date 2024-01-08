@@ -49,9 +49,9 @@ struct ray_t {
  * @param wall The line segment to test for intersection with the ray.
  * @param dst A pointer to a vector where the resulting intersection point will be stored.
  *
- * @return A pointer to the resulting intersection point, or NULL if there is no intersection.
+ * @return True if the ray intersects with the line segment, false otherwise.
  */
-struct vec_t *ray_intersection(const struct ray_t *ray, const struct wall_t *wall, struct vec_t *dst);
+bool ray_intersection(const struct ray_t *ray, const struct wall_t *wall, struct vec_t *dst);
 
 
 #endif // RAY_RAY_H

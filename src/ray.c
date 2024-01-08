@@ -7,9 +7,9 @@
 #include "ray.h"
 
 
-struct vec_t *ray_intersection(const struct ray_t *const restrict ray,
-                               const struct wall_t *const restrict wall,
-                               struct vec_t *const restrict dst) {
+bool ray_intersection(const struct ray_t *const restrict ray,
+                      const struct wall_t *const restrict wall,
+                      struct vec_t *const restrict dst) {
     const float x1 = wall->a.x;
     const float y1 = wall->a.y;
     const float x2 = wall->b.x;
@@ -34,8 +34,8 @@ struct vec_t *ray_intersection(const struct ray_t *const restrict ray,
     if (t > 0.0F && t < 1.0F && u > 0.0F) {
         dst->x = x3 + u * dx;
         dst->y = y3 + u * dy;
-        return dst;
+        return true;
     }
 
-    return NULL;
+    return false;
 }

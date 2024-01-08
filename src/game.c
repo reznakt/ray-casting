@@ -70,7 +70,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
 
     render_colored(game->renderer, color, {
-        render_printf(game->renderer, &pos, fmt,
+        render_printf(game->renderer, pos, fmt,
                       game->fps,
                       game->ticks,
                       game->frames,
@@ -153,8 +153,8 @@ static void render_3d(struct game_t *const game) {
                                 x,
                                 y);
 
-            const float dist_a2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->a);
-            const float dist_b2 = vdist2(&ray->intersection.pos, &ray->intersection.wall->b);
+            const float dist_a2 = vdist2(ray->intersection.pos, ray->intersection.wall->a);
+            const float dist_b2 = vdist2(ray->intersection.pos, ray->intersection.wall->b);
 
             // vertical line; only at the adge of a wall
             // this is a bad approximation, which works poorly in lower resolutions
@@ -173,7 +173,7 @@ static void render_3d(struct game_t *const game) {
 
     const struct ray_t *const center_ray = &game->camera->rays[game->camera->nrays / 2];
     const struct wall_t *const center_wall = center_ray->intersection.wall;
-    const struct vec_t *const center_pos = vadd(vcopy(&game->center), &(struct vec_t) {10.0F, 10.0F});
+    const struct vec_t center_pos = vadd(game->center, (struct vec_t) {10.0F, 10.0F});
 
     render_colored(game->renderer, COLOR_WHITE, {
         render_printf(game->renderer, center_pos, "%.2f m",
@@ -238,23 +238,23 @@ static void render_floor_and_ceiling(struct game_t *const game) {
 }
 
 static void update_player_position(const struct game_t *const game) {
-    struct vec_t *const dirvect = vmul(vcopy(&game->camera->dir), speed_coeff(game, game->camera->speed));
+    struct vec_t dirvect = vmul(game->camera->dir, speed_coeff(game, game->camera->speed));
 
     if (game->camera->movement.forward ^ game->camera->movement.backward) {
         if (game->camera->movement.forward) { /* forward */
-            vadd(&game->camera->pos, dirvect);
+            game->camera->pos = vadd(game->camera->pos, dirvect);
         } else { /* backward */
-            vsub(&game->camera->pos, dirvect);
+            game->camera->pos = vsub(game->camera->pos, dirvect);
         }
     }
 
     if (game->camera->movement.left ^ game->camera->movement.right) {
-        vrotate(dirvect, radians(90));
+        dirvect = vrotate(dirvect, radians(90.0F));
 
         if (game->camera->movement.left) { /* left */
-            vsub(&game->camera->pos, dirvect);
+            game->camera->pos = vsub(game->camera->pos, dirvect);
         } else { /* right */
-            vadd(&game->camera->pos, dirvect);
+            game->camera->pos = vadd(game->camera->pos, dirvect);
         }
     }
 }
@@ -274,8 +274,8 @@ static void update_ray_intersections(const struct game_t *const game) {
         struct intersection_t ray_int = {0};
         float min_dist = INFINITY;
 
-        vmove(&ray.pos, &game->camera->pos);
-        vfromangle(&ray.dir, get_ray_angle(game, i));
+        ray.pos = game->camera->pos;
+        ray.dir = vfromangle(get_ray_angle(game, i));
 
         for (size_t j = 0; j < game->nobjects; j++) {
             if (game->objects[j]->type != WALL) {
@@ -283,16 +283,16 @@ static void update_ray_intersections(const struct game_t *const game) {
             }
 
             const struct wall_t *const wall = &game->objects[j]->data.wall;
-            const struct vec_t *const intersection = ray_intersection(&ray, wall, vector());
+            struct vec_t intersection;
 
-            if (intersection == NULL) {
+            if (!ray_intersection(&ray, wall, &intersection)) {
                 continue;
             }
 
-            const float dist = vdist(&ray.pos, intersection);
+            const float dist = vdist(ray.pos, intersection);
 
             if (dist < min_dist) {
-                ray_int.pos = *intersection;
+                ray_int.pos = intersection;
                 ray_int.wall = wall;
                 min_dist = ray_int.dist = dist;
             }
@@ -319,7 +319,7 @@ static void tick(struct game_t *const game) {
 
 void camera_update_angle(struct game_t *const game, const float angle) {
     game->camera->angle = fmodf(angle, 360.0F);
-    vfromangle(&game->camera->dir, radians(game->camera->angle));
+    game->camera->dir = vfromangle(radians(game->camera->angle));
 }
 
 void render(struct game_t *const game) {
@@ -382,7 +382,7 @@ struct game_t *game_create(void) {
     game.camera->nrays = game.camera->fov * game.camera->resmult;
     game.camera->speed = CAMERA_MOVEMENT_SPEED;
     game.camera->rays = rays;
-    vmove(&game.camera->pos, &game.center);
+    game.camera->pos = game.center;
     game.camera->lightmult = CAMERA_LIGHTMULT;
 
     game.render_mode = RENDER_MODE_TEXTURED;

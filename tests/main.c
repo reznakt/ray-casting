@@ -164,194 +164,124 @@ TEST(test_vzero, {
     assert_is_close(vzero.y, 0.0F);
 })
 
-TEST(test_vclear_rand, {
-    struct vec_t vec;
-    vec.x = randf();
-    vec.y = randf();
-
-    assert_equals(vclear(&vec), &vec);
-    assert_is_close(vec.x, 0.0F);
-    assert_is_close(vec.y, 0.0F);
-})
-
 TEST(test_vadd_rand, {
-    struct vec_t vec1;
-    struct vec_t vec2;
+    const struct vec_t vec1 = {randf(), randf()};
+    const struct vec_t vec2 = {randf(), randf()};
 
-    const float x1 = randf();
-    const float y1 = randf();
-    const float x2 = randf();
-    const float y2 = randf();
+    const struct vec_t result = vadd(vec1, vec2);
 
-    vec1.x = x1;
-    vec1.y = y1;
-    vec2.x = x2;
-    vec2.y = y2;
-
-    assert_equals(vadd(&vec1, &vec2), &vec1);
-
-    assert_is_close(vec2.x, x2);
-    assert_is_close(vec2.y, y2);
-
-    assert_is_close(vec1.x, x1 + x2);
-    assert_is_close(vec1.y, y1 + y2);
+    assert_is_close(result.x, vec1.x + vec2.x);
+    assert_is_close(result.y, vec1.y + vec2.y);
 })
 
 TEST(test_vsub_rand, {
-    struct vec_t vec1;
-    struct vec_t vec2;
+    const struct vec_t vec1 = {randf(), randf()};
+    const struct vec_t vec2 = {randf(), randf()};
 
-    const float x1 = randf();
-    const float y1 = randf();
-    const float x2 = randf();
-    const float y2 = randf();
+    const struct vec_t result = vsub(vec1, vec2);
 
-    vec1.x = x1;
-    vec1.y = y1;
-    vec2.x = x2;
-    vec2.y = y2;
-
-    assert_equals(vsub(&vec1, &vec2), &vec1);
-
-    assert_is_close(vec2.x, x2);
-    assert_is_close(vec2.y, y2);
-
-    assert_is_close(vec1.x, x1 - x2);
-    assert_is_close(vec1.y, y1 - y2);
+    assert_is_close(result.x, vec1.x - vec2.x);
+    assert_is_close(result.y, vec1.y - vec2.y);
 })
 
 TEST(test_vmul_rand, {
-    struct vec_t vec;
-
-    const float x = randf();
-    const float y = randf();
+    const struct vec_t vec = {randf(), randf()};
     const float m = randf();
 
-    vec.x = x;
-    vec.y = y;
+    const struct vec_t result = vmul(vec, m);
 
-    assert_equals(vmul(&vec, m), &vec);
-
-    assert_is_close(vec.x, x * m);
-    assert_is_close(vec.y, y * m);
+    assert_is_close(result.x, vec.x * m);
+    assert_is_close(result.y, vec.y * m);
 })
 
 TEST(test_vdiv_rand, {
-    struct vec_t vec;
+    const struct vec_t vec = {randf(), randf()};
 
-    const float x = randf();
-    const float y = randf();
     float d;
 
     do {
         d = randf();
     } while (isclose(d, 0.0F));
 
-    vec.x = x;
-    vec.y = y;
+    const struct vec_t result = vdiv(vec, d);
 
-    assert_equals(vdiv(&vec, d), &vec);
-
-    assert_is_close(vec.x, x / d);
-    assert_is_close(vec.y, y / d);
+    assert_is_close(result.x, vec.x / d);
+    assert_is_close(result.y, vec.y / d);
 })
 
 TEST(test_vprod_rand, {
-    struct vec_t vec1;
-    struct vec_t vec2;
+    const struct vec_t vec1 = {randf(), randf()};
+    const struct vec_t vec2 = {randf(), randf()};
 
-    const float x1 = randf();
-    const float y1 = randf();
-    const float x2 = randf();
-    const float y2 = randf();
+    const float result = vprod(vec1, vec2);
 
-    vec1.x = x1;
-    vec1.y = y1;
-    vec2.x = x2;
-    vec2.y = y2;
-
-    assert_is_close(vprod(&vec1, &vec2), x1 * x2 + y1 * y2);
-
-    assert_is_close(vec1.x, x1);
-    assert_is_close(vec1.y, y1);
-    assert_is_close(vec2.x, x2);
-    assert_is_close(vec2.y, y2);
+    assert_is_close(result, vec1.x * vec2.x + vec1.y * vec2.y);
 })
 
 TEST(test_vlen_rand, {
-    struct vec_t vec;
+    struct vec_t vec = {randf(), randf()};
 
-    const float x = randf();
-    const float y = randf();
-
-    vec.x = x;
-    vec.y = y;
-    assert_is_close(vlen(&vec), sqrtf(x * x + y * y));
+    assert_is_close(vlen(vec), sqrtf(vec.x * vec.x + vec.y * vec.y));
 
     vec.x = 0.0F;
     vec.y = 0.0F;
-    assert_is_close(vlen(&vec), 0.0F);
+    assert_is_close(vlen(vec), 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
-    assert_is_close(vlen(&vec), 1.0F);
+    assert_is_close(vlen(vec), 1.0F);
 
     vec.x = 0.0F;
     vec.y = 1.0F;
-    assert_is_close(vlen(&vec), 1.0F);
+    assert_is_close(vlen(vec), 1.0F);
 
     vec.x = 1.0F;
     vec.y = 1.0F;
-    assert_is_close(vlen(&vec), sqrtf(2.0F));
+    assert_is_close(vlen(vec), sqrtf(2.0F));
 })
 
 TEST(test_vlen2_rand, {
-    struct vec_t vec;
+    struct vec_t vec = {randf(), randf()};
 
-    const float x = randf();
-    const float y = randf();
-
-    vec.x = x;
-    vec.y = y;
-    assert_is_close(vlen2(&vec), x * x + y * y);
+    assert_is_close(vlen2(vec), vec.x * vec.x + vec.y * vec.y);
 
     vec.x = 0.0F;
     vec.y = 0.0F;
-    assert_is_close(vlen2(&vec), 0.0F);
+    assert_is_close(vlen2(vec), 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
-    assert_is_close(vlen2(&vec), 1.0F);
+    assert_is_close(vlen2(vec), 1.0F);
 
     vec.x = 0.0F;
     vec.y = 1.0F;
-    assert_is_close(vlen2(&vec), 1.0F);
+    assert_is_close(vlen2(vec), 1.0F);
 
     vec.x = 1.0F;
     vec.y = 1.0F;
-    assert_is_close(vlen2(&vec), 2.0F);
+    assert_is_close(vlen2(vec), 2.0F);
 })
 
 TEST(test_vfromangle, {
     struct vec_t vec;
 
-    assert_equals(vfromangle(&vec, 0.0F), &vec);
+    vec = vfromangle(0.0F);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
-    assert_equals(vfromangle(&vec, PI / 2.0F), &vec);
+    vec = vfromangle(PI / 2.0F);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 1.0F);
 
-    assert_equals(vfromangle(&vec, PI), &vec);
+    vec = vfromangle(PI);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 0.0F);
 
-    assert_equals(vfromangle(&vec, 3.0F * PI / 2.0F), &vec);
+    vec = vfromangle(3.0F * PI / 2.0F);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, -1.0F);
 
-    assert_equals(vfromangle(&vec, 2.0F * PI), &vec);
+    vec = vfromangle(2.0F * PI);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 })
@@ -359,53 +289,38 @@ TEST(test_vfromangle, {
 TEST(test_vnorm_rand, {
     struct vec_t vec;
 
-    float x;
-    float y;
-
     do {
-        x = randf();
-        y = randf();
-    } while (isclose(x, 0.0F) || isclose(y, 0.0F));
+        vec.x = randf();
+        vec.y = randf();
+    } while (isclose(vec.x, 0.0F) || isclose(vec.y, 0.0F));
 
-    vec.x = x;
-    vec.y = y;
-
-    const float length_before = vlen(&vec);
-
-    assert_equals(vnorm(&vec), &vec);
-
-    const float length_after = vlen(&vec);
+    const float length_before = vlen(vec);
+    const struct vec_t result = vnorm(vec);
+    const float length_after = vlen(result);
 
     assert_is_close(length_after, 1.0F);
-    assert_is_close(vec.x, x / length_before);
-    assert_is_close(vec.y, y / length_before);
+    assert_is_close(result.x, vec.x / length_before);
+    assert_is_close(result.y, vec.y / length_before);
 })
 
 TEST(test_vnorm_weak_rand, {
-    struct vec_t vec;
+    struct vec_t vec = vzero;
+    struct vec_t result;
 
-    vec.x = 0.0F;
-    vec.y = 0.0F;
-    assert_equals(vnorm_weak(&vec), &vec);
-    assert_is_close(vec.x, 0.0F);
-    assert_is_close(vec.y, 0.0F);
-    assert_is_close(vlen(&vec), 0.0F);
+    result = vnorm_weak(vec);
+    assert_is_close(result.x, 0.0F);
+    assert_is_close(result.y, 0.0F);
+    assert_is_close(vlen(result), 0.0F);
 
-    const float x = randf();
-    const float y = randf();
+    vec = (struct vec_t) {randf(), randf()};
 
-    vec.x = x;
-    vec.y = y;
-
-    const float length_before = vlen(&vec);
-
-    assert_equals(vnorm_weak(&vec), &vec);
-
-    const float length_after = vlen(&vec);
+    const float length_before = vlen(vec);
+    result = vnorm_weak(vec);
+    const float length_after = vlen(result);
 
     assert_is_close(length_after, 1.0F);
-    assert_is_close(vec.x, x / length_before);
-    assert_is_close(vec.y, y / length_before);
+    assert_is_close(result.x, vec.x / length_before);
+    assert_is_close(result.y, vec.y / length_before);
 })
 
 TEST(test_vdist, {
@@ -417,42 +332,42 @@ TEST(test_vdist, {
     vec2.x = 0.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), 0.0F);
+    assert_is_close(vdist(vec1, vec2), 0.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), sqrtf(2.0F));
+    assert_is_close(vdist(vec1, vec2), sqrtf(2.0F));
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = -1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = -1.0F;
 
-    assert_is_close(vdist(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist(vec1, vec2), 1.0F);
 })
 
 TEST(test_vdist2, {
@@ -464,42 +379,42 @@ TEST(test_vdist2, {
     vec2.x = 0.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 0.0F);
+    assert_is_close(vdist2(vec1, vec2), 0.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist2(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist2(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 2.0F);
+    assert_is_close(vdist2(vec1, vec2), 2.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = -1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist2(vec1, vec2), 1.0F);
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = -1.0F;
 
-    assert_is_close(vdist2(&vec1, &vec2), 1.0F);
+    assert_is_close(vdist2(vec1, vec2), 1.0F);
 })
 
 TEST(test_vangle, {
@@ -511,41 +426,28 @@ TEST(test_vangle, {
     vec2.x = 0.0F;
     vec2.y = 0.0F;
 
-    assert_nan(vangle(&vec1, &vec2));
+    assert_nan(vangle(vec1, vec2));
 
     vec1.x = 0.0F;
     vec1.y = 0.0F;
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_nan(vangle(&vec1, &vec2));
+    assert_nan(vangle(vec1, vec2));
 
     vec1.x = 1.0F;
     vec1.y = 0.0F;
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), PI / 2.0F);
+    assert_is_close(vangle(vec1, vec2), PI / 2.0F);
 
     vec1.x = 1.0F;
     vec1.y = 0.0F;
     vec2.x = -1.0F;
     vec2.y = 0.0F;
 
-    assert_is_close(vangle(&vec1, &vec2), PI);
-})
-
-TEST(test_vmove_rand, {
-    struct vec_t vec1;
-    struct vec_t vec2;
-
-    vec1.x = randf();
-    vec1.y = randf();
-
-    assert_equals(vmove(&vec2, &vec1), &vec2);
-
-    assert_is_close(vec1.x, vec2.x);
-    assert_is_close(vec1.y, vec2.y);
+    assert_is_close(vangle(vec1, vec2), PI);
 })
 
 TEST(test_vrotate, {
@@ -554,35 +456,35 @@ TEST(test_vrotate, {
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, 0.0F), &vec);
+    vec = vrotate(vec, 0.0F);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, PI / 2.0F), &vec);
+    vec = vrotate(vec, PI / 2.0F);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 1.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, PI), &vec);
+    vec = vrotate(vec, PI);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, 3.0F * PI / 2.0F), &vec);
+    vec = vrotate(vec, 3.0F * PI / 2.0F);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, -1.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vrotate(&vec, 2.0F * PI), &vec);
+    vec = vrotate(vec, 2.0F * PI);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 })
@@ -596,7 +498,7 @@ TEST(test_vlerp, {
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_equals(vlerp(&vec1, &vec2, 0.0F), &vec1);
+    vec1 = vlerp(vec1, vec2, 0.0F);
     assert_is_close(vec1.x, 0.0F);
     assert_is_close(vec1.y, 0.0F);
 
@@ -605,7 +507,7 @@ TEST(test_vlerp, {
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_equals(vlerp(&vec1, &vec2, 0.5F), &vec1);
+    vec1 = vlerp(vec1, vec2, 0.5F);
     assert_is_close(vec1.x, 0.5F);
     assert_is_close(vec1.y, 0.0F);
 
@@ -614,7 +516,7 @@ TEST(test_vlerp, {
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_equals(vlerp(&vec1, &vec2, 1.0F), &vec1);
+    vec1 = vlerp(vec1, vec2, 1.0F);
     assert_is_close(vec1.x, 1.0F);
     assert_is_close(vec1.y, 0.0F);
 
@@ -623,7 +525,7 @@ TEST(test_vlerp, {
     vec2.x = 1.0F;
     vec2.y = 0.0F;
 
-    assert_equals(vlerp(&vec1, &vec2, 0.0F), &vec1);
+    vec1 = vlerp(vec1, vec2, 0.0F);
     assert_is_close(vec1.x, 0.0F);
     assert_is_close(vec1.y, 0.0F);
 
@@ -632,7 +534,7 @@ TEST(test_vlerp, {
     vec2.x = 0.0F;
     vec2.y = 1.0F;
 
-    assert_equals(vlerp(&vec1, &vec2, 0.0F), &vec1);
+    vec1 = vlerp(vec1, vec2, 0.0F);
     assert_is_close(vec1.x, 0.0F);
     assert_is_close(vec1.y, 0.0F);
 })
@@ -643,28 +545,28 @@ TEST(test_vscale, {
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vscale(&vec, 0.0F), &vec);
+    vec = vscale(vec, 0.0F);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vscale(&vec, 0.5F), &vec);
+    vec = vscale(vec, 0.5F);
     assert_is_close(vec.x, 0.5F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vscale(&vec, 1.0F), &vec);
+    vec = vscale(vec, 1.0F);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
     vec.x = 1.0F;
     vec.y = 0.0F;
 
-    assert_equals(vscale(&vec, 2.0F), &vec);
+    vec = vscale(vec, 2.0F);
     assert_is_close(vec.x, 2.0F);
     assert_is_close(vec.y, 0.0F);
 })
@@ -679,7 +581,7 @@ TEST(test_vreflect, {
     normal.x = 0.0F;
     normal.y = 1.0F;
 
-    assert_equals(vreflect(&vec, &normal), &vec);
+    vec = vreflect(vec, normal);
     assert_is_close(vec.x, 1.0F);
     assert_is_close(vec.y, 0.0F);
 
@@ -689,7 +591,7 @@ TEST(test_vreflect, {
     normal.x = 1.0F;
     normal.y = 0.0F;
 
-    assert_equals(vreflect(&vec, &normal), &vec);
+    vec = vreflect(vec, normal);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 0.0F);
 
@@ -699,7 +601,7 @@ TEST(test_vreflect, {
     normal.x = 1.0F;
     normal.y = 0.0F;
 
-    assert_equals(vreflect(&vec, &normal), &vec);
+    vec = vreflect(vec, normal);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 0.0F);
 
@@ -709,7 +611,7 @@ TEST(test_vreflect, {
     normal.x = 1.0F;
     normal.y = 0.0F;
 
-    assert_equals(vreflect(&vec, &normal), &vec);
+    vec = vreflect(vec, normal);
     assert_is_close(vec.x, -1.0F);
     assert_is_close(vec.y, 1.0F);
 })
@@ -724,7 +626,7 @@ TEST(test_vproject, {
     normal.x = 0.0F;
     normal.y = 1.0F;
 
-    assert_equals(vproject(&vec, &normal), &vec);
+    vec = vproject(normal, vec);
     assert_is_close(vec.x, 0.0F);
     assert_is_close(vec.y, 0.0F);
 })
@@ -854,11 +756,9 @@ TEST(test_hex_to_dec, {
 RUN_TESTS(
         ADD_TEST(test_is_decimal_valid_rand, REPEATS),
         ADD_TEST(test_vadd_rand, REPEATS),
-        ADD_TEST(test_vclear_rand, REPEATS),
         ADD_TEST(test_vdiv_rand, REPEATS),
         ADD_TEST(test_vlen2_rand, REPEATS),
         ADD_TEST(test_vlen_rand, REPEATS),
-        ADD_TEST(test_vmove_rand, REPEATS),
         ADD_TEST(test_vmul_rand, REPEATS),
         ADD_TEST(test_vnorm_rand, REPEATS),
         ADD_TEST(test_vnorm_weak_rand, REPEATS),
