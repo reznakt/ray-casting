@@ -7,8 +7,9 @@
 
 int menu_add_button(
         struct menu_t *const restrict menu,
-        struct vec_t pos,
+        const struct vec_t pos,
         const char *const restrict title,
+        const enum menu_alignment_t alignment,
         void (*const on_click)(void *arg),
         void *const restrict on_click_arg
 ) {
@@ -16,9 +17,23 @@ int menu_add_button(
         return -1;
     }
 
-    const struct menu_button_t button = {.on_click = on_click, .pos = pos, .name = title, .on_click_arg = on_click_arg};
-    menu->buttons[menu->num_buttons++] = button;
+    const size_t width = menu_button_width(title);
+    struct vec_t button_pos = pos;
 
+    if (alignment == MENU_ALIGN_CENTER) {
+        button_pos.x -= (float) width / 2.0F;
+    } else if (alignment == MENU_ALIGN_RIGHT) {
+        button_pos.x -= (float) width;
+    }
+
+    const struct menu_button_t button = {
+            .on_click = on_click,
+            .pos = button_pos,
+            .name = title,
+            .on_click_arg = on_click_arg
+    };
+
+    menu->buttons[menu->num_buttons++] = button;
     return 0;
 }
 
@@ -198,10 +213,8 @@ void menu_create(struct menu_t *const restrict menu,
     menu->on_event = on_event;
     menu->on_event_arg = on_event_arg;
 
-    static const char *const close_button_title = "X";
-    const size_t close_button_width = menu_button_width(close_button_title);
-    const struct vec_t close_button_pos = {.x = size.x - (float) close_button_width, .y = 0.0F};
-    menu_add_button(menu, close_button_pos, close_button_title, on_close, on_close_arg);
+    const struct vec_t close_button_pos = {.x = size.x, .y = 0.0F};
+    menu_add_button(menu, close_button_pos, "X", MENU_ALIGN_RIGHT, on_close, on_close_arg);
 
     const struct vec_t header_line_start = {.x = 0.0F, .y = BUTTON_HEIGHT};
     const struct vec_t header_line_end = {.x = size.x, .y = BUTTON_HEIGHT};

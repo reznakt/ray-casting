@@ -14,6 +14,12 @@
 #define BUTTON_HEIGHT (CHAR_HEIGHT + 2 * BUTTON_PADDING)
 
 
+enum menu_alignment_t {
+    MENU_ALIGN_LEFT,
+    MENU_ALIGN_CENTER,
+    MENU_ALIGN_RIGHT
+};
+
 struct menu_button_t {
     void (*on_click)(void *arg);
 
@@ -48,8 +54,8 @@ struct menu_t {
 };
 
 
-int menu_add_button(struct menu_t *menu, struct vec_t pos, const char *title, void (*on_click)(void *arg),
-                    void *on_click_arg);
+int menu_add_button(struct menu_t *menu, struct vec_t pos, const char *title, enum menu_alignment_t alignment,
+                    void (*on_click)(void *arg), void *on_click_arg);
 
 int menu_add_text(struct menu_t *menu, struct vec_t pos, const char *value);
 

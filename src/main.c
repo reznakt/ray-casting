@@ -50,16 +50,6 @@ static void menu_quit(void *const arg) {
     game->quit = true;
 }
 
-static void menu_add_centered_button(struct menu_t *const restrict menu,
-                                     struct vec_t pos,
-                                     const char *const restrict name,
-                                     void (*const on_click)(void *arg),
-                                     void *const restrict on_click_arg) {
-    const size_t width = menu_button_width(name);
-    pos.x -= (float) width / 2.0F;
-    menu_add_button(menu, pos, name, on_click, on_click_arg);
-}
-
 static void menu_add_centered_text(struct menu_t *const restrict menu,
                                    struct vec_t pos,
                                    const char *const restrict value) {
@@ -96,13 +86,13 @@ static void set_main_menu(struct game_t *const game) {
     menu_add_centered_text(&menu, position, "*** GAME PAUSED ***");
     position = (struct vec_t) {.x = size.x / 2.0F, .y = size.y / 3.0F};
 
-    menu_add_centered_button(&menu, position, "Resume", menu_close, game);
+    menu_add_button(&menu, position, "Resume", MENU_ALIGN_CENTER, menu_close, game);
     position.y += BUTTON_HEIGHT * 2;
 
-    menu_add_centered_button(&menu, position, "Options", NULL, NULL);
+    menu_add_button(&menu, position, "Options", MENU_ALIGN_CENTER, NULL, NULL);
     position.y += BUTTON_HEIGHT * 2;
 
-    menu_add_centered_button(&menu, position, "Quit", menu_quit, game);
+    menu_add_button(&menu, position, "Quit", MENU_ALIGN_CENTER, menu_quit, game);
 
     game->menu = menu;
 }
