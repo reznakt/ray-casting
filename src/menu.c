@@ -164,9 +164,6 @@ void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
 
             break;
         }
-
-        default:
-            break;
     }
 }
 

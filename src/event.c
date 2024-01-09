@@ -128,8 +128,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_LIGHT_DEC:
                     camera_set_lightmult(game, game->camera->lightmult - 0.1F);
                     break;
-                default:
-                    break;
             }
             break;
 
@@ -153,8 +151,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     break;
                 case KEY_SPRINT:
                     game->camera->speed = CAMERA_MOVEMENT_SPEED;
-                    break;
-                default:
                     break;
             }
             break;

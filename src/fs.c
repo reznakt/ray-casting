@@ -81,8 +81,6 @@ static char *executable_path(void) {
         case PATH_MAX:
             logger_printf(LOG_LEVEL_ERROR, "readlink: path too long (PATH_MAX = %u)\n", PATH_MAX);
             goto bailout;
-        default:
-            break;
     }
 
     return buf;
