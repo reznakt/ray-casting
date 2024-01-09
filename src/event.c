@@ -106,6 +106,11 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     game->paused = true;
                     SDL_SetRelativeMouseMode(SDL_FALSE);
                     SDL_WarpMouseInWindow(game->window, (int) game->center.x, (int) game->center.y);
+
+                    if (SCREEN_FLAGS & SDL_WINDOW_FULLSCREEN) {
+                        SDL_SetWindowGrab(game->window, SDL_TRUE);
+                    }
+
                     break;
                 case KEY_VIEW_1:
                     game->render_mode = RENDER_MODE_FLAT;
