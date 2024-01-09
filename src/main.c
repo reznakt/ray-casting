@@ -68,6 +68,16 @@ static void menu_add_centered_text(struct menu_t *const restrict menu,
     menu_add_text(menu, pos, value);
 }
 
+static void menu_on_event(const SDL_Event *const event, void *const arg) {
+    if (event->type == SDL_KEYDOWN) {
+        switch (event->key.keysym.sym) {
+            case KEY_PAUSE:
+                menu_close(arg);
+                break;
+        }
+    }
+}
+
 static void set_main_menu(struct game_t *const game) {
     static const size_t width = SCREEN_WIDTH / 4;
     static const size_t height = SCREEN_HEIGHT / 4;
@@ -79,7 +89,7 @@ static void set_main_menu(struct game_t *const game) {
     const struct vec_t size = {.x = (float) width, .y = (float) height};
 
     struct menu_t menu;
-    menu_create(&menu, pos, size, "Menu", menu_close, game);
+    menu_create(&menu, pos, size, "Menu", menu_close, game, menu_on_event, game);
 
     struct vec_t position = {.x = size.x / 2.0F, .y = size.y / 5.0F};
 

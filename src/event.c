@@ -103,12 +103,9 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     camera_update_angle(game, CAMERA_HEADING);
                     break;
                 case KEY_PAUSE:
-                    game->paused = !game->paused;
-                    SDL_SetRelativeMouseMode(game->paused ? SDL_FALSE : SDL_TRUE);
-
-                    if (game->paused) {
-                        SDL_WarpMouseInWindow(game->window, (int) game->center.x, (int) game->center.y);
-                    }
+                    game->paused = true;
+                    SDL_SetRelativeMouseMode(SDL_FALSE);
+                    SDL_WarpMouseInWindow(game->window, (int) game->center.x, (int) game->center.y);
                     break;
                 case KEY_VIEW_1:
                     game->render_mode = RENDER_MODE_FLAT;

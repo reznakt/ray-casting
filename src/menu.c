@@ -165,6 +165,10 @@ void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
             break;
         }
     }
+
+    if (menu->on_event != NULL) {
+        menu->on_event(event, menu->on_event_arg);
+    }
 }
 
 int menu_add_line(struct menu_t *const menu, struct vec_t start, struct vec_t end) {
@@ -183,12 +187,16 @@ void menu_create(struct menu_t *const restrict menu,
                  const struct vec_t size,
                  const char *const restrict title,
                  void (*const on_close)(void *arg),
-                 void *const restrict on_close_arg) {
+                 void *const restrict on_close_arg,
+                 void (*on_event)(const SDL_Event *event, void *arg),
+                 void *on_event_arg) {
     menu->pos = pos;
     menu->size = size;
     menu->num_buttons = 0;
     menu->num_texts = 0;
     menu->num_lines = 0;
+    menu->on_event = on_event;
+    menu->on_event_arg = on_event_arg;
 
     static const char *const close_button_title = "X";
     const size_t close_button_width = menu_button_width(close_button_title);

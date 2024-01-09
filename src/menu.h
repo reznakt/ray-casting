@@ -34,6 +34,9 @@ struct menu_line_t {
 };
 
 struct menu_t {
+    void (*on_event)(const SDL_Event *event, void *arg);
+
+    void *on_event_arg;
     struct vec_t pos;
     struct vec_t size;
     size_t num_buttons;
@@ -58,8 +61,14 @@ size_t menu_button_width(const char *title);
 
 void menu_handle_event(struct menu_t *menu, const SDL_Event *event);
 
-void menu_create(struct menu_t *menu, struct vec_t pos, struct vec_t size,
-                 const char *title, void (*on_close)(void *arg), void *on_close_arg);
+void menu_create(struct menu_t *menu,
+                 struct vec_t pos,
+                 struct vec_t size,
+                 const char *title,
+                 void (*on_close)(void *arg),
+                 void *on_close_arg,
+                 void (*on_event)(const SDL_Event *event, void *arg),
+                 void *on_event_arg);
 
 
 #endif //RAY_MENU_H
