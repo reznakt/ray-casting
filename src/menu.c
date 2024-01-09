@@ -133,11 +133,12 @@ static bool is_within(const struct SDL_FRect *const restrict rect, const struct 
 void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
     switch (event->type) {
         case SDL_MOUSEMOTION:
-        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONDOWN: {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+
             for (size_t i = 0; i < menu->num_buttons; i++) {
                 struct menu_button_t *const button = &menu->buttons[i];
-                int x, y;
-                SDL_GetMouseState(&x, &y);
 
                 const SDL_FRect button_rect = {
                         .x = button->pos.x + menu->pos.x,
@@ -160,7 +161,10 @@ void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
                     button->hover = true;
                 }
             }
+
             break;
+        }
+
         default:
             break;
     }
