@@ -1,6 +1,7 @@
+#include <math.h>
+
+
 #include "math.h"
-
-
 #include "menu.h"
 #include "logger.h"
 
