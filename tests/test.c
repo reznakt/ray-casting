@@ -60,10 +60,8 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
         }
     }
 
-    printf("\n\npassed: %s%zu%s, failed: %s%zu%s, total: %zu (%" PRIdMAX " ms)\n",
-           HGRN, passed, CRESET,
-           RED, failed, CRESET,
-           total, elapsed);
+    printf("\n\npassed: " HGRN "%zu" CRESET ", failed: " RED "%zu" CRESET ", total: %zu (%" PRIdMAX " ms)\n",
+           passed, failed, total, elapsed);
 
 
     if (failed > 0) {
@@ -78,8 +76,5 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
 void test_fail(struct test_t *const restrict test, const char *const restrict func,
                const unsigned int line, const char *const restrict condstr) {
     test->failed = true;
-    snprintf(test->output,
-             OUTPUT_MAXLEN,
-             "%s%s:%u:\n\t%sassert(%s)%s ",
-             HBLU, func, line, HYEL, condstr, CRESET);
+    snprintf(test->output, OUTPUT_MAXLEN, HBLU "%s:%u:\n\t" HYEL "assert(%s) " CRESET, func, line, condstr);
 }
