@@ -14,7 +14,7 @@
 #define BUTTON_HEIGHT (CHAR_HEIGHT + 2 * BUTTON_PADDING)
 
 
-enum menu_alignment_t {
+enum unused menu_alignment_t {
     MENU_ALIGN_LEFT,
     MENU_ALIGN_CENTER,
     MENU_ALIGN_RIGHT
