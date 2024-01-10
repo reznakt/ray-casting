@@ -48,7 +48,7 @@ static void name(unused struct test_t *const test) {    \
 
 
 #define RUN_TESTS(...)                                      \
-int main(void) {                                            \
+int main(unused const int argc, unused char **const argv) { \
     srand(get_seed());                                      \
     static struct test_t tests[] = {__VA_ARGS__};           \
     return run_tests(tests, sizeof tests / sizeof *tests);  \
