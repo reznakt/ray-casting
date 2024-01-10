@@ -2,6 +2,7 @@
 #define RAY_TESTS_TEST_H
 
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
