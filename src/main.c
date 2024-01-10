@@ -169,7 +169,7 @@ int main(const int argc, char **const argv) {
     const bool profile = get_flag(argc, argv, "-p", "--profile");
 
     if (profile) {
-        logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %zu ticks\n", PROFILE_TICKS);
+        logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %d ticks\n", PROFILE_TICKS);
     }
 
     logger_print(LOG_LEVEL_INFO, "starting main loop...");

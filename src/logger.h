@@ -58,6 +58,7 @@ enum unused log_level_t {
  * @param fmt The format string.
  * @param ... The arguments to the format string.
  */
+__attribute__((__format__(__printf__, 5, 6)))
 void logger_log(enum log_level_t level, const char *file, unsigned int line, const char *func, const char *fmt, ...);
 
 

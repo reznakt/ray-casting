@@ -63,6 +63,7 @@ void render_puts(SDL_Renderer *renderer, struct vec_t pos, const char *str);
  * @param fmt The format string.
  * @param ... The variadic arguments for the format string.
  */
+__attribute__((__format__(__printf__, 3, 4)))
 void render_printf(SDL_Renderer *renderer, struct vec_t pos, const char *fmt, ...);
 
 
