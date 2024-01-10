@@ -148,7 +148,7 @@ static int parse_record(char *const restrict record, struct wobject_t *const dst
                         break;
                     default:
                         logger_printf(LOG_LEVEL_ERROR, "unexpected token '%s' starting at position %zu\n",
-                                      token, token - line + 1);
+                                      token, (size_t) (token - line) + 1);
                         return -1;
                 }
                 break;
