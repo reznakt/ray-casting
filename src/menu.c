@@ -1,8 +1,20 @@
 #include "logger.h"
 #include "text.h"
+#include "util.h"
 
 
 #include "menu.h"
+
+
+static const SDL_Color TEXT_COLOR = COLOR_WHITE;
+static const SDL_Color LINE_COLOR = COLOR_WHITE;
+
+static const SDL_Color BUTTON_COLOR_BACKGROUND = COLOR_BLACK;
+static const SDL_Color BUTTON_COLOR_HOVER = rgb(100, 100, 100);
+static const SDL_Color BUTTON_COLOR_BORDER = COLOR_WHITE;
+
+static const SDL_Color MENU_COLOR_BACKGROUND = COLOR_BLACK;
+static const SDL_Color MENU_COLOR_BORDER = COLOR_WHITE;
 
 
 int menu_add_button(
@@ -59,22 +71,17 @@ static void render_button(const struct menu_t *const restrict menu, SDL_Renderer
             .h = CHAR_HEIGHT + 2 * BUTTON_PADDING
     };
 
-    static const SDL_Color color = rgb(0, 0, 0);
-    static const SDL_Color hover_color = rgb(100, 100, 100);
-    static const SDL_Color text_color = rgb(255, 255, 255);
-    static const SDL_Color border_color = rgb(255, 255, 255);
-
-    render_colored(renderer, button->hover ? hover_color : color, {
+    render_colored(renderer, button->hover ? BUTTON_COLOR_HOVER : BUTTON_COLOR_BACKGROUND, {
         SDL_RenderFillRectF(renderer, &box_pos);
     });
 
-    render_colored(renderer, border_color, {
+    render_colored(renderer, BUTTON_COLOR_BORDER, {
         SDL_RenderDrawRectF(renderer, &box_pos);
     });
 
     const struct vec_t text_pos = {box_pos.x + BUTTON_PADDING, box_pos.y + BUTTON_PADDING};
 
-    render_colored(renderer, text_color, {
+    render_colored(renderer, TEXT_COLOR, {
         render_puts(renderer, text_pos, button->name);
     });
 }
@@ -84,14 +91,16 @@ static void render_line(const struct menu_t *const restrict menu, SDL_Renderer *
     const struct vec_t start = vadd(menu->pos, line->start);
     const struct vec_t end = vadd(menu->pos, line->end);
 
-    render_colored(renderer, COLOR_WHITE, {
+    render_colored(renderer, LINE_COLOR, {
         SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
     });
 }
 
 static void render_text(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
                         const struct menu_text_t *const restrict text) {
-    render_puts(renderer, vadd(menu->pos, text->pos), text->value);
+    render_colored(renderer, TEXT_COLOR, {
+        render_puts(renderer, vadd(menu->pos, text->pos), text->value);
+    });
 }
 
 void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *const restrict menu) {
@@ -103,12 +112,12 @@ void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *con
     };
 
     // background
-    render_colored(renderer, COLOR_BLACK, {
+    render_colored(renderer, MENU_COLOR_BACKGROUND, {
         SDL_RenderFillRectF(renderer, &box_pos);
     });
 
     // border
-    render_colored(renderer, COLOR_WHITE, {
+    render_colored(renderer, MENU_COLOR_BORDER, {
         SDL_RenderDrawRectF(renderer, &box_pos);
     });
 
