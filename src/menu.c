@@ -49,12 +49,22 @@ int menu_add_button(
     return 0;
 }
 
-int menu_add_text(struct menu_t *const restrict menu, struct vec_t pos, const char *const restrict value) {
+int menu_add_text(struct menu_t *const restrict menu, struct vec_t pos,
+                  const char *const restrict value, const enum menu_alignment_t alignment) {
     if (menu->num_texts >= MENU_MAX_ELEMENTS) {
         return -1;
     }
 
-    const struct menu_text_t text = {.pos = pos, .value = value};
+    struct vec_t text_pos = pos;
+    const size_t width = menu_button_width(value) - 2 * BUTTON_PADDING;
+
+    if (alignment == MENU_ALIGN_CENTER) {
+        text_pos.x -= (float) width / 2.0F;
+    } else if (alignment == MENU_ALIGN_RIGHT) {
+        text_pos.x -= (float) width;
+    }
+
+    const struct menu_text_t text = {.pos = text_pos, .value = value};
     menu->texts[menu->num_texts++] = text;
 
     return 0;
@@ -137,22 +147,13 @@ void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *con
     }
 }
 
-
 size_t menu_button_width(const char *const title) {
-    const size_t title_len = strlen(title);
-    size_t result = 0;
-
-    result += CHAR_WIDTH * title_len; // width of all characters
-    result += CHAR_HORIZONTAL_SPACING * (title_len - 1); // width of all spaces between characters
-    result += 2 * BUTTON_PADDING; // width of padding on both sides
-
-    return result;
+    return text_width(title) + 2 * BUTTON_PADDING;
 }
 
 static bool is_within(const struct SDL_FRect *const restrict rect, const struct vec_t *const restrict pos) {
     return pos->x >= rect->x && pos->x <= rect->x + rect->w && pos->y >= rect->y && pos->y <= rect->y + rect->h;
 }
-
 
 void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
     switch (event->type) {
@@ -229,7 +230,6 @@ void menu_create(struct menu_t *const restrict menu,
     const struct vec_t header_line_end = {.x = size.x, .y = BUTTON_HEIGHT};
     menu_add_line(menu, header_line_start, header_line_end);
 
-    const size_t text_width = strlen(title) * CHAR_WIDTH;
-    const struct vec_t title_pos = {.x = (float) (size.x / 2 - (float) text_width / 2.0F), .y = BUTTON_PADDING};
-    menu_add_text(menu, title_pos, title);
+    const struct vec_t title_pos = {.x = size.x / 2.0F, .y = BUTTON_PADDING};
+    menu_add_text(menu, title_pos, title, MENU_ALIGN_CENTER);
 }

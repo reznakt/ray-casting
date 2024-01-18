@@ -50,14 +50,6 @@ static void menu_quit(void *const arg) {
     game->quit = true;
 }
 
-static void menu_add_centered_text(struct menu_t *const restrict menu,
-                                   struct vec_t pos,
-                                   const char *const restrict value) {
-    const size_t width = menu_button_width(value) - 2 * BUTTON_PADDING;
-    pos.x -= (float) width / 2.0F;
-    menu_add_text(menu, pos, value);
-}
-
 static void menu_on_event(const SDL_Event *const event, void *const arg) {
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
@@ -83,7 +75,7 @@ static void set_main_menu(struct game_t *const game) {
 
     struct vec_t position = {.x = size.x / 2.0F, .y = size.y / 5.0F};
 
-    menu_add_centered_text(&menu, position, "*** GAME PAUSED ***");
+    menu_add_text(&menu, position, "*** GAME PAUSED ***", MENU_ALIGN_CENTER);
     position = (struct vec_t) {.x = size.x / 2.0F, .y = size.y / 3.0F};
 
     menu_add_button(&menu, position, "Resume", MENU_ALIGN_CENTER, menu_close, game);

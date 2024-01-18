@@ -37,6 +37,8 @@ struct vec_t; // Forward declaration because of circular dependencies.
 #define TAB_WIDTH 4
 
 
+size_t text_width(const char *text);
+
 /**
  * @brief Renders a single character at the specified coordinates using the given renderer.
  *

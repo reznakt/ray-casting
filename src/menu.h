@@ -57,7 +57,7 @@ struct menu_t {
 int menu_add_button(struct menu_t *menu, struct vec_t pos, const char *title, enum menu_alignment_t alignment,
                     void (*on_click)(void *arg), void *on_click_arg);
 
-int menu_add_text(struct menu_t *menu, struct vec_t pos, const char *value);
+int menu_add_text(struct menu_t *menu, struct vec_t pos, const char *value, enum menu_alignment_t alignment);
 
 int menu_add_line(struct menu_t *menu, struct vec_t start, struct vec_t end);
 

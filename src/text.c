@@ -8,6 +8,11 @@
 #include "vector.h"
 
 
+size_t text_width(const char *const text) {
+    const size_t len = strlen(text);
+    return len * CHAR_WIDTH + (len - 1) * CHAR_HORIZONTAL_SPACING;
+}
+
 void render_putchar(SDL_Renderer *const renderer, const struct vec_t pos, int chr) {
     for (size_t i = 0; i < CHAR_HEIGHT; i++) {
         for (size_t j = 0; j < CHAR_WIDTH; j++) {
