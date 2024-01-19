@@ -1,5 +1,6 @@
-#include "math.h"
+#include <SDL2/SDL.h>
 
+#include "math.h"
 
 #include "util.h"
 

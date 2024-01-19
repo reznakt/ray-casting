@@ -1,7 +1,11 @@
+#include <stdlib.h>
+
+#include <SDL2/SDL.h>
+
 #include "logger.h"
 #include "text.h"
 #include "util.h"
-
+#include "vector.h"
 
 #include "menu.h"
 

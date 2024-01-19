@@ -7,9 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
 #include <SDL2/SDL.h>
-
 
 #include "conf.h"
 #include "menu.h"

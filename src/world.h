@@ -4,7 +4,6 @@
 
 #include <stdbool.h>
 
-
 #include "vector.h"
 
 

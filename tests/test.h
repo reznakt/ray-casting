@@ -6,10 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-
 #include "../src/color.h"
-
-
 #include "util.h"
 
 

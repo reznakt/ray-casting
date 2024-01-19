@@ -1,8 +1,6 @@
 #include <time.h>
 
-
 #include "../src/util.h"
-
 
 #include "util.h"
 

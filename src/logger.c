@@ -1,8 +1,6 @@
 #include <libgen.h>
 
-
 #include "color.h"
-
 
 #include "logger.h"
 

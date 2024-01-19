@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 
+
 /**
  * @brief Open a file given by a path relative to the `/src` directory as a `FILE` stream with the given mode.
  * @param path The path to the file relative to the project root.

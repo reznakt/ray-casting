@@ -2,8 +2,9 @@
 #define RAY_MENU_H
 
 
-#include <SDL2/SDL.h>
+#include <stdlib.h>
 
+#include <SDL2/SDL.h>
 
 #include "vector.h"
 

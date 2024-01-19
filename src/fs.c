@@ -4,7 +4,6 @@
 #include <string.h>
 #include <unistd.h>
 
-
 #ifdef __linux__
 
 #include <linux/limits.h>
@@ -15,11 +14,9 @@
 
 #endif
 
-
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
-
 
 #include "fs.h"
 #include "logger.h"

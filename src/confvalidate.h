@@ -1,7 +1,9 @@
 #ifndef RAY_CONFVALIDATE_H
 #define RAY_CONFVALIDATE_H
 
-#include "stdint.h"
+
+#include <stdint.h>
+
 
 #define static_assert_inner1(cond, line) typedef char __static_assert_at_line_##line##__[2 * (!!(cond)) - 1]
 #define static_assert_inner2(cond, line) static_assert_inner1(cond, line)

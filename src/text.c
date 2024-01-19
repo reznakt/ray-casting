@@ -1,11 +1,9 @@
 #include <SDL2/SDL.h>
 
-
 #include "../fonts/font8x8_basic.h"
-
+#include "vector.h"
 
 #include "text.h"
-#include "vector.h"
 
 
 size_t text_width(const char *const text) {

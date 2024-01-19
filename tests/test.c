@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include "../src/color.h"
-
 
 #include "test.h"
 

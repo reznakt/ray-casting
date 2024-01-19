@@ -1,13 +1,12 @@
 #include <errno.h>
+
 #include <SDL2/SDL.h>
 
-
+#include "fs.h"
 #include "logger.h"
 #include "util.h"
 
-
 #include "world.h"
-#include "fs.h"
 
 
 /**

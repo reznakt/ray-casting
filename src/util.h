@@ -4,9 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-
 #include <stdbool.h>
-
 
 #include "conf.h"
 #include "text.h"

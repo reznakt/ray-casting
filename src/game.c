@@ -2,14 +2,12 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
 
-
 #include "logger.h"
 #include "math.h"
 #include "menu.h"
 #include "ray.h"
 #include "util.h"
 #include "vector.h"
-
 
 #include "game.h"
 

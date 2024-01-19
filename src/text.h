@@ -2,11 +2,11 @@
 #define RAY_FONT_H
 
 
+#include <stdlib.h>
+
 #include <SDL2/SDL.h>
 
-
 struct vec_t; // Forward declaration because of circular dependencies.
-
 
 #include "vector.h"
 
