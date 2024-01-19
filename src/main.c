@@ -37,18 +37,18 @@ static inline void usage(const char *const argv0) {
     printf(fmt, argv0);
 }
 
-static void menu_close(void *const arg) {
+static inline void menu_close(void *const arg) {
     struct game_t *const game = arg;
     game->paused = false;
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
-static void menu_quit(void *const arg) {
+static inline void menu_quit(void *const arg) {
     struct game_t *const game = arg;
     game->quit = true;
 }
 
-static void menu_on_event(const SDL_Event *const event, void *const arg) {
+static inline void menu_on_event(const SDL_Event *const event, void *const arg) {
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
             case KEY_PAUSE:
@@ -87,16 +87,7 @@ static void set_main_menu(struct game_t *const game) {
     game->menu = menu;
 }
 
-int main(const int argc, char **const argv) {
-    if (get_flag(argc, argv, "-h", "--help")) {
-        usage(argv[0]);
-        return EXIT_SUCCESS;
-    }
-
-    for (int i = 0; i < argc; i++) {
-        logger_printf(LOG_LEVEL_DEBUG, "argv[%d]: %s\n", i, argv[i]);
-    }
-
+static void log_system_info(void) {
     logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d, SDL_Image version %d.%d.%d\n",
                   SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL,
                   SDL_IMAGE_MAJOR_VERSION, SDL_IMAGE_MINOR_VERSION, SDL_IMAGE_PATCHLEVEL);
@@ -104,13 +95,8 @@ int main(const int argc, char **const argv) {
     logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
     logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
     logger_print(LOG_LEVEL_INFO, "initializing SDL...");
-
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        logger_print(LOG_LEVEL_FATAL, "SDL: unable to initialize SDL_INIT_VIDEO");
-        return EXIT_FAILURE;
-    }
-
     logger_printf(LOG_LEVEL_DEBUG, "initialized video driver: %s\n", SDL_GetCurrentVideoDriver());
+
     const int displays = SDL_GetNumVideoDisplays();
 
     if (displays < 1) {
@@ -138,7 +124,44 @@ int main(const int argc, char **const argv) {
 
         }
     }
+}
 
+static void main_loop(struct game_t *const game, const bool profile) {
+    while (!game->quit) {
+        if (profile && game->ticks >= PROFILE_TICKS) {
+            break;
+        }
+
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event)) {
+            on_event(game, &event);
+        }
+
+        update(game);
+        render(game);
+    }
+}
+
+int main(const int argc, char **const argv) {
+    const bool help = get_flag(argc, argv, "-h", "--help");
+    const bool profile = get_flag(argc, argv, "-p", "--profile");
+
+    if (help) {
+        usage(argv[0]);
+        return EXIT_SUCCESS;
+    }
+
+    for (int i = 0; i < argc; i++) {
+        logger_printf(LOG_LEVEL_DEBUG, "argv[%d]: %s\n", i, argv[i]);
+    }
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        logger_print(LOG_LEVEL_FATAL, "SDL: unable to initialize SDL_INIT_VIDEO");
+        return EXIT_FAILURE;
+    }
+
+    log_system_info();
     logger_print(LOG_LEVEL_INFO, "initializing SDL_Image...");
 
     if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
@@ -156,29 +179,12 @@ int main(const int argc, char **const argv) {
 
     set_main_menu(game);
 
-    const bool profile = get_flag(argc, argv, "-p", "--profile");
-
     if (profile) {
         logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %d ticks\n", PROFILE_TICKS);
     }
 
     logger_print(LOG_LEVEL_INFO, "starting main loop...");
-
-    while (!game->quit) {
-        if (profile && game->ticks >= PROFILE_TICKS) {
-            break;
-        }
-
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            on_event(game, &event);
-        }
-
-        update(game);
-        render(game);
-    }
-
+    main_loop(game, profile);
     logger_print(LOG_LEVEL_INFO, "quitting...");
 
     if (profile) {
