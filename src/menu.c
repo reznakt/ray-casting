@@ -167,7 +167,8 @@ void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
             SDL_GetMouseState(&x, &y);
 
             for (size_t i = 0; i < menu->num_buttons; i++) {
-                struct menu_button_t *const button = &menu->buttons[i];
+                // process buttons in reverse order so that buttons with the highest z-index are processed first
+                struct menu_button_t *const button = &menu->buttons[menu->num_buttons - i - 1];
 
                 const SDL_FRect button_rect = {
                         .x = button->pos.x + menu->pos.x,
@@ -178,17 +179,18 @@ void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
 
                 const struct vec_t mouse_pos = {.x = (float) x, .y = (float) y};
 
-                if (!is_within(&button_rect, &mouse_pos)) {
-                    button->hover = false;
-                    continue;
+                if (is_within(&button_rect, &mouse_pos)) {
+                    if (event->type == SDL_MOUSEBUTTONDOWN && button->on_click != NULL) {
+                        logger_printf(LOG_LEVEL_DEBUG, "button clicked: %s\n", button->name);
+                        button->on_click(button->on_click_arg);
+                    } else if (event->type == SDL_MOUSEMOTION) {
+                        button->hover = true;
+                    }
+
+                    break;
                 }
 
-                if (event->type == SDL_MOUSEBUTTONDOWN && button->on_click != NULL) {
-                    logger_printf(LOG_LEVEL_DEBUG, "button clicked: %s\n", button->name);
-                    button->on_click(button->on_click_arg);
-                } else if (event->type == SDL_MOUSEMOTION) {
-                    button->hover = true;
-                }
+                button->hover = false;
             }
 
             break;
