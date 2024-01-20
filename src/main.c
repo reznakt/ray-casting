@@ -61,8 +61,6 @@ static inline void menu_on_event(const SDL_Event *const event, void *const arg) 
     }
 }
 
-#define callback(func) ((void (*)(void *const)) (func))
-
 static void set_main_menu(struct game_t *const game) {
     static const size_t width = SCREEN_WIDTH / 4;
     static const size_t height = SCREEN_HEIGHT / 4;
@@ -74,20 +72,20 @@ static void set_main_menu(struct game_t *const game) {
     const struct vec_t size = {.x = (float) width, .y = (float) height};
 
     struct menu_t menu;
-    menu_create(&menu, pos, size, "Menu", callback(menu_close), game, menu_on_event, game);
+    menu_create(&menu, pos, size, "Menu", (void (*)(void *)) menu_close, game, menu_on_event, game);
 
     struct vec_t position = {.x = size.x / 2.0F, .y = size.y / 5.0F};
 
     menu_add_text(&menu, position, "*** GAME PAUSED ***", MENU_ALIGN_CENTER);
     position = (struct vec_t) {.x = size.x / 2.0F, .y = size.y / 3.0F};
 
-    menu_add_button(&menu, position, "Resume", MENU_ALIGN_CENTER, callback(menu_close), game);
+    menu_add_button(&menu, position, "Resume", MENU_ALIGN_CENTER, (void (*)(void *)) menu_close, game);
     position.y += BUTTON_HEIGHT * 2;
 
-    menu_add_button(&menu, position, "Options", MENU_ALIGN_CENTER, callback(set_options_menu), game);
+    menu_add_button(&menu, position, "Options", MENU_ALIGN_CENTER, (void (*)(void *)) set_options_menu, game);
     position.y += BUTTON_HEIGHT * 2;
 
-    menu_add_button(&menu, position, "Quit", MENU_ALIGN_CENTER, callback(menu_quit), game);
+    menu_add_button(&menu, position, "Quit", MENU_ALIGN_CENTER, (void (*)(void *)) menu_quit, game);
 
     game->menu = menu;
 }
@@ -103,12 +101,12 @@ static void set_options_menu(struct game_t *const game) {
     const struct vec_t size = {.x = (float) width, .y = (float) height};
 
     struct menu_t menu;
-    menu_create(&menu, pos, size, "Options", callback(menu_close), game, menu_on_event, game);
+    menu_create(&menu, pos, size, "Options", (void (*)(void *)) menu_close, game, menu_on_event, game);
     const float x = size.x / 2.0F;
 
     menu_add_text(&menu, (struct vec_t) {x, size.y / 3.0F}, "TBD", MENU_ALIGN_CENTER);
     menu_add_button(&menu, (struct vec_t) {x, size.y - size.y / 3.0F}, "Back", MENU_ALIGN_CENTER,
-                    callback(set_main_menu), game);
+                    (void (*)(void *)) set_main_menu, game);
 
     game->menu = menu;
 }
