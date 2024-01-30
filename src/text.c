@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives_font.h>
 
-#include "../fonts/font8x8_basic.h"
 #include "vector.h"
 
 #include "text.h"
@@ -11,10 +11,10 @@ size_t text_width(const char *const text) {
     return len * CHAR_WIDTH + (len - 1) * CHAR_HORIZONTAL_SPACING;
 }
 
-void render_putchar(SDL_Renderer *const renderer, const struct vec_t pos, int chr) {
+void render_putchar(SDL_Renderer *const renderer, const struct vec_t pos, unsigned char chr) {
     for (size_t i = 0; i < CHAR_HEIGHT; i++) {
         for (size_t j = 0; j < CHAR_WIDTH; j++) {
-            if (font8x8_basic[chr][i] & 1 << j) {
+            if (gfxPrimitivesFontdata[(size_t) CHAR_WIDTH * chr + i] & 1 << (CHAR_WIDTH - j)) {
                 SDL_RenderDrawPointF(renderer, pos.x + (float) j, pos.y + (float) i);
             }
         }
@@ -28,7 +28,7 @@ void render_puts(SDL_Renderer *const restrict renderer,
     size_t y_off = 0;
 
     for (size_t i = 0; i < strlen(str); i++) {
-        const char ch = str[i];
+        const unsigned char ch = (unsigned char) str[i];
 
         switch (ch) {
             case '\t': // horizontal tab

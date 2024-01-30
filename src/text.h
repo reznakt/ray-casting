@@ -46,7 +46,7 @@ size_t text_width(const char *text);
  * @param pos The position at which to render the character.
  * @param chr The ASCII code for the character to render.
  */
-void render_putchar(SDL_Renderer *renderer, struct vec_t pos, int chr);
+void render_putchar(SDL_Renderer *renderer, struct vec_t pos, unsigned char chr);
 
 /**
  * @brief Renders a null-terminated string at the specified coordinates using the given renderer.
