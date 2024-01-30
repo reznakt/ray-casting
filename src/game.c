@@ -426,15 +426,16 @@ int game_init(struct game_t *const game) {
     }
 
     game->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
-    SDL_FreeSurface(surface);
 
     if (game->texture == NULL) {
         logger_print(LOG_LEVEL_ERROR, "unable to create texture from surface");
+        SDL_FreeSurface(surface);
         return -1;
     }
 
     logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d px)\n",
                   TEXTURE_ATLAS_FILE, surface->w, surface->h);
+    SDL_FreeSurface(surface);
 
     return 0;
 }
