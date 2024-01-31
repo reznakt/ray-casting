@@ -317,7 +317,12 @@ static void update_ray_intersections(const struct game_t *const game) {
     }
 }
 
-static void tick(struct game_t *const game) {
+void camera_update_angle(struct game_t *const game, const float angle) {
+    game->camera->angle = fmodf(angle, 360.0F);
+    game->camera->dir = vfromangle(radians(game->camera->angle));
+}
+
+void tick(struct game_t *const game) {
     const uint64_t ticks = SDL_GetTicks64();
     const uint64_t tick_delta = ticks - game->ticks;
 
@@ -329,11 +334,6 @@ static void tick(struct game_t *const game) {
     }
 
     game->newframes++;
-}
-
-void camera_update_angle(struct game_t *const game, const float angle) {
-    game->camera->angle = fmodf(angle, 360.0F);
-    game->camera->dir = vfromangle(radians(game->camera->angle));
 }
 
 void render(struct game_t *const game) {
@@ -374,7 +374,6 @@ void render(struct game_t *const game) {
 void update(struct game_t *const game) {
     update_player_position(game);
     update_ray_intersections(game);
-    tick(game);
 }
 
 struct game_t *game_create(void) {

@@ -68,6 +68,13 @@ struct game_t {
 void camera_update_angle(struct game_t *game, float angle);
 
 /**
+ * @brief Update the FPS, frames, and ticks counters.
+ *
+ * @param game The game instance to update.
+ */
+void tick(struct game_t *game);
+
+/**
  * @brief Renders the game scene.
  *
  * @param game The game instance to render.

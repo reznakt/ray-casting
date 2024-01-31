@@ -43,6 +43,7 @@ static void set_options_menu(struct game_t *game);
 
 static inline void menu_close(struct game_t *const game) {
     game->paused = false;
+    memset(&game->camera->movement, false, sizeof game->camera->movement);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     set_main_menu(game);
 }
@@ -162,8 +163,12 @@ static void main_loop(struct game_t *const game, const bool profile) {
             on_event(game, &event);
         }
 
-        update(game);
+        if (!game->paused) {
+            update(game);
+        }
+
         render(game);
+        tick(game);
     }
 }
 
