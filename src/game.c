@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdlib.h>
 
 #include <SDL2/SDL.h>
@@ -317,8 +316,14 @@ static void update_ray_intersections(const struct game_t *const game) {
     }
 }
 
-void camera_update_angle(struct game_t *const game, const float angle) {
-    game->camera->angle = fmodf(angle, 360.0F);
+void camera_update_angle(struct game_t *const game, float angle) {
+    if (angle < 0) {
+        angle += 360.0F;
+    } else if (angle > 360.0F) {
+        angle -= 360.0F;
+    }
+
+    game->camera->angle = angle;
     game->camera->dir = vfromangle(radians(game->camera->angle));
 }
 
