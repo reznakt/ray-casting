@@ -126,28 +126,28 @@ static void log_system_info(void) {
 
     if (displays < 1) {
         logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get number of video displays (reason: '%s')", SDL_GetError());
-    } else {
-        for (int i = 0; i < displays; i++) {
-            const char *const name = SDL_GetDisplayName(i);
+        return;
+    }
 
-            if (name == NULL) {
-                logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get display name for display %d (reason: '%s')",
-                              i, SDL_GetError());
-                continue;
-            }
+    for (int i = 0; i < displays; i++) {
+        const char *const name = SDL_GetDisplayName(i);
 
-            SDL_DisplayMode mode;
-
-            if (SDL_GetDesktopDisplayMode(i, &mode) != 0) {
-                logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get desktop display mode for display %d (reason: '%s')",
-                              i, SDL_GetError());
-                continue;
-            }
-
-            logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%dx%d px @ %dHz)\n",
-                          i, name, mode.w, mode.h, mode.refresh_rate);
-
+        if (name == NULL) {
+            logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get display name for display %d (reason: '%s')",
+                          i, SDL_GetError());
+            continue;
         }
+
+        SDL_DisplayMode mode;
+
+        if (SDL_GetDesktopDisplayMode(i, &mode) != 0) {
+            logger_printf(LOG_LEVEL_ERROR, "SDL: unable to get desktop display mode for display %d (reason: '%s')",
+                          i, SDL_GetError());
+            continue;
+        }
+
+        logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%dx%d px @ %dHz)\n",
+                      i, name, mode.w, mode.h, mode.refresh_rate);
     }
 }
 
