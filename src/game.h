@@ -30,7 +30,6 @@ struct camera_t {
     float speed; /**< The current movement speed of the camera. */
     size_t resmult; /**< The resolution multiplier for the camera. */
     size_t fov; /**< The field of view (in degrees) for the camera. */
-    size_t nrays; /**< The number of rays cast from the camera. */
     float lightmult; /**< The multiplier for the light intensity emitted by the camera/player. */
 };
 

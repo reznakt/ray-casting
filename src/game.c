@@ -51,6 +51,16 @@ static inline float speed_coeff(const struct game_t *const game, const float coe
     return coeff / (float) game->fps;
 }
 
+/**
+ * Calculates the number of rays cast by the camera.
+ *
+ * @param game A pointer to the game_t struct representing the current game.
+ * @return The number of rays cast by the camera.
+ */
+static inline size_t camera_nrays(const struct game_t *const game) {
+    return game->camera->fov * game->camera->resmult;
+}
+
 static void render_walls(const struct game_t *const game) {
     for (size_t i = 0; i < game->nobjects; i++) {
         if (game->objects[i]->type != WALL) {
@@ -70,6 +80,8 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
                                    "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
 
+    const size_t nrays = game->camera->fov * game->camera->resmult;
+
     render_colored(game->renderer, color, {
         render_printf(game->renderer, pos, fmt,
                       game->fps,
@@ -80,8 +92,8 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
                       game->camera->angle,
                       game->camera->fov,
                       game->camera->resmult,
-                      game->camera->nrays,
-                      (float) SCREEN_WIDTH / (float) game->camera->nrays,
+                      nrays,
+                      (float) SCREEN_WIDTH / (float) nrays,
                       game->nthreads,
                       game->camera->lightmult);
     });
@@ -89,7 +101,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
 
 static void render_rays(const struct game_t *const restrict game, const SDL_Color color) {
     render_colored(game->renderer, color, {
-        for (size_t i = 0; i < game->camera->nrays; i++) {
+        for (size_t i = 0; i < camera_nrays(game); i++) {
             const struct ray_t *const ray = &game->camera->rays[i];
             const struct intersection_t *const intersection = &ray->intersection;
 
@@ -102,9 +114,10 @@ static void render_rays(const struct game_t *const restrict game, const SDL_Colo
 }
 
 static void render_3d(struct game_t *const game) {
-    const float width = SCREEN_WIDTH / (float) (game->camera->nrays);
+    const size_t nrays = camera_nrays(game);
+    const float width = SCREEN_WIDTH / (float) (nrays);
 
-    for (size_t i = 0; i < game->camera->nrays; i++) {
+    for (size_t i = 0; i < nrays; i++) {
         const struct ray_t *const ray = &game->camera->rays[i];
 
         if (ray->intersection.wall == NULL) {
@@ -172,7 +185,7 @@ static void render_3d(struct game_t *const game) {
                       3,
                       color_to_int(COLOR_WHITE));
 
-    const struct ray_t *const center_ray = &game->camera->rays[game->camera->nrays / 2];
+    const struct ray_t *const center_ray = &game->camera->rays[camera_nrays(game) / 2];
     const struct wall_t *const center_wall = center_ray->intersection.wall;
     const struct vec_t center_pos = vadd(game->center, (struct vec_t) {10.0F, 10.0F});
 
@@ -270,7 +283,7 @@ static float get_ray_angle(const struct game_t *const game, const size_t rayno) 
 
 static void update_ray_intersections(const struct game_t *const game) {
 #pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
-    for (size_t i = 0; i < game->camera->nrays; i++) {
+    for (size_t i = 0; i < camera_nrays(game); i++) {
         struct ray_t ray;
         struct intersection_t ray_int = {0};
         float min_dist = INFINITY;
@@ -380,7 +393,6 @@ struct game_t *game_create(void) {
     game.camera = &camera;
     game.camera->fov = CAMERA_FOV;
     game.camera->resmult = CAMERA_RESMULT;
-    game.camera->nrays = game.camera->fov * game.camera->resmult;
     game.camera->speed = CAMERA_MOVEMENT_SPEED;
     game.camera->rays = rays;
     game.camera->pos = game.center;
