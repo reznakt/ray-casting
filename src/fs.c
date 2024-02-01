@@ -59,56 +59,6 @@ static int mode_to_flags(const char *const mode) {
     return -1;
 }
 
-/**
- * @brief Returns the path to the application executable.
- * @return The path to the executable or NULL if an error occurred.
- */
-static char *executable_path(void) {
-    char *const buf = calloc(PATH_MAX + 1, sizeof *buf);
-
-    if (buf == NULL) {
-        logger_perror("calloc");
-        return NULL;
-    }
-
-    switch (readlink("/proc/self/exe", buf, PATH_MAX)) {
-        case -1:
-            logger_perror("readlink");
-            goto bailout;
-        case PATH_MAX:
-            logger_printf(LOG_LEVEL_ERROR, "readlink: path too long (PATH_MAX = %d)\n", PATH_MAX);
-            goto bailout;
-    }
-
-    return buf;
-
-    bailout:
-    free(buf);
-    return NULL;
-}
-
-/**
- * @brief Returns the directory containing the application executable.
- * @return The directory containing the executable or NULL if an error occurred.
- */
-static char *executable_dir(void) {
-    char *const path = executable_path();
-
-    if (path == NULL) {
-        return NULL;
-    }
-
-    char *const dir = dirname(path);
-
-    if (dir == NULL) {
-        logger_perror("dirname");
-        free(path);
-        return NULL;
-    }
-
-    return dir;
-}
-
 FILE *open_file(const char *const restrict path, const char *const restrict mode) {
     if (path == NULL || mode == NULL) {
         return NULL;
@@ -121,7 +71,7 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
         return NULL;
     }
 
-    char *const dirpath = executable_dir();
+    char *const dirpath = SDL_GetBasePath();
 
     if (dirpath == NULL) {
         return NULL;
