@@ -4,6 +4,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
 
+#include "fs.h"
 #include "logger.h"
 #include "math.h"
 #include "menu.h"
@@ -437,7 +438,14 @@ int game_init(struct game_t *const game) {
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
 
-    SDL_Surface *const surface = IMG_Load(TEXTURE_ATLAS_FILE);
+    FILE *const stream = open_file(TEXTURE_ATLAS_FILE, "r");
+
+    if (stream == NULL) {
+        logger_printf(LOG_LEVEL_ERROR, "unable to open texture atlas file '%s'\n", TEXTURE_ATLAS_FILE);
+        return -1;
+    }
+
+    SDL_Surface *const surface = IMG_Load_RW(SDL_RWFromFP(stream, true), 1);
 
     if (surface == NULL) {
         logger_printf(LOG_LEVEL_ERROR, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
