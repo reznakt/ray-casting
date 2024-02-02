@@ -74,7 +74,7 @@ static int parse_color(const char *const colorstr, SDL_Color *const dst) {
         return -1;
     }
 
-    if (dst) {
+    if (dst != NULL) {
         dst->r = (Uint8) (r1 * 16 + r2);
         dst->g = (Uint8) (g1 * 16 + g2);
         dst->b = (Uint8) (b1 * 16 + b2);
