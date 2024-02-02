@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <time.h>
 
 #include "../src/util.h"
@@ -11,14 +12,28 @@
 static struct timespec start;
 
 
-void timer_start(void) {
-    clock_gettime(TIMER_CLOCK, &start);
+int timer_start(void) {
+    if (clock_gettime(TIMER_CLOCK, &start) != 0) {
+        perror("clock_gettime");
+        return -1;
+    }
+
+    return 0;
 }
 
-intmax_t timer_stop(void) {
+int timer_stop(intmax_t *const duration) {
     struct timespec end;
-    clock_gettime(TIMER_CLOCK, &end);
-    return (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
+
+    if (clock_gettime(TIMER_CLOCK, &end) != 0) {
+        perror("clock_gettime");
+        return -1;
+    }
+
+    if (duration != NULL) {
+        *duration = (end.tv_sec - start.tv_sec) * 1000 + (end.tv_nsec - start.tv_nsec) / 1000000;
+    }
+
+    return 0;
 }
 
 unsigned int get_seed(void) {

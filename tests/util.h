@@ -8,14 +8,17 @@
 /**
  * @brief Starts a timer. Call timer_stop() to get the elapsed time.
  * Only one timer can be active at any given time.
+ *
+ * @return 0 on success, -1 on error.
  */
-void timer_start(void);
+int timer_start(void);
 
 /**
  * @brief Stops the timer started by timer_start() and returns the elapsed time in milliseconds.
- * @return The elapsed time in milliseconds.
+ * The result is stored in @p duration.
+ * @return 0 on success, -1 on error.
  */
-intmax_t timer_stop(void);
+int timer_stop(intmax_t *duration);
 
 /**
  * @brief Returns a random seed obtained from /dev/urandom.

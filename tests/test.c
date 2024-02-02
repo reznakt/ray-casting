@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "../src/color.h"
 
@@ -7,7 +6,10 @@
 
 
 int run_tests(struct test_t *const tests, const size_t ntests) {
-    timer_start();
+    if (timer_start() != 0) {
+        return -1;
+    }
+
     size_t passed = 0;
     size_t failed = 0;
     size_t total = 0;
@@ -47,7 +49,12 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
         total++;
     }
 
-    const intmax_t elapsed = timer_stop();
+    intmax_t elapsed;
+
+    if (timer_stop(&elapsed) != 0) {
+        return -1;
+    }
+
     putchar('\n');
 
     for (size_t i = 0; i < ntests; i++) {
@@ -68,7 +75,7 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
         puts(BHGRN "\nAll tests passed!" CRESET);
     }
 
-    return failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+    return failed == 0 ? 0 : -1;
 }
 
 void test_fail(struct test_t *const restrict test, const char *const restrict func,

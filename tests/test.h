@@ -44,11 +44,12 @@ static void name(unused struct test_t *const test) {    \
 // end of macro magic
 
 
-#define RUN_TESTS(...)                                      \
-int main(unused const int argc, unused char **const argv) { \
-    srand(get_seed());                                      \
-    static struct test_t tests[] = {__VA_ARGS__};           \
-    return run_tests(tests, sizeof tests / sizeof *tests);  \
+#define RUN_TESTS(...)                                              \
+int main(unused const int argc, unused char **const argv) {         \
+    srand(get_seed());                                              \
+    static struct test_t tests[] = {__VA_ARGS__};                   \
+    const int rv = run_tests(tests, sizeof tests / sizeof *tests);  \
+    return rv == 0 ? EXIT_SUCCESS : EXIT_FAILURE;                   \
 }
 
 #define assert(cond)                                \
