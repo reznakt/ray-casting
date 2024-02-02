@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "../src/color.h"
 #include "util.h"
@@ -46,7 +47,7 @@ static void name(unused struct test_t *const test) {    \
 
 #define RUN_TESTS(...)                                              \
 int main(unused const int argc, unused char **const argv) {         \
-    srand(get_seed());                                              \
+    srand((unsigned int) time(NULL));                               \
     static struct test_t tests[] = {__VA_ARGS__};                   \
     const int rv = run_tests(tests, sizeof tests / sizeof *tests);  \
     return rv == 0 ? EXIT_SUCCESS : EXIT_FAILURE;                   \

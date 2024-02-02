@@ -36,24 +36,6 @@ int timer_stop(intmax_t *const duration) {
     return 0;
 }
 
-unsigned int get_seed(void) {
-    FILE *const stream = fopen("/dev/urandom", "rb");
-
-    if (stream == NULL) {
-        abort();
-    }
-
-    unsigned int seed;
-    const size_t bytes = fread(&seed, sizeof seed, 1, stream);
-    fclose(stream);
-
-    if (bytes != 1) {
-        abort();
-    }
-
-    return seed;
-}
-
 void print_justified(const char *const str, const unsigned int width, const char pad) {
     const size_t len = strlen(str);
 

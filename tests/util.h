@@ -21,12 +21,6 @@ int timer_start(void);
 int timer_stop(intmax_t *duration);
 
 /**
- * @brief Returns a random seed obtained from /dev/urandom.
- * @return A random seed. If /dev/urandom could not be opened, calls abort(3).
- */
-unsigned int get_seed(void);
-
-/**
  * @brief Prints a string justified to the left.
  * @param str The string to print.
  * @param width The total desired width of the string.
