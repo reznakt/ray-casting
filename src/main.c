@@ -5,6 +5,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include "event.h"
 #include "game.h"
 #include "logger.h"
@@ -151,25 +155,46 @@ static void log_system_info(void) {
     }
 }
 
-static void main_loop(struct game_t *const game, const bool profile) {
-    while (!game->quit) {
-        if (profile && game->ticks >= PROFILE_TICKS) {
-            break;
-        }
+static void main_loop(struct game_t *const game) {
+    if (game->quit) {
+        logger_print(LOG_LEVEL_INFO, "quitting...");
 
-        SDL_Event event;
+        game_destroy(game);
+        SDL_Quit();
 
-        while (SDL_PollEvent(&event)) {
-            on_event(game, &event);
-        }
-
-        if (!game->paused) {
-            update(game);
-        }
-
-        render(game);
-        tick(game);
+#ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+#else
+        exit(EXIT_SUCCESS);
+#endif
     }
+
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        on_event(game, &event);
+    }
+
+    if (!game->paused) {
+        update(game);
+    }
+
+    render(game);
+    tick(game);
+}
+
+#ifndef __EMSCRIPTEN__
+
+__attribute__((__noreturn__))
+#endif
+static void start_main_loop(struct game_t *const game) {
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg((void(*)(void *)) main_loop, game, 0, true);
+#else
+    for (;;) {
+        main_loop(game);
+    }
+#endif
 }
 
 int main(const int argc, char **const argv) {
@@ -213,16 +238,5 @@ int main(const int argc, char **const argv) {
     }
 
     logger_print(LOG_LEVEL_INFO, "starting main loop...");
-    main_loop(game, profile);
-    logger_print(LOG_LEVEL_INFO, "quitting...");
-
-    if (profile) {
-        logger_printf(LOG_LEVEL_DEBUG, "ticks: %zu, frames: %zu, avg fps: %f\n",
-                      game->ticks, game->frames, (float) game->frames / (float) game->ticks * 1000.0F);
-    }
-
-    game_destroy(game);
-    SDL_Quit();
-
-    return EXIT_SUCCESS;
+    start_main_loop(game);
 }

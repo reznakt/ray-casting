@@ -1,0 +1,112 @@
+name: Emscripten
+
+on:
+  - push
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v1.14
+
+      - name: Build with EmCMake
+        run: |
+          mkdir build
+          cd build
+          emcmake cmake -DSTRICT=ON ..
+          make
+
+      - name: Prepare artifacts
+        run: |
+          cd build
+          mkdir -p dist/ray-casting dist/test
+          cp ray-casting.* dist/ray-casting
+          cp test.* dist/test
+
+      - name: Export test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test
+          path: build/dist/test
+
+      - name: Export ray-casting artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ray-casting
+          path: build/dist/ray-casting
+
+  test:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Import test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test
+          path: build/dist/test
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run tests
+        run: |
+          node build/dist/test/test.js
+
+  deploy:
+    needs: build
+
+    if: github.ref_name == github.event.repository.default_branch
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Import ray-casting artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ray-casting
+          path: build/dist/ray-casting
+
+      - name: Rename ray-casting.html to index.html
+        run: |
+          cd build/dist/ray-casting
+          mv ray-casting.html index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/dist/ray-casting
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

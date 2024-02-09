@@ -280,7 +280,9 @@ static float get_ray_angle(const struct game_t *const game, const size_t rayno) 
 }
 
 static void update_ray_intersections(const struct game_t *const game) {
+#ifndef __EMSCRIPTEN__
 #pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
+#endif
     for (size_t i = 0; i < camera_nrays(game); i++) {
         struct ray_t ray;
         struct intersection_t ray_int = {0};

@@ -1,0 +1,69 @@
+name: Linux
+
+env:
+  APT_PACKAGES: libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+
+on:
+  - push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-suggests --no-install-recommends $APT_PACKAGES
+
+      - name: Build with CMake
+        uses: threeal/cmake-action@v1.3.0
+        with:
+          run-build: true
+          build-dir: build/
+          options: STRICT=ON
+
+      - name: Strip debugging symbols
+        run: |
+          strip build/ray-casting
+          strip build/test
+
+      - name: Export test executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: test
+          path: build/test
+
+      - name: Export ray-casting executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: ray-casting
+          path: build/ray-casting
+
+  test:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-suggests --no-install-recommends $APT_PACKAGES
+
+      - name: Import test executable
+        uses: actions/download-artifact@v3
+        with:
+          name: test
+          path: build/
+
+      - name: Run tests
+        run: |
+          chmod +x build/test
+          build/test

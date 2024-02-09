@@ -10,7 +10,6 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_compile_options(
         -fopenmp
-        -fstack-protector
         -fstrict-aliasing
         -g
         -O3
@@ -63,6 +62,7 @@ add_compile_options(
         -Wunused-parameter
         -Wvla
         -Wwrite-strings
+        -Wno-unknown-warning-option
 )
 
 if (STRICT)
@@ -74,9 +74,14 @@ endif ()
 
 add_link_options(-fopenmp)
 
-find_package(SDL2 REQUIRED)
-find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
-find_library(SDL2_IMG NAMES SDL2_image REQUIRED)
+if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_SDL=2 -s USE_SDL_GFX=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=['png'] --embed-file=assets/")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+else ()
+    find_package(SDL2 REQUIRED)
+    find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
+    find_library(SDL2_IMG NAMES SDL2_image REQUIRED)
+endif ()
 
 file(GLOB SOURCES "src/*.c")
 file(GLOB TEST_SOURCES "tests/*.c")
@@ -92,7 +97,7 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 target_link_libraries(test ${LIBS})
 
 add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
+        TARGET ${PROJECT_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets/"
 )
 
@@ -100,7 +105,7 @@ file(GLOB ASSETS "assets/*")
 
 foreach (FILE ${ASSETS})
     add_custom_command(
-            TARGET ${PROJECT_NAME} POST_BUILD
+            TARGET ${PROJECT_NAME} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy ${FILE} "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets/"
     )
 endforeach ()
