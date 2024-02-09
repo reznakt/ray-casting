@@ -1,3 +1,5 @@
+#include <inttypes.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
@@ -75,8 +77,9 @@ static void render_walls(const struct game_t *const game) {
 
 static void render_hud(const struct game_t *const restrict game, const SDL_Color color) {
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
-    static const char *const fmt = "fps: %lu | ticks: %lu | frames: %lu | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
-                                   "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
+    static const char *const fmt =
+            "fps: %" PRIu64 " | ticks: %" PRIu64 " | frames: %" PRIu64 " | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
+            "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
 
     const size_t nrays = game->camera->fov * game->camera->resmult;
 
