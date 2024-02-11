@@ -1,7 +1,7 @@
 # 🚀 Ray Casting
 
-![GitHub](https://img.shields.io/github/license/reznakt/ray-casting)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reznakt/ray-casting/build.yml)
+![License](https://img.shields.io/github/license/reznakt/ray-casting)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reznakt/ray-casting/linux.yml)
 ![GitHub repo size](https://img.shields.io/github/repo-size/reznakt/ray-casting)
 ![GitHub repo file count](https://tokei.rs/b1/github/reznakt/ray-casting?category=files)
 ![GitHub repo LOC](https://tokei.rs/b1/github/reznakt/ray-casting?category=lines)
