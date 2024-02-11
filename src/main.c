@@ -156,18 +156,34 @@ static void log_system_info(void) {
     }
 }
 
+#ifndef __EMSCRIPTEN__
+
+__attribute__((__noreturn__))
+#endif
+static void start_main_loop(void (*const func)(void *), void *const arg) {
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg(func, arg, INT_MAX, true);
+#else
+    for (;;) {
+        func(arg);
+    }
+#endif
+}
+
+__attribute__((__noreturn__)) static void stop_main_loop(void) {
+#ifdef __EMSCRIPTEN__
+    emscripten_cancel_main_loop();
+#endif
+
+    exit(EXIT_SUCCESS);
+}
+
 static void main_loop(struct game_t *const game) {
     if (game->quit) {
         logger_print(LOG_LEVEL_INFO, "quitting...");
-
         game_destroy(game);
         SDL_Quit();
-
-#ifdef __EMSCRIPTEN__
-        emscripten_cancel_main_loop();
-#else
-        exit(EXIT_SUCCESS);
-#endif
+        stop_main_loop();
     }
 
     SDL_Event event;
@@ -182,20 +198,6 @@ static void main_loop(struct game_t *const game) {
 
     render(game);
     tick(game);
-}
-
-#ifndef __EMSCRIPTEN__
-
-__attribute__((__noreturn__))
-#endif
-static void start_main_loop(void (*const func)(void *), void *const arg) {
-#ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop_arg(func, arg, INT_MAX, true);
-#else
-    for (;;) {
-        func(arg);
-    }
-#endif
 }
 
 int main(const int argc, char **const argv) {
