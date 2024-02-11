@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -189,7 +190,7 @@ __attribute__((__noreturn__))
 #endif
 static void start_main_loop(struct game_t *const game) {
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop_arg((void(*)(void *)) main_loop, game, 0, true);
+    emscripten_set_main_loop_arg((void(*)(void *)) main_loop, game, INT_MAX, true);
 #else
     for (;;) {
         main_loop(game);
