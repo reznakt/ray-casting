@@ -79,7 +79,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
     static const char *const fmt =
             "fps: %" PRIu64 " | ticks: %" PRIu64 " | frames: %" PRIu64 " | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
-            "| resmult: %zu | rays: %zu | px/ray: %.4f | threads: %zu | light: %.1f";
+            "| resmult: %zu | rays: %zu | px/ray: %.4f | light: %.1f";
 
     const size_t nrays = game->camera->fov * game->camera->resmult;
 
@@ -95,7 +95,6 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
                       game->camera->resmult,
                       nrays,
                       (float) SCREEN_WIDTH / (float) nrays,
-                      game->nthreads,
                       game->camera->lightmult);
     });
 }
@@ -283,9 +282,6 @@ static float get_ray_angle(const struct game_t *const game, const size_t rayno) 
 }
 
 static void update_ray_intersections(const struct game_t *const game) {
-#ifndef __EMSCRIPTEN__
-#pragma omp parallel for default(none) shared(game) num_threads(game->nthreads)
-#endif
     for (size_t i = 0; i < camera_nrays(game); i++) {
         struct ray_t ray;
         struct intersection_t ray_int = {0};
@@ -409,7 +405,6 @@ struct game_t *game_create(void) {
     game.render_mode = RENDER_MODE_TEXTURED;
     game.ceil_color = (SDL_Color) CEIL_COLOR;
     game.floor_color = (SDL_Color) FLOOR_COLOR;
-    game.nthreads = THREADS;
     game.objects = objects;
 
     assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);

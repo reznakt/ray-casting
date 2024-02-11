@@ -11,10 +11,6 @@
 #define STATIC_ASSERT(cond) static_assert_inner2(cond, __LINE__)
 
 
-#if THREADS < 1
-#error "THREADS must be positive"
-#endif
-
 #if TEXTURE_SIZE < 1
 #error "TEXTURE_SIZE must be positive"
 #endif

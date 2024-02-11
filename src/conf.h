@@ -8,11 +8,6 @@
 
 
 /**
- * @brief The default number of threads to use for parallel computation.
- */
-#define THREADS 3
-
-/**
  * @brief Path to a file containing the world specification.
  */
 #define WORLD_SPEC_FILE "assets/world.txt"
@@ -160,8 +155,6 @@
 #define KEY_FOV_DEC SDLK_KP_MINUS
 #define KEY_RESMULT_INC SDLK_INSERT
 #define KEY_RESMULT_DEC SDLK_DELETE
-#define KEY_NTHREADS_INC SDLK_PAGEUP
-#define KEY_NTHREADS_DEC SDLK_PAGEDOWN
 #define KEY_VIEW_1 SDLK_F1
 #define KEY_VIEW_2 SDLK_F2
 #define KEY_VIEW_3 SDLK_F3

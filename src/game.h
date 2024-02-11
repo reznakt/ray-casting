@@ -44,7 +44,6 @@ struct game_t {
     struct wobject_t **objects; /**< The objects in the game world. */
     struct vec_t center; /**< The center of the game window. */
     size_t nobjects; /**< The number of objects in the game world. */
-    size_t nthreads; /**< The number of threads to use for parallel computation. */
     uint64_t fps; /**< The current frames per second (FPS) of the game. */
     uint64_t frames; /**< The total number of frames rendered by the game. */
     uint64_t newframes; /**< The number of frames rendered by the game since the last polling event. */

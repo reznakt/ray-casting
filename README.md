@@ -21,12 +21,11 @@ in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun proje
 - C99
 - CMake
 - SDL2
-- OpenMP
 
 > [!TIP]
 > On Debian-based systems, you can install all necessary dependencies with:
 > ```shell
-> sudo apt-get install -y cmake libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libomp-dev
+> sudo apt-get install -y cmake libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev
 > ```
 
 ## 🚀 Getting Started

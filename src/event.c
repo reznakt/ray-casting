@@ -87,14 +87,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_RESMULT_DEC:
                     camera_set_resmult(game, game->camera->resmult - 1);
                     break;
-                case KEY_NTHREADS_INC:
-                    game->nthreads++;
-                    break;
-                case KEY_NTHREADS_DEC:
-                    if (game->nthreads > 1) {
-                        game->nthreads--;
-                    }
-                    break;
                 case KEY_RESET:
                     game->camera->pos = game->center;
                     camera_update_angle(game, CAMERA_HEADING);
