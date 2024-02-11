@@ -188,12 +188,12 @@ static void main_loop(struct game_t *const game) {
 
 __attribute__((__noreturn__))
 #endif
-static void start_main_loop(struct game_t *const game) {
+static void start_main_loop(void (*const func)(void *), void *const arg) {
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop_arg((void(*)(void *)) main_loop, game, INT_MAX, true);
+    emscripten_set_main_loop_arg(func, arg, INT_MAX, true);
 #else
     for (;;) {
-        main_loop(game);
+        func(arg);
     }
 #endif
 }
@@ -239,5 +239,5 @@ int main(const int argc, char **const argv) {
     }
 
     logger_print(LOG_LEVEL_INFO, "starting main loop...");
-    start_main_loop(game);
+    start_main_loop((void (*)(void *)) main_loop, game);
 }
