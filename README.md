@@ -8,6 +8,8 @@
 
 > A simple experiment with ray casting and C.
 
+**Play online**: https://reznakt.github.io/ray-casting/
+
 ## 🤔 About the project
 
 This project is a simple experiment with ray casting and C. It's not really a game, but rather a proof of concept. You
@@ -31,7 +33,8 @@ in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun proje
 ## 🚀 Getting Started
 
 > [!TIP]
-> You can also download a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/build/main/ray-casting.zip).
+> You can also download
+> a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/build/main/ray-casting.zip).
 
 To get a local copy up and running, follow these simple steps:
 
@@ -69,6 +72,7 @@ This project is licensed under the MIT license - see the [LICENSE](LICENSE) file
 
 - [Lode Vandevenne](https://github.com/lvandeve) for the
   legendary [ray casting tutorial](http://lodev.org/cgtutor/raycasting.html)
-- [Ultimecia](https://www.textures-resource.com/submitter/Ultimecia/) for the Wolfenstein 3D [texture atlas](https://www.textures-resource.com/pc_computer/wolf3d/texture/1375/)
+- [Ultimecia](https://www.textures-resource.com/submitter/Ultimecia/) for the Wolfenstein
+  3D [texture atlas](https://www.textures-resource.com/pc_computer/wolf3d/texture/1375/)
 - [Daniel Hepper ](https://github.com/dhepper) for the 8x8 bitmap font ([font8x8](https://github.com/dhepper/font8x8))
 
