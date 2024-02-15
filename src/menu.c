@@ -199,14 +199,16 @@ static struct menu_elem_t *menu_get_element_by_id_helper(struct menu_elem_t *con
     }
 
     for (size_t i = 0; i < root->num_children; i++) {
-        struct menu_elem_t *elem = root->children[i];
+        struct menu_elem_t *const elem = root->children[i];
 
         if (strcmp(elem->id, id) == 0) {
             return elem;
         }
 
-        if ((elem = menu_get_element_by_id_helper(elem, id)) != NULL) {
-            return elem;
+        struct menu_elem_t *const child = menu_get_element_by_id_helper(elem, id);
+
+        if (child != NULL) {
+            return child;
         }
     }
 
@@ -304,7 +306,7 @@ struct menu_elem_t *menu_create_element(const char *const id, const enum menu_el
         return NULL;
     }
 
-    struct menu_elem_t *elem = malloc(sizeof *elem);
+    struct menu_elem_t *const elem = malloc(sizeof *elem);
 
     if (elem == NULL) {
         logger_perror("malloc");
@@ -332,7 +334,7 @@ int menu_append_child(struct menu_elem_t *restrict parent, struct menu_elem_t *c
     }
 
     parent->num_children++;
-    struct menu_elem_t **children = realloc(parent->children, parent->num_children * sizeof *children);
+    struct menu_elem_t **const children = realloc(parent->children, parent->num_children * sizeof *children);
 
     if (children == NULL) {
         logger_perror("realloc");
@@ -384,7 +386,7 @@ static struct vec_t element_size_helper(const struct menu_elem_t *const elem) {
 
     if (has_children(elem)) {
         for (size_t i = 0; i < elem->num_children; i++) {
-            const struct menu_elem_t *child = elem->children[i];
+            const struct menu_elem_t *const child = elem->children[i];
             const struct vec_t child_size = element_size(child);
 
             size.x = fmaxf(size.x, child_size.x);
@@ -454,7 +456,7 @@ static int render_element(SDL_Renderer *const restrict renderer, const struct me
     }
 
     for (size_t i = 0; i < elem->num_children; i++) {
-        const struct menu_elem_t *child = elem->children[i];
+        const struct menu_elem_t *const child = elem->children[i];
 
         if (render_element(renderer, child) != 0) {
             logger_printf(LOG_LEVEL_ERROR, "unable to render child %s (no. %zu) of element %s\n",
