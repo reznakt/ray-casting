@@ -294,8 +294,6 @@ static void initialize_element(struct menu_elem_t *const restrict elem,
 
     elem->num_children = 0;
     elem->children = NULL;
-
-
 }
 
 struct menu_elem_t *menu_create_element(const char *const id, const enum menu_elem_type_t type) {
