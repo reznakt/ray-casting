@@ -340,9 +340,7 @@ void render(struct game_t *const game) {
     render_visual_fps(game, COLOR_WHITE, COLOR_BLACK);
     render_hud(game, COLOR_WHITE);
 
-    if (game->paused) {
-        menu_render(game->renderer, &game->menu);
-    }
+    menu_render(game->renderer);
 
     SDL_RenderPresent(game->renderer);
 }

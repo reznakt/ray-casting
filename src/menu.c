@@ -1,241 +1,554 @@
-#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 #include <SDL2/SDL.h>
 
 #include "logger.h"
-#include "text.h"
 #include "util.h"
-#include "vector.h"
 
 #include "menu.h"
 
 
-static const SDL_Color TEXT_COLOR = COLOR_WHITE;
-static const SDL_Color LINE_COLOR = COLOR_WHITE;
-
-static const SDL_Color BUTTON_COLOR_BACKGROUND = COLOR_BLACK;
-static const SDL_Color BUTTON_COLOR_HOVER = rgb(100, 100, 100);
-static const SDL_Color BUTTON_COLOR_BORDER = COLOR_WHITE;
-
-static const SDL_Color MENU_COLOR_BACKGROUND = COLOR_BLACK;
-static const SDL_Color MENU_COLOR_BORDER = COLOR_WHITE;
+#define notnull(x, rv)                                  \
+do {                                                    \
+    if ((x) == NULL) {                                  \
+        logger_print(LOG_LEVEL_ERROR, #x " is NULL");   \
+        return (rv);                                    \
+    }                                                   \
+} while (0)
 
 
-int menu_add_button(
-        struct menu_t *const restrict menu,
-        const struct vec_t pos,
-        const char *const restrict title,
-        const enum menu_alignment_t alignment,
-        void (*const on_click)(void *arg),
-        void *const restrict on_click_arg
-) {
-    if (menu->num_buttons >= MENU_MAX_ELEMENTS) {
-        return -1;
+static struct menu_elem_t *menu_root = NULL;
+
+static const float vw = (float) SCREEN_WIDTH / 100.0F;
+static const float vh = (float) SCREEN_HEIGHT / 100.0F;
+
+
+/* ------------------------------ */
+/*    Public function headers     */
+/* ------------------------------ */
+
+
+static void cleanup(void);
+
+static bool has_children(const struct menu_elem_t *elem);
+
+static struct menu_elem_t *menu_get_element_by_id_helper(struct menu_elem_t *root, const char *id);
+
+static inline const char *safestr(const char *str);
+
+static struct vec_t element_size(const struct menu_elem_t *elem);
+
+static struct vec_t element_pos(const struct menu_elem_t *elem);
+
+static struct menu_padding_t get_padding(const struct menu_elem_t *elem);
+
+static struct menu_padding_t get_margin(const struct menu_elem_t *elem);
+
+static struct menu_number_t get_width(const struct menu_elem_t *elem);
+
+static struct menu_number_t get_height(const struct menu_elem_t *elem);
+
+static inline const char *bool_to_str(bool b);
+
+static void print_element(const struct menu_elem_t *elem, size_t depth);
+
+static const char *number_unit(struct menu_number_t number);
+
+
+struct menu_padding_t get_padding(const struct menu_elem_t *const elem) {
+    const bool left_percent = elem->padding.left.type == MENU_NUMBER_PERCENT;
+    const bool right_percent = elem->padding.right.type == MENU_NUMBER_PERCENT;
+    const bool top_percent = elem->padding.top.type == MENU_NUMBER_PERCENT;
+    const bool bottom_percent = elem->padding.bottom.type == MENU_NUMBER_PERCENT;
+
+    if (!left_percent && !right_percent && !top_percent && !bottom_percent) {
+        return elem->padding;
     }
 
-    const size_t width = menu_button_width(title);
-    struct vec_t button_pos = pos;
+    const struct vec_t parent_size = elem->parent == NULL ? (struct vec_t) {vw, vh} : element_size(elem->parent);
 
-    if (alignment == MENU_ALIGN_CENTER) {
-        button_pos.x -= (float) width / 2.0F;
-    } else if (alignment == MENU_ALIGN_RIGHT) {
-        button_pos.x -= (float) width;
-    }
+    const float left = elem->padding.left.type == MENU_NUMBER_PX
+                       ? elem->padding.left.value
+                       : parent_size.x * elem->padding.left.value / 100.0F;
 
-    const struct menu_button_t button = {
-            .on_click = on_click,
-            .pos = button_pos,
-            .name = title,
-            .on_click_arg = on_click_arg
+    const float right = elem->padding.right.type == MENU_NUMBER_PX
+                        ? elem->padding.right.value
+                        : parent_size.x * elem->padding.right.value / 100.0F;
+
+    const float top = elem->padding.top.type == MENU_NUMBER_PX
+                      ? elem->padding.top.value
+                      : parent_size.y * elem->padding.top.value / 100.0F;
+
+    const float bottom = elem->padding.bottom.type == MENU_NUMBER_PX
+                         ? elem->padding.bottom.value
+                         : parent_size.y * elem->padding.bottom.value / 100.0F;
+
+    return (struct menu_padding_t) {
+            .left = menu_px(left),
+            .right = menu_px(right),
+            .top = menu_px(top),
+            .bottom = menu_px(bottom)
     };
-
-    menu->buttons[menu->num_buttons++] = button;
-    return 0;
 }
 
-int menu_add_text(struct menu_t *const restrict menu, struct vec_t pos,
-                  const char *const restrict value, const enum menu_alignment_t alignment) {
-    if (menu->num_texts >= MENU_MAX_ELEMENTS) {
-        return -1;
+static struct menu_padding_t get_margin(const struct menu_elem_t *const elem) {
+    const bool left_percent = elem->margin.left.type == MENU_NUMBER_PERCENT;
+    const bool right_percent = elem->margin.right.type == MENU_NUMBER_PERCENT;
+    const bool top_percent = elem->margin.top.type == MENU_NUMBER_PERCENT;
+    const bool bottom_percent = elem->margin.bottom.type == MENU_NUMBER_PERCENT;
+
+    if (!left_percent && !right_percent && !top_percent && !bottom_percent) {
+        return elem->margin;
     }
 
-    struct vec_t text_pos = pos;
-    const size_t width = menu_button_width(value) - 2 * BUTTON_PADDING;
+    const struct vec_t parent_size = elem->parent == NULL ? (struct vec_t) {vw, vh} : element_size(elem->parent);
 
-    if (alignment == MENU_ALIGN_CENTER) {
-        text_pos.x -= (float) width / 2.0F;
-    } else if (alignment == MENU_ALIGN_RIGHT) {
-        text_pos.x -= (float) width;
-    }
+    const float left = elem->margin.left.type == MENU_NUMBER_PX
+                       ? elem->margin.left.value
+                       : parent_size.x * elem->margin.left.value / 100.0F;
 
-    const struct menu_text_t text = {.pos = text_pos, .value = value};
-    menu->texts[menu->num_texts++] = text;
+    const float right = elem->margin.right.type == MENU_NUMBER_PX
+                        ? elem->margin.right.value
+                        : parent_size.x * elem->margin.right.value / 100.0F;
 
-    return 0;
-}
+    const float top = elem->margin.top.type == MENU_NUMBER_PX
+                      ? elem->margin.top.value
+                      : parent_size.y * elem->margin.top.value / 100.0F;
 
-static void render_button(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
-                          const struct menu_button_t *const restrict button) {
-    const struct vec_t pos = vadd(menu->pos, button->pos);
+    const float bottom = elem->margin.bottom.type == MENU_NUMBER_PX
+                         ? elem->margin.bottom.value
+                         : parent_size.y * elem->margin.bottom.value / 100.0F;
 
-    const SDL_FRect box_pos = {
-            .x = pos.x,
-            .y = pos.y,
-            .w = (float) menu_button_width(button->name),
-            .h = CHAR_HEIGHT + 2 * BUTTON_PADDING
+    return (struct menu_padding_t) {
+            .left = menu_px(left),
+            .right = menu_px(right),
+            .top = menu_px(top),
+            .bottom = menu_px(bottom)
     };
-
-    render_colored(renderer, button->hover ? BUTTON_COLOR_HOVER : BUTTON_COLOR_BACKGROUND, {
-        SDL_RenderFillRectF(renderer, &box_pos);
-    });
-
-    render_colored(renderer, BUTTON_COLOR_BORDER, {
-        SDL_RenderDrawRectF(renderer, &box_pos);
-    });
-
-    const struct vec_t text_pos = {box_pos.x + BUTTON_PADDING, box_pos.y + BUTTON_PADDING};
-
-    render_colored(renderer, TEXT_COLOR, {
-        render_puts(renderer, text_pos, button->name);
-    });
 }
 
-static void render_line(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
-                        const struct menu_line_t *const restrict line) {
-    const struct vec_t start = vadd(menu->pos, line->start);
-    const struct vec_t end = vadd(menu->pos, line->end);
-
-    render_colored(renderer, LINE_COLOR, {
-        SDL_RenderDrawLineF(renderer, start.x, start.y, end.x, end.y);
-    });
+struct menu_number_t menu_vw(const float vw_) {
+    return (struct menu_number_t) {vw * vw_, MENU_NUMBER_PX};
 }
 
-static void render_text(const struct menu_t *const restrict menu, SDL_Renderer *const restrict renderer,
-                        const struct menu_text_t *const restrict text) {
-    render_colored(renderer, TEXT_COLOR, {
-        render_puts(renderer, vadd(menu->pos, text->pos), text->value);
-    });
+struct menu_number_t menu_vh(const float vh_) {
+    return (struct menu_number_t) {vh * vh_, MENU_NUMBER_PX};
 }
 
-void menu_render(SDL_Renderer *const restrict renderer, const struct menu_t *const restrict menu) {
-    const SDL_FRect box_pos = {
-            .x = menu->pos.x,
-            .y = menu->pos.y,
-            .w = menu->size.x,
-            .h = menu->size.y
-    };
+struct menu_number_t menu_px(const float px) {
+    return (struct menu_number_t) {px, MENU_NUMBER_PX};
+}
 
-    // background
-    render_colored(renderer, MENU_COLOR_BACKGROUND, {
-        SDL_RenderFillRectF(renderer, &box_pos);
-    });
+struct menu_number_t menu_percent(const float percent) {
+    return (struct menu_number_t) {percent, MENU_NUMBER_PERCENT};
+}
 
-    // border
-    render_colored(renderer, MENU_COLOR_BORDER, {
-        SDL_RenderDrawRectF(renderer, &box_pos);
-    });
+static struct menu_number_t get_width(const struct menu_elem_t *const elem) {
+    notnull(elem, menu_px(NAN));
 
-    // buttons
-    for (size_t i = 0; i < menu->num_buttons; i++) {
-        render_button(menu, renderer, &menu->buttons[i]);
+    if (elem->width.type == MENU_NUMBER_PX) {
+        return elem->width;
     }
 
-    // lines
-    for (size_t i = 0; i < menu->num_lines; i++) {
-        render_line(menu, renderer, &menu->lines[i]);
+    const struct vec_t parent_size = elem->parent == NULL ? (struct vec_t) {vw, vh} : element_size(elem->parent);
+    return menu_px(parent_size.x * elem->width.value / 100.0F);
+}
+
+static struct menu_number_t get_height(const struct menu_elem_t *const elem) {
+    notnull(elem, menu_px(NAN));
+
+    if (elem->height.type == MENU_NUMBER_PX) {
+        return elem->height;
     }
 
-    // text
-    for (size_t i = 0; i < menu->num_texts; i++) {
-        render_text(menu, renderer, &menu->texts[i]);
+    const struct vec_t parent_size = elem->parent == NULL ? (struct vec_t) {vw, vh} : element_size(elem->parent);
+    return menu_px(parent_size.y * elem->height.value / 100.0F);
+}
+
+static inline const char *safestr(const char *const str) {
+    return str == NULL ? "(null)" : str;
+}
+
+static bool has_children(const struct menu_elem_t *const elem) {
+    const bool num_children = elem->num_children > 0;
+    const bool children = elem->children != NULL;
+
+    if (num_children != children) {
+        logger_printf(LOG_LEVEL_WARN, "element '%s' has num_children = %d, but children = %d",
+                      safestr(elem->id), num_children, children);
+        return false;
     }
+
+    return children;
 }
 
-size_t menu_button_width(const char *const title) {
-    return text_width(title) + 2 * BUTTON_PADDING;
-}
+static struct menu_elem_t *menu_get_element_by_id_helper(struct menu_elem_t *const restrict root,
+                                                         const char *const restrict id) {
+    notnull(id, NULL);
+    notnull(root, NULL);
 
-static bool is_within(const struct SDL_FRect *const restrict rect, const struct vec_t *const restrict pos) {
-    return pos->x >= rect->x && pos->x <= rect->x + rect->w && pos->y >= rect->y && pos->y <= rect->y + rect->h;
-}
+    if (strcmp(root->id, id) == 0) {
+        return root;
+    }
 
-void menu_handle_event(struct menu_t *menu, const SDL_Event *event) {
-    switch (event->type) {
-        case SDL_MOUSEMOTION:
-        case SDL_MOUSEBUTTONDOWN: {
-            int x, y;
-            SDL_GetMouseState(&x, &y);
+    if (!has_children(root)) {
+        return NULL;
+    }
 
-            for (size_t i = 0; i < menu->num_buttons; i++) {
-                // process buttons in reverse order so that buttons with the highest z-index are processed first
-                struct menu_button_t *const button = &menu->buttons[menu->num_buttons - i - 1];
+    for (size_t i = 0; i < root->num_children; i++) {
+        struct menu_elem_t *elem = root->children[i];
 
-                const SDL_FRect button_rect = {
-                        .x = button->pos.x + menu->pos.x,
-                        .y = button->pos.y + menu->pos.y,
-                        .w = (float) menu_button_width(button->name),
-                        .h = BUTTON_HEIGHT
-                };
+        if (strcmp(elem->id, id) == 0) {
+            return elem;
+        }
 
-                const struct vec_t mouse_pos = {.x = (float) x, .y = (float) y};
-
-                if (is_within(&button_rect, &mouse_pos)) {
-                    if (event->type == SDL_MOUSEBUTTONDOWN && button->on_click != NULL) {
-                        logger_printf(LOG_LEVEL_DEBUG, "button clicked: %s\n", button->name);
-                        button->on_click(button->on_click_arg);
-                    } else if (event->type == SDL_MOUSEMOTION) {
-                        button->hover = true;
-                    }
-
-                    break;
-                }
-
-                button->hover = false;
-            }
-
-            break;
+        if ((elem = menu_get_element_by_id_helper(elem, id)) != NULL) {
+            return elem;
         }
     }
 
-    if (menu->on_event != NULL) {
-        menu->on_event(event, menu->on_event_arg);
-    }
+    return NULL;
 }
 
-int menu_add_line(struct menu_t *const menu, struct vec_t start, struct vec_t end) {
-    if (menu->num_lines >= MENU_MAX_ELEMENTS) {
+struct menu_elem_t *menu_get_element_by_id(const char *const id) {
+    return menu_get_element_by_id_helper(menu_root, id);
+}
+
+void menu_destroy_element(struct menu_elem_t *const elem) {
+    if (elem == NULL) {
+        return;
+    }
+
+    if (has_children(elem)) {
+        for (size_t i = 0; i < elem->num_children; i++) {
+            menu_destroy_element(elem->children[i]);
+        }
+    }
+
+    free(elem->children);
+    const char *const id = elem->id;
+    free(elem);
+
+    logger_printf(LOG_LEVEL_DEBUG, "destroyed element '%s'\n", safestr(id));
+}
+
+static void cleanup(void) {
+    menu_destroy_element(menu_root);
+}
+
+int menu_initialize(void) {
+    menu_root = menu_create_element(":root", MENU_ELEM_CONTAINER);
+
+    if (menu_root == NULL) {
         return -1;
     }
 
-    const struct menu_line_t line = {.start = start, .end = end};
-    menu->lines[menu->num_lines++] = line;
+    menu_root->width = menu_vw(100.0F);
+    menu_root->height = menu_vh(100.0F);
+    menu_root->border.width = menu_px(0.0F);
+
+    if (atexit(cleanup) != 0) {
+        logger_perror("atexit");
+        return -1;
+    }
 
     return 0;
 }
 
-void menu_create(struct menu_t *const restrict menu,
-                 const struct vec_t pos,
-                 const struct vec_t size,
-                 const char *const restrict title,
-                 void (*const on_close)(void *arg),
-                 void *const restrict on_close_arg,
-                 void (*on_event)(const SDL_Event *event, void *arg),
-                 void *on_event_arg) {
-    menu->pos = pos;
-    menu->size = size;
-    menu->num_buttons = 0;
-    menu->num_texts = 0;
-    menu->num_lines = 0;
-    menu->on_event = on_event;
-    menu->on_event_arg = on_event_arg;
+static void initialize_element(struct menu_elem_t *const restrict elem,
+                               const char *const restrict id,
+                               const enum menu_elem_type_t type) {
+    elem->id = id;
+    elem->type = type;
+    elem->parent = NULL;
 
-    const struct vec_t close_button_pos = {.x = size.x, .y = 0.0F};
-    menu_add_button(menu, close_button_pos, "X", MENU_ALIGN_RIGHT, on_close, on_close_arg);
+    elem->width = menu_px(NAN);
+    elem->height = menu_px(NAN);
 
-    const struct vec_t header_line_start = {.x = 0.0F, .y = BUTTON_HEIGHT};
-    const struct vec_t header_line_end = {.x = size.x, .y = BUTTON_HEIGHT};
-    menu_add_line(menu, header_line_start, header_line_end);
+    elem->padding.top = menu_px(10.0F);
+    elem->padding.right = menu_px(10.0F);
+    elem->padding.bottom = menu_px(10.0F);
+    elem->padding.left = menu_px(10.0F);
 
-    const struct vec_t title_pos = {.x = size.x / 2.0F, .y = BUTTON_PADDING};
-    menu_add_text(menu, title_pos, title, MENU_ALIGN_CENTER);
+    elem->margin.top = menu_px(0.0F);
+    elem->margin.right = menu_px(0.0F);
+    elem->margin.bottom = menu_px(0.0F);
+    elem->margin.left = menu_px(0.0F);
+
+    elem->border.width = menu_px(1.0F);
+    elem->border.color = COLOR_WHITE;
+
+    elem->hover = false;
+    elem->focus = false;
+    elem->visible = true;
+
+    elem->text_color = COLOR_WHITE;
+    elem->background_color = COLOR_BLACK;
+
+    elem->on_event = NULL;
+    elem->event_arg = NULL;
+
+    elem->num_children = 0;
+    elem->children = NULL;
+
+
+}
+
+struct menu_elem_t *menu_create_element(const char *const id, const enum menu_elem_type_t type) {
+    notnull(id, NULL);
+
+    if (menu_root != NULL && menu_get_element_by_id(id) != NULL) {
+        logger_printf(LOG_LEVEL_ERROR, "element with id '%s' already exists\n", id);
+        return NULL;
+    }
+
+    struct menu_elem_t *elem = malloc(sizeof *elem);
+
+    if (elem == NULL) {
+        logger_perror("malloc");
+        return NULL;
+    }
+
+    initialize_element(elem, id, type);
+
+    logger_printf(LOG_LEVEL_DEBUG, "created element '%s'\n", id);
+    return elem;
+}
+
+int menu_append_child(struct menu_elem_t *restrict parent, struct menu_elem_t *const restrict child) {
+    notnull(child, -1);
+
+    if (child->parent != NULL) {
+        logger_printf(LOG_LEVEL_ERROR, "element '%s' is already a child of '%s'\n",
+                      safestr(child->id), safestr(child->parent->id));
+        return -1;
+    }
+
+    if (parent == NULL) {
+        notnull(menu_root, -1);
+        parent = menu_root;
+    }
+
+    parent->num_children++;
+    struct menu_elem_t **children = realloc(parent->children, parent->num_children * sizeof *children);
+
+    if (children == NULL) {
+        logger_perror("realloc");
+        return -1;
+    }
+
+    parent->children = children;
+    parent->children[parent->num_children - 1] = child;
+    child->parent = parent;
+
+    return 0;
+}
+
+static struct vec_t padding_to_vec(const struct menu_padding_t padding) {
+    return (struct vec_t) {
+            padding.left.value + padding.right.value,
+            padding.top.value + padding.bottom.value
+    };
+}
+
+static struct vec_t element_size_helper(const struct menu_elem_t *const elem) {
+    notnull(elem, ((struct vec_t) {NAN, NAN}));
+    struct vec_t size = {0.0F, 0.0F};
+
+    if (!elem->visible) {
+        return size;
+    }
+
+    const float width = get_width(elem).value;
+    const float height = get_height(elem).value;
+
+    if (!isnan(width) && !isnan(height)) {
+        return (struct vec_t) {width, height};
+    }
+
+    size = vadd(size, padding_to_vec(get_padding(elem)));
+    size = vadd(size, padding_to_vec(get_margin(elem)));
+
+    switch (elem->type) {
+        case MENU_ELEM_TEXT:
+        case MENU_ELEM_BUTTON:
+            size.x += (float) text_width(elem->specifics.text.value);
+            size.y += (float) CHAR_HEIGHT;
+            break;
+        case MENU_ELEM_CONTAINER:
+        case MENU_ELEM_OPTION:
+            break;
+    }
+
+    if (has_children(elem)) {
+        for (size_t i = 0; i < elem->num_children; i++) {
+            const struct menu_elem_t *child = elem->children[i];
+            const struct vec_t child_size = element_size(child);
+
+            size.x = fmaxf(size.x, child_size.x);
+            size.y += child_size.y;
+        }
+    }
+
+    if (!isnan(width)) {
+        size.x = width;
+    }
+
+    if (!isnan(height)) {
+        size.y = height;
+    }
+
+    return size;
+}
+
+static struct vec_t element_size(const struct menu_elem_t *const elem) {
+    return vsub(element_size_helper(elem), padding_to_vec(get_margin(elem)));
+}
+
+static struct vec_t element_pos(const struct menu_elem_t *const elem) {
+    notnull(elem, ((struct vec_t) {NAN, NAN}));
+
+    if (elem->parent == NULL) {
+        return (struct vec_t) {0.0F, 0.0F};
+    }
+
+    const struct vec_t pos = element_pos(elem->parent);
+
+    const struct menu_padding_t padding = get_padding(elem->parent);
+    const struct menu_padding_t margin = get_margin(elem);
+
+    return (struct vec_t) {
+            pos.x + margin.left.value + padding.left.value,
+            pos.y + margin.top.value + padding.top.value
+    };
+}
+
+static int render_element(SDL_Renderer *const restrict renderer, const struct menu_elem_t *const restrict elem) {
+    notnull(renderer, -1);
+    notnull(elem, -1);
+
+    if (!elem->visible) {
+        return 0;
+    }
+
+    const struct vec_t size = element_size(elem);
+    const struct vec_t pos = element_pos(elem);
+
+    if (elem->border.width.value > 0.0F) {
+        const SDL_FRect rect = {
+                pos.x,
+                pos.y,
+                size.x,
+                size.y
+        };
+
+        render_colored(renderer, elem->border.color, {
+            SDL_RenderDrawRectF(renderer, &rect);
+        });
+    }
+
+    if (!has_children(elem)) {
+        return 0;
+    }
+
+    for (size_t i = 0; i < elem->num_children; i++) {
+        const struct menu_elem_t *child = elem->children[i];
+
+        if (render_element(renderer, child) != 0) {
+            logger_printf(LOG_LEVEL_ERROR, "unable to render child %s (no. %zu) of element %s\n",
+                          safestr(child->id), i, safestr(elem->id));
+            return -1;
+        }
+    }
+
+    return 0;
+}
+
+int menu_render(SDL_Renderer *const renderer) {
+    return render_element(renderer, menu_root);
+}
+
+static const char *element_type_name(const struct menu_elem_t *const elem) {
+    notnull(elem, NULL);
+
+    switch (elem->type) {
+        case MENU_ELEM_TEXT:
+            return "Text";
+        case MENU_ELEM_OPTION:
+            return "Option";
+        case MENU_ELEM_CONTAINER:
+            return "Container";
+        case MENU_ELEM_BUTTON:
+            return "Button";
+    }
+
+    return "(unknown)";
+}
+
+static inline const char *bool_to_str(const bool b) {
+    return b ? "true" : "false";
+}
+
+static const char *number_unit(const struct menu_number_t number) {
+    switch (number.type) {
+        case MENU_NUMBER_PX:
+            return "px";
+        case MENU_NUMBER_PERCENT:
+            return "%";
+    }
+
+    return "(unknown)";
+}
+
+static void print_element(const struct menu_elem_t *const elem, const size_t depth) {
+    if (elem == NULL) {
+        logger_print(LOG_LEVEL_ERROR, "element is NULL");
+        return;
+    }
+
+    const struct menu_number_t width = get_width(elem);
+    const struct menu_number_t height = get_height(elem);
+    const struct vec_t pos = element_pos(elem);
+    const struct vec_t size = element_size(elem);
+    const struct menu_padding_t padding = get_padding(elem);
+    const struct menu_padding_t margin = get_margin(elem);
+
+    logger_printf(
+            LOG_LEVEL_DEBUG,
+            "%*s<%s id='%s' width=%.1f height=%.1f pos=[%.1f, %.1f] size=%.1f x %.1f px "
+            "visible=%s hover=%s focus=%s "
+            "border=%.1f px #%02x%02x%02x%02x text-color=#%02x%02x%02x%02x background-color=#%02x%02x%02x%02x "
+            "padding=[%.1f %s (%.1f px), %.1f %s (%.1f px), %.1f %s (%.1f px), %.1f %s (%.1f px)] "
+            "margin=[%.1f %s (%.1f px), %.1f %s (%.1f px), %.1f %s (%.1f px), %.1f %s (%.1f px)]>\n",
+            (int) depth, "",
+            safestr(element_type_name(elem)),
+            safestr(elem->id),
+            width.value,
+            height.value,
+            pos.x, pos.y,
+            size.x, size.y,
+            bool_to_str(elem->visible), bool_to_str(elem->hover), bool_to_str(elem->focus), elem->border.width.value,
+            elem->border.color.r, elem->border.color.g, elem->border.color.b, elem->border.color.a,
+            elem->text_color.r, elem->text_color.g, elem->text_color.b, elem->text_color.a,
+            elem->background_color.r, elem->background_color.g, elem->background_color.b, elem->background_color.a,
+            elem->padding.top.value, number_unit(elem->padding.top), padding.top.value,
+            elem->padding.right.value, number_unit(elem->padding.right), padding.right.value,
+            elem->padding.bottom.value, number_unit(elem->padding.bottom), padding.bottom.value,
+            elem->padding.left.value, number_unit(elem->padding.left), padding.left.value,
+            elem->margin.top.value, number_unit(elem->margin.top), margin.top.value,
+            elem->margin.right.value, number_unit(elem->margin.right), margin.right.value,
+            elem->margin.bottom.value, number_unit(elem->margin.bottom), margin.bottom.value,
+            elem->margin.left.value, number_unit(elem->margin.left), margin.left.value
+    );
+
+    if (has_children(elem)) {
+        for (size_t i = 0; i < elem->num_children; i++) {
+            print_element(elem->children[i], depth + 2);
+        }
+    }
+}
+
+void menu_print_tree(void) {
+    print_element(menu_root, 0);
 }

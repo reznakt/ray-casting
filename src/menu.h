@@ -9,73 +9,132 @@
 #include "vector.h"
 
 
-#define MENU_MAX_ELEMENTS 16
-
-#define BUTTON_PADDING 8
-#define BUTTON_HEIGHT (CHAR_HEIGHT + 2 * BUTTON_PADDING)
-
-
-enum unused menu_alignment_t {
-    MENU_ALIGN_LEFT,
-    MENU_ALIGN_CENTER,
-    MENU_ALIGN_RIGHT
+enum unused menu_elem_type_t {
+    MENU_ELEM_BUTTON,
+    MENU_ELEM_TEXT,
+    MENU_ELEM_OPTION,
+    MENU_ELEM_CONTAINER
 };
 
-struct menu_button_t {
-    void (*on_click)(void *arg);
+enum unused menu_number_type_t {
+    MENU_NUMBER_PX,
+    MENU_NUMBER_PERCENT,
+};
 
-    void *on_click_arg;
-    struct vec_t pos;
+enum unused menu_event_type_t {
+    MENU_EVENT_CLICK,
+    MENU_EVENT_HOVER_ENTER,
+    MENU_EVENT_HOVER_LEAVE,
+    MENU_EVENT_FOCUS_ENTER,
+    MENU_EVENT_FOCUS_LEAVE
+};
+
+struct menu_number_t {
+    float value;
+    enum menu_number_type_t type;
+};
+
+struct menu_padding_t {
+    struct menu_number_t top;
+    struct menu_number_t right;
+    struct menu_number_t bottom;
+    struct menu_number_t left;
+};
+
+struct menu_border_t {
+    struct menu_number_t width;
+    SDL_Color color;
+};
+
+struct menu_event_t {
+    enum menu_event_type_t type;
+    struct menu_elem_t *elem;
+
+    union {
+        struct vec_t pos;
+    } data;
+};
+
+typedef void (*menu_event_handler_t)(const struct menu_event_t *event, void *arg);
+
+struct menu_elem_t;
+
+struct menu_elem_t {
+    const char *id;
+    enum menu_elem_type_t type;
+    struct menu_elem_t *parent;
+
+    struct menu_number_t width;
+    struct menu_number_t height;
+
+    struct menu_padding_t padding;
+    struct menu_padding_t margin;
+    struct menu_border_t border;
+
     bool hover;
-    const char *name;
+    bool focus;
+    bool visible;
+
+    SDL_Color text_color;
+    SDL_Color background_color;
+
+    union {
+        struct {
+            const char *value;
+        } text;
+
+        struct {
+            const char *title;
+        } button;
+
+        struct {
+            const char *title;
+            const char *value;
+
+            void (*on_next)(void *arg);
+
+            void (*on_prev)(void *arg);
+
+            void *on_next_arg;
+            void *on_prev_arg;
+        } option;
+
+        struct {
+            size_t num_children;
+            struct menu_elem_t **children;
+        } container;
+    } specifics;
+
+    menu_event_handler_t on_event;
+    void *event_arg;
+
+    size_t num_children;
+    struct menu_elem_t **children;
 };
 
-struct menu_text_t {
-    struct vec_t pos;
-    const char *value;
-};
+struct menu_elem_t *menu_get_element_by_id(const char *id);
 
-struct menu_line_t {
-    struct vec_t start;
-    struct vec_t end;
-};
+void menu_destroy_element(struct menu_elem_t *elem);
 
-struct menu_t {
-    void (*on_event)(const SDL_Event *event, void *arg);
+struct menu_elem_t *menu_create_element(const char *id, enum menu_elem_type_t type);
 
-    void *on_event_arg;
-    struct vec_t pos;
-    struct vec_t size;
-    size_t num_buttons;
-    size_t num_texts;
-    size_t num_lines;
-    struct menu_button_t buttons[MENU_MAX_ELEMENTS];
-    struct menu_text_t texts[MENU_MAX_ELEMENTS];
-    struct menu_line_t lines[MENU_MAX_ELEMENTS];
-};
+int menu_append_child(struct menu_elem_t *parent, struct menu_elem_t *child);
 
+int menu_render(SDL_Renderer *renderer);
 
-int menu_add_button(struct menu_t *menu, struct vec_t pos, const char *title, enum menu_alignment_t alignment,
-                    void (*on_click)(void *arg), void *on_click_arg);
+int menu_handle_event(const SDL_Event *event);
 
-int menu_add_text(struct menu_t *menu, struct vec_t pos, const char *value, enum menu_alignment_t alignment);
+int menu_initialize(void);
 
-int menu_add_line(struct menu_t *menu, struct vec_t start, struct vec_t end);
+struct menu_number_t menu_px(float px);
 
-void menu_render(SDL_Renderer *renderer, const struct menu_t *menu);
+struct menu_number_t menu_percent(float percent);
 
-size_t menu_button_width(const char *title);
+struct menu_number_t menu_vw(float vw);
 
-void menu_handle_event(struct menu_t *menu, const SDL_Event *event);
+struct menu_number_t menu_vh(float vh);
 
-void menu_create(struct menu_t *menu,
-                 struct vec_t pos,
-                 struct vec_t size,
-                 const char *title,
-                 void (*on_close)(void *arg),
-                 void *on_close_arg,
-                 void (*on_event)(const SDL_Event *event, void *arg),
-                 void *on_event_arg);
+void menu_print_tree(void);
 
 
 #endif //RAY_MENU_H

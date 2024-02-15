@@ -52,8 +52,6 @@ struct game_t {
         RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED, RENDER_MODE_TEXTURED
     } render_mode; /**< The current render mode. */
     bool quit; /**< Boolean flag indicating whether the game should quit. */
-    bool paused; /**< Boolean flag indicating whether the game is paused. */
-    struct menu_t menu; /**< The menu currently being displayed. */
 };
 
 /**

@@ -42,81 +42,6 @@ static inline void usage(const char *const argv0) {
     printf(fmt, argv0);
 }
 
-static void set_main_menu(struct game_t *game);
-
-static void set_options_menu(struct game_t *game);
-
-static inline void menu_close(struct game_t *const game) {
-    game->paused = false;
-    memset(&game->camera->movement, false, sizeof game->camera->movement);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
-    set_main_menu(game);
-}
-
-static inline void menu_quit(struct game_t *const game) {
-    game->quit = true;
-}
-
-static inline void menu_on_event(const SDL_Event *const event, void *const arg) {
-    if (event->type == SDL_KEYDOWN) {
-        switch (event->key.keysym.sym) {
-            case KEY_PAUSE:
-                menu_close(arg);
-                break;
-        }
-    }
-}
-
-static void set_main_menu(struct game_t *const game) {
-    static const size_t width = SCREEN_WIDTH / 4;
-    static const size_t height = SCREEN_HEIGHT / 4;
-
-    const struct vec_t pos = {
-            .x = (float) SCREEN_WIDTH / 2.0F - (float) width / 2.0F,
-            .y = (float) SCREEN_HEIGHT / 2.0F - (float) height / 2.0F
-    };
-    const struct vec_t size = {.x = (float) width, .y = (float) height};
-
-    struct menu_t menu;
-    menu_create(&menu, pos, size, "Menu", (void (*)(void *)) menu_close, game, menu_on_event, game);
-
-    struct vec_t position = {.x = size.x / 2.0F, .y = size.y / 5.0F};
-
-    menu_add_text(&menu, position, "*** GAME PAUSED ***", MENU_ALIGN_CENTER);
-    position = (struct vec_t) {.x = size.x / 2.0F, .y = size.y / 3.0F};
-
-    menu_add_button(&menu, position, "Resume", MENU_ALIGN_CENTER, (void (*)(void *)) menu_close, game);
-    position.y += BUTTON_HEIGHT * 2;
-
-    menu_add_button(&menu, position, "Options", MENU_ALIGN_CENTER, (void (*)(void *)) set_options_menu, game);
-    position.y += BUTTON_HEIGHT * 2;
-
-    menu_add_button(&menu, position, "Quit", MENU_ALIGN_CENTER, (void (*)(void *)) menu_quit, game);
-
-    game->menu = menu;
-}
-
-static void set_options_menu(struct game_t *const game) {
-    static const size_t width = SCREEN_WIDTH / 4;
-    static const size_t height = SCREEN_HEIGHT / 4;
-
-    const struct vec_t pos = {
-            .x = (float) SCREEN_WIDTH / 2.0F - (float) width / 2.0F,
-            .y = (float) SCREEN_HEIGHT / 2.0F - (float) height / 2.0F
-    };
-    const struct vec_t size = {.x = (float) width, .y = (float) height};
-
-    struct menu_t menu;
-    menu_create(&menu, pos, size, "Options", (void (*)(void *)) menu_close, game, menu_on_event, game);
-    const float x = size.x / 2.0F;
-
-    menu_add_text(&menu, (struct vec_t) {x, size.y / 3.0F}, "TBD", MENU_ALIGN_CENTER);
-    menu_add_button(&menu, (struct vec_t) {x, size.y - size.y / 3.0F}, "Back", MENU_ALIGN_CENTER,
-                    (void (*)(void *)) set_main_menu, game);
-
-    game->menu = menu;
-}
-
 static void log_system_info(void) {
     logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d, SDL2_gfx version %d.%d.%d\n",
                   SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL,
@@ -192,10 +117,7 @@ static void main_loop(struct game_t *const game) {
         on_event(game, &event);
     }
 
-    if (!game->paused) {
-        update(game);
-    }
-
+    update(game);
     render(game);
     tick(game);
 }
@@ -228,11 +150,58 @@ int main(const int argc, char **const argv) {
         return EXIT_FAILURE;
     }
 
-    set_main_menu(game);
-
     if (profile) {
         logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %d ticks\n", PROFILE_TICKS);
     }
+
+    if (menu_initialize() != 0) {
+        logger_print(LOG_LEVEL_FATAL, "unable to initialize menu");
+        return EXIT_FAILURE;
+    }
+
+    struct menu_elem_t *const foo = menu_create_element("foo", MENU_ELEM_CONTAINER);
+
+    if (foo == NULL) {
+        logger_print(LOG_LEVEL_FATAL, "unable to create menu element");
+        return EXIT_FAILURE;
+    }
+
+    if (menu_append_child(NULL, foo) != 0) {
+        logger_print(LOG_LEVEL_FATAL, "unable to append child to menu element");
+        return EXIT_FAILURE;
+    }
+
+    foo->margin.left = menu_percent(50.0F);
+    foo->margin.top = menu_percent(50.0F);
+
+    menu_append_child(menu_get_element_by_id("foo"), menu_create_element("bar", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("bar"), menu_create_element("baz", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("baz"), menu_create_element("qux", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("qux"), menu_create_element("quux", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("quux"), menu_create_element("corge", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("corge"), menu_create_element("grault", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("grault"), menu_create_element("garply", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("garply"), menu_create_element("waldo", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("waldo"), menu_create_element("fred", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("fred"), menu_create_element("plugh", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("plugh"), menu_create_element("xyzzy", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("xyzzy"), menu_create_element("thud", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("thud"), menu_create_element("wibble", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("wibble"), menu_create_element("wobble", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("wobble"), menu_create_element("wubble", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("wubble"), menu_create_element("flob", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop", MENU_ELEM_CONTAINER));
+
+    menu_get_element_by_id("flob")->specifics.text.value = "hello, world!";
+
+    struct menu_elem_t *const foo_found = menu_get_element_by_id("foo");
+
+    if (foo_found == NULL) {
+        logger_print(LOG_LEVEL_FATAL, "unable to find menu element by id");
+        return EXIT_FAILURE;
+    }
+
+    menu_print_tree();
 
     logger_print(LOG_LEVEL_INFO, "starting main loop...");
     start_main_loop((void (*)(void *)) main_loop, game);
