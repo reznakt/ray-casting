@@ -226,9 +226,10 @@ void menu_destroy_element(struct menu_elem_t *const elem) {
         for (size_t i = 0; i < elem->num_children; i++) {
             menu_destroy_element(elem->children[i]);
         }
+
+        free(elem->children);
     }
 
-    free(elem->children);
     const char *const id = elem->id;
     free(elem);
 
