@@ -171,6 +171,8 @@ static inline const char *safestr(const char *const str) {
 }
 
 static bool has_children(const struct menu_elem_t *const elem) {
+    notnull(elem, false);
+
     const bool num_children = elem->num_children > 0;
     const bool children = elem->children != NULL;
 
