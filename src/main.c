@@ -191,6 +191,8 @@ int main(const int argc, char **const argv) {
     menu_append_child(menu_get_element_by_id("wobble"), menu_create_element("wubble", MENU_ELEM_CONTAINER));
     menu_append_child(menu_get_element_by_id("wubble"), menu_create_element("flob", MENU_ELEM_CONTAINER));
     menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop1", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop2", MENU_ELEM_CONTAINER));
 
     menu_get_element_by_id("flob")->specifics.text.value = "hello, world!";
 

@@ -384,15 +384,19 @@ static struct vec_t element_size_helper(const struct menu_elem_t *const elem) {
             break;
     }
 
+    struct vec_t children_size = {0.0F, 0.0F};
+
     if (has_children(elem)) {
         for (size_t i = 0; i < elem->num_children; i++) {
             const struct menu_elem_t *const child = elem->children[i];
             const struct vec_t child_size = element_size(child);
 
-            size.x = fmaxf(size.x, child_size.x);
-            size.y += child_size.y;
+            children_size.x = fmaxf(child_size.x, children_size.x);
+            children_size.y += child_size.y;
         }
     }
+
+    size = vadd(size, children_size);
 
     if (!isnan(width)) {
         size.x = width;
@@ -416,15 +420,27 @@ static struct vec_t element_pos(const struct menu_elem_t *const elem) {
         return (struct vec_t) {0.0F, 0.0F};
     }
 
-    const struct vec_t pos = element_pos(elem->parent);
+    struct vec_t pos = element_pos(elem->parent);
 
     const struct menu_padding_t padding = get_padding(elem->parent);
     const struct menu_padding_t margin = get_margin(elem);
 
-    return (struct vec_t) {
-            pos.x + margin.left.value + padding.left.value,
-            pos.y + margin.top.value + padding.top.value
-    };
+    pos.x += padding.left.value + margin.left.value;
+    pos.y += padding.top.value + margin.top.value;
+
+    for (size_t i = 0; i < elem->parent->num_children; i++) {
+        const struct menu_elem_t *const child = elem->parent->children[i];
+
+        if (child == elem) {
+            break;
+        }
+
+        const struct vec_t child_size = vadd(element_size(child), padding_to_vec(get_margin(child)));
+        pos.x = fminf(pos.x + child_size.x, pos.x);
+        pos.y += child_size.y;
+    }
+
+    return pos;
 }
 
 static int render_element(SDL_Renderer *const restrict renderer, const struct menu_elem_t *const restrict elem) {
