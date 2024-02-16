@@ -98,11 +98,6 @@ struct menu_elem_t {
             void *on_next_arg;
             void *on_prev_arg;
         } option;
-
-        struct {
-            size_t num_children;
-            struct menu_elem_t **children;
-        } container;
     } specifics;
 
     menu_event_handler_t on_event;
