@@ -39,7 +39,6 @@ add_compile_options(
         -Wmissing-format-attribute
         -Wmissing-noreturn
         -Wmissing-prototypes
-        -Wno-unknown-warning-option
         -Wnormalized
         -Wnull-dereference
         -Wold-style-definition
@@ -63,6 +62,10 @@ add_compile_options(
         -Wvla
         -Wwrite-strings
 )
+
+if (NOT CMAKE_C_COMPILER_ID MATCHES "GNU")
+    add_compile_options(-Wno-unknown-warning-option)
+endif ()
 
 if (CMAKE_C_COMPILER_ID MATCHES "TinyCC")
     # See https://www.mail-archive.com/tinycc-devel@nongnu.org/msg08821.html.
