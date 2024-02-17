@@ -64,6 +64,11 @@ add_compile_options(
         -Wwrite-strings
 )
 
+if (CMAKE_C_COMPILER_ID MATCHES "TinyCC")
+    # See https://www.mail-archive.com/tinycc-devel@nongnu.org/msg08821.html.
+    add_compile_options(-DSDL_DISABLE_IMMINTRIN_H)
+endif ()
+
 if (STRICT)
     message("Note: Strict mode enabled, promoting warnings to errors.")
     add_compile_options(-Werror -pedantic-errors)
