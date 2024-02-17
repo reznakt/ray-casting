@@ -266,7 +266,6 @@ static void initialize_element(struct menu_elem_t *const restrict elem,
                                const enum menu_elem_type_t type) {
     elem->id = id;
     elem->type = type;
-    elem->parent = NULL;
 
     elem->width = menu_px(NAN);
     elem->height = menu_px(NAN);
@@ -284,18 +283,10 @@ static void initialize_element(struct menu_elem_t *const restrict elem,
     elem->border.width = menu_px(1.0F);
     elem->border.color = COLOR_WHITE;
 
-    elem->hover = false;
-    elem->focus = false;
     elem->visible = true;
 
     elem->text_color = COLOR_WHITE;
     elem->background_color = COLOR_BLACK;
-
-    elem->on_event = NULL;
-    elem->event_arg = NULL;
-
-    elem->num_children = 0;
-    elem->children = NULL;
 }
 
 struct menu_elem_t *menu_create_element(const char *const id, const enum menu_elem_type_t type) {
@@ -306,7 +297,7 @@ struct menu_elem_t *menu_create_element(const char *const id, const enum menu_el
         return NULL;
     }
 
-    struct menu_elem_t *const elem = malloc(sizeof *elem);
+    struct menu_elem_t *const elem = calloc(1, sizeof *elem);
 
     if (elem == NULL) {
         logger_perror("malloc");
@@ -376,8 +367,10 @@ static struct vec_t element_size_helper(const struct menu_elem_t *const elem) {
     switch (elem->type) {
         case MENU_ELEM_TEXT:
         case MENU_ELEM_BUTTON:
-            size.x += (float) text_width(elem->specifics.text.value);
-            size.y += (float) CHAR_HEIGHT;
+            if (elem->specifics.text.value != NULL) {
+                size.x += (float) text_width(elem->specifics.text.value);
+                size.y += (float) CHAR_HEIGHT;
+            }
             break;
         case MENU_ELEM_CONTAINER:
         case MENU_ELEM_OPTION:
@@ -465,6 +458,22 @@ static int render_element(SDL_Renderer *const restrict renderer, const struct me
         render_colored(renderer, elem->border.color, {
             SDL_RenderDrawRectF(renderer, &rect);
         });
+    }
+
+    const struct vec_t pos_with_padding = vadd(pos, (struct vec_t) {elem->padding.left.value, elem->padding.top.value});
+
+    switch (elem->type) {
+        case MENU_ELEM_TEXT:
+            if (elem->specifics.text.value != NULL) {
+                render_colored(renderer, elem->text_color, {
+                    render_puts(renderer, pos_with_padding, elem->specifics.text.value);
+                });
+            }
+            break;
+        case MENU_ELEM_OPTION:
+        case MENU_ELEM_CONTAINER:
+        case MENU_ELEM_BUTTON:
+            break;
     }
 
     if (!has_children(elem)) {

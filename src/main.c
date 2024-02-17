@@ -193,8 +193,9 @@ int main(const int argc, char **const argv) {
     menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop", MENU_ELEM_CONTAINER));
     menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop1", MENU_ELEM_CONTAINER));
     menu_append_child(menu_get_element_by_id("flob"), menu_create_element("blop2", MENU_ELEM_CONTAINER));
+    menu_append_child(menu_get_element_by_id("blop1"), menu_create_element("blop3", MENU_ELEM_TEXT));
 
-    menu_get_element_by_id("flob")->specifics.text.value = "hello, world!";
+    menu_get_element_by_id("blop3")->specifics.text.value = "hello, world!";
 
     struct menu_elem_t *const foo_found = menu_get_element_by_id("foo");
 
