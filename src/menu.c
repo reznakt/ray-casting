@@ -518,7 +518,7 @@ static inline const char *bool_to_str(const bool b) {
     return b ? "true" : "false";
 }
 
-static const char *number_unit(const struct menu_number_t number) {
+static inline const char *number_unit(const struct menu_number_t number) {
     switch (number.type) {
         case MENU_NUMBER_PX:
             return "px";
