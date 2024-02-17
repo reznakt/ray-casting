@@ -76,7 +76,7 @@ if (STRICT)
     message("Note: Strict mode enabled, promoting warnings to errors.")
     add_compile_options(-Werror -pedantic-errors)
 else ()
-    message("WARNING: Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
+    message("-- WARNING: Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
 endif ()
 
 add_link_options(-fopenmp)
