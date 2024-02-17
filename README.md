@@ -72,7 +72,5 @@ This project is licensed under the MIT license - see the [LICENSE](LICENSE) file
 
 - [Lode Vandevenne](https://github.com/lvandeve) for the
   legendary [ray casting tutorial](http://lodev.org/cgtutor/raycasting.html)
-- [Ultimecia](https://www.textures-resource.com/submitter/Ultimecia/) for the Wolfenstein
-  3D [texture atlas](https://www.textures-resource.com/pc_computer/wolf3d/texture/1375/)
 - [Daniel Hepper ](https://github.com/dhepper) for the 8x8 bitmap font ([font8x8](https://github.com/dhepper/font8x8))
 

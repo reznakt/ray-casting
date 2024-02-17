@@ -16,31 +16,6 @@
 
 
 /**
- * @brief Renders a texture from the texture atlas to the screen.
- *
- * @param game A pointer to the game_t struct representing the game.
- * @param texno The number of the texture to render (0-indexed, left-to-right, top-to-bottom).
- * @param src The source rectangle of the texture to render.
- * @param dst The destination rectangle at which to render the texture.
- */
-unused static void render_texture(struct game_t *const restrict game,
-                                  const uint8_t texno,
-                                  const SDL_Rect *const restrict src,
-                                  const SDL_FRect *const restrict dst) {
-    static const int rowsize = TEXTURE_ATLAS_WIDTH * TEXTURE_SIZE;
-
-    const SDL_Rect adjusted_src = {
-            .x = texno % rowsize + src->x,
-            .y = texno / rowsize + src->y,
-            .w = src->w,
-            .h = src->h
-    };
-
-    SDL_RenderCopyF(game->renderer, game->texture, &adjusted_src, dst);
-}
-
-
-/**
  * Calculates the speed coefficient for the game based on the game's FPS and a given coefficient.
  *
  * @param game A pointer to the game_t struct representing the current game.
@@ -435,33 +410,6 @@ int game_init(struct game_t *const game) {
     }
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
-
-    FILE *const stream = open_file(TEXTURE_ATLAS_FILE, "r");
-
-    if (stream == NULL) {
-        logger_printf(LOG_LEVEL_ERROR, "unable to open texture atlas file '%s'\n", TEXTURE_ATLAS_FILE);
-        return -1;
-    }
-
-    SDL_Surface *const surface = IMG_Load_RW(SDL_RWFromFP(stream, true), 1);
-
-    if (surface == NULL) {
-        logger_printf(LOG_LEVEL_ERROR, "unable to load texture atlas from '%s'\n", TEXTURE_ATLAS_FILE);
-        return -1;
-    }
-
-    game->texture = SDL_CreateTextureFromSurface(game->renderer, surface);
-
-    if (game->texture == NULL) {
-        logger_print(LOG_LEVEL_ERROR, "unable to create texture from surface");
-        SDL_FreeSurface(surface);
-        return -1;
-    }
-
-    logger_printf(LOG_LEVEL_INFO, "loaded texture atlas from '%s' (%dx%d px)\n",
-                  TEXTURE_ATLAS_FILE, surface->w, surface->h);
-    SDL_FreeSurface(surface);
-
     return 0;
 }
 
