@@ -109,8 +109,7 @@ static void render_3d(struct game_t *const game) {
                 .w = width
         };
 
-        SDL_Color color;
-        memcpy(&color, &ray->intersection.wall->color, sizeof color);
+        SDL_Color color = ray->intersection.wall->color;
 
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
             const float brightness = map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F);
