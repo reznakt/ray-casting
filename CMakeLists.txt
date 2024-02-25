@@ -85,15 +85,12 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                         -s USE_SDL=2 \
                         -s USE_SDL_GFX=2 \
-                        -s USE_SDL_IMAGE=2 \
-                        -s SDL2_IMAGE_FORMATS=['png'] \
                         --embed-file=assets/")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s ALLOW_MEMORY_GROWTH")
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 else ()
     find_package(SDL2 REQUIRED)
     find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
-    find_library(SDL2_IMG NAMES SDL2_image REQUIRED)
 endif ()
 
 file(GLOB SOURCES "src/*.c")
