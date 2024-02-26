@@ -13,11 +13,6 @@
 #define WORLD_SPEC_FILE "assets/world.txt"
 
 /**
- * @brief Path to a file containing the texture atlas.
- */
-#define TEXTURE_ATLAS_FILE "assets/textures.png"
-
-/**
  * @brief The size of one texture in the texture atlas.
  */
 #define TEXTURE_SIZE 64
