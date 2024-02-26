@@ -8,6 +8,7 @@
 #endif /* __EMSCRIPTEN__ */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "event.h"
 #include "game.h"
@@ -117,8 +118,9 @@ static void set_options_menu(struct game_t *const game) {
 }
 
 static void log_system_info(void) {
-    logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d\n",
-                  SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
+    logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d, SDL2_gfx version %d.%d.%d\n",
+                  SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL,
+                  SDL2_GFXPRIMITIVES_MAJOR, SDL2_GFXPRIMITIVES_MINOR, SDL2_GFXPRIMITIVES_MICRO);
 
     logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
     logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
