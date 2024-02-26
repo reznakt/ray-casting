@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <inttypes.h>
 
 #include <SDL2/SDL.h>
