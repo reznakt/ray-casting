@@ -8,7 +8,6 @@
 #endif /* __EMSCRIPTEN__ */
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 #include "event.h"
 #include "game.h"
@@ -118,9 +117,8 @@ static void set_options_menu(struct game_t *const game) {
 }
 
 static void log_system_info(void) {
-    logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d, SDL_Image version %d.%d.%d\n",
-                  SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL,
-                  SDL_IMAGE_MAJOR_VERSION, SDL_IMAGE_MINOR_VERSION, SDL_IMAGE_PATCHLEVEL);
+    logger_printf(LOG_LEVEL_INFO, "using SDL version %d.%d.%d\n",
+                  SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
 
     logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
     logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
@@ -220,13 +218,8 @@ int main(const int argc, char **const argv) {
 
     log_system_info();
     logger_print(LOG_LEVEL_INFO, "initializing SDL_Image...");
-
-    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
-        logger_print(LOG_LEVEL_FATAL, "SDL_Image: unable to initialize IMG_INIT_PNG");
-        return EXIT_FAILURE;
-    }
-
     logger_print(LOG_LEVEL_INFO, "creating and initializing game objects...");
+
     struct game_t *const game = game_create();
 
     if (game_init(game) != 0) {
