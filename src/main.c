@@ -5,7 +5,7 @@
 #ifdef __EMSCRIPTEN__
 #include <limits.h>
 #include <emscripten.h>
-#endif
+#endif /* __EMSCRIPTEN__ */
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
