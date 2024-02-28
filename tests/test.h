@@ -11,11 +11,6 @@
 #include "util.h"
 
 
-#ifdef assert
-#undef assert
-#endif
-
-
 #define OUTPUT_MAXLEN 1024
 
 
