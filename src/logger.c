@@ -1,4 +1,5 @@
 #include <libgen.h>
+#include <stdarg.h>
 
 #include "color.h"
 
