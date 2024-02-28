@@ -58,7 +58,7 @@ int run_tests(struct test_t *const tests, const size_t ntests) {
     putchar('\n');
 
     for (size_t i = 0; i < ntests; i++) {
-        struct test_t *const test = &tests[i];
+        const struct test_t *const test = &tests[i];
 
         if (test->failed) {
             printf("\n%s\n", test->output);

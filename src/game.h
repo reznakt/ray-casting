@@ -83,7 +83,7 @@ void render(struct game_t *game);
  *
  * @param game The game instance to update.
  */
-void update(struct game_t *game);
+void update(const struct game_t *game);
 
 /**
  * @brief Creates a new game by allocating memory and setting default values.

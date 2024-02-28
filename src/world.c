@@ -90,7 +90,7 @@ static int parse_color(const char *const colorstr, SDL_Color *const dst) {
  * @param dst pointer to a wobject_t struct to store the parsed object, or NULL, if the object should not be stored.
  * @return 0 on success, -1 on error (dst is not modified in this case).
  */
-static int parse_record(char *const restrict record, struct wobject_t *const dst) {
+static int parse_record(const char *const restrict record, struct wobject_t *const dst) {
     if (record == NULL) {
         return -1;
     }

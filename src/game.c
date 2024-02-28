@@ -109,21 +109,18 @@ static void render_3d(struct game_t *const game) {
                 .w = width
         };
 
-        SDL_Color color = ray->intersection.wall->color;
-
         if (game->render_mode != RENDER_MODE_WIREFRAME) {
             const float brightness = map(1.0F / powf(ray->intersection.dist, 2.0F), 0.0F, 0.00001F, 0.0F, 1.0F);
-            color = change_brightness(color, brightness * game->camera->lightmult);
-        }
+            const SDL_Color color = change_brightness(ray->intersection.wall->color,
+                                                      brightness * game->camera->lightmult);
 
-        if (game->render_mode != RENDER_MODE_WIREFRAME) {
             render_colored(game->renderer, color, {
                 SDL_RenderFillRectF(game->renderer, &stripe);
             });
             continue;
         }
 
-        render_colored(game->renderer, color, {
+        render_colored(game->renderer, ray->intersection.wall->color, {
             const float x = stripe.x + stripe.w;
             const float y = stripe.y + stripe.h;
 
@@ -350,7 +347,7 @@ void render(struct game_t *const game) {
     SDL_RenderPresent(game->renderer);
 }
 
-void update(struct game_t *const game) {
+void update(const struct game_t *const game) {
     update_player_position(game);
     update_ray_intersections(game);
 }

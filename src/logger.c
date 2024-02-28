@@ -31,10 +31,6 @@ void logger_log(const enum log_level_t level,
                 const char *const restrict fmt, ...) {
     const struct log_target_t *const target = &LOG_TARGETS[level];
     FILE *const stream = target->stream == STDOUT ? stdout : stderr;
-
-    va_list args;
-    va_start(args, fmt);
-
     char *const path = strdup(file);
 
     if (path == NULL) {
@@ -44,6 +40,10 @@ void logger_log(const enum log_level_t level,
 
     fprintf(stream, HGRN "%s:%u" CRESET " [%s] " BHMAG "%s" CRESET ": ", basename(path), line, target->prefix, func);
     free(path);
+
+    va_list args;
+    va_start(args, fmt);
+
     vfprintf(stream, fmt, args);
 
     va_end(args);
