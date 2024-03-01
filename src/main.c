@@ -219,7 +219,6 @@ int main(const int argc, char **const argv) {
     }
 
     log_system_info();
-    logger_print(LOG_LEVEL_INFO, "initializing SDL_Image...");
     logger_print(LOG_LEVEL_INFO, "creating and initializing game objects...");
 
     struct game_t *const game = game_create();
