@@ -238,7 +238,7 @@ void menu_destroy_element(struct menu_elem_t *const elem) {
     logger_printf(LOG_LEVEL_DEBUG, "destroyed element '%s'\n", safestr(id));
 }
 
-static void cleanup(void) {
+static inline void cleanup(void) {
     menu_destroy_element(menu_root);
 }
 
