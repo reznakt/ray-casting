@@ -149,5 +149,11 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
         case SDL_MOUSEMOTION:
             camera_update_angle(game, game->camera->angle + (float) event->motion.xrel * (float) CAMERA_ROTATION_SPEED);
             break;
+
+        case SDL_WINDOWEVENT:
+            if (event->window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
+                game->paused = true;
+                SDL_SetRelativeMouseMode(SDL_FALSE);
+            }
     }
 }
