@@ -72,13 +72,13 @@ void logger_log(enum log_level_t level,
  * All subsequent log messages will be printed on the same line until @p logger_end_line() is called.
  * @param separator The separator to print between log messages, or NULL, if no separator should be printed.
  */
-void logger_start_line(const char *separator);
+unused void logger_start_line(const char *separator);
 
 /**
  * @brief End the current line in the log.
  * This function has no effect if no line has been started.
  */
-void logger_end_line(void);
+unused void logger_end_line(void);
 
 
 #endif //RAY_LOGGER_H

@@ -103,6 +103,10 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_LIGHT_DEC:
                     camera_set_lightmult(game, game->camera->lightmult - 0.1F);
                     break;
+                case KEY_FULLSCREEN:
+                    game->fullscreen = !game->fullscreen;
+                    SDL_SetWindowFullscreen(game->window, game->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+                    break;
             }
             break;
 
