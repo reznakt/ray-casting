@@ -53,6 +53,7 @@ struct game_t {
     } render_mode; /**< The current render mode. */
     bool quit; /**< Boolean flag indicating whether the game should quit. */
     bool paused; /**< Boolean flag indicating whether the game is paused. */
+    bool fullscreen; /**< Boolean flag indicating whether the game is in fullscreen mode. */
     struct menu_t menu; /**< The menu currently being displayed. */
 };
 

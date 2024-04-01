@@ -35,7 +35,7 @@
 /**
  * @brief Flags used for creating the window.
  */
-#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN)
+#define SCREEN_FLAGS (SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE)
 
 /**
  * @brief Title of the window.
@@ -156,6 +156,7 @@
 #define KEY_VIEW_4 SDLK_F4
 #define KEY_LIGHT_INC SDLK_HOME
 #define KEY_LIGHT_DEC SDLK_END
+#define KEY_FULLSCREEN SDLK_F11
 
 
 #include "confvalidate.h"

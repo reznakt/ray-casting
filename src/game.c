@@ -377,6 +377,7 @@ struct game_t *game_create(void) {
     game.ceil_color = (SDL_Color) CEIL_COLOR;
     game.floor_color = (SDL_Color) FLOOR_COLOR;
     game.objects = objects;
+    game.fullscreen = SCREEN_FLAGS & SDL_WINDOW_FULLSCREEN;
 
     assert(load_world(WORLD_SPEC_FILE, game.objects, &game.nobjects) == 0);
     camera_update_angle(&game, CAMERA_HEADING);

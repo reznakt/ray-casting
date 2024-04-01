@@ -96,7 +96,7 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     SDL_SetRelativeMouseMode(SDL_FALSE);
                     SDL_WarpMouseInWindow(game->window, (int) game->center.x, (int) game->center.y);
 
-                    if (SCREEN_FLAGS & SDL_WINDOW_FULLSCREEN) {
+                    if (game->fullscreen) {
                         SDL_SetWindowGrab(game->window, SDL_TRUE);
                     }
 
@@ -118,6 +118,10 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     break;
                 case KEY_LIGHT_DEC:
                     camera_set_lightmult(game, game->camera->lightmult - 0.1F);
+                    break;
+                case KEY_FULLSCREEN:
+                    game->fullscreen = !game->fullscreen;
+                    SDL_SetWindowFullscreen(game->window, game->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
                     break;
             }
             break;
