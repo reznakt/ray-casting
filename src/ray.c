@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include "math.h"
 
 #include "ray.h"
@@ -23,7 +21,7 @@ bool ray_intersection(const struct ray_t *const restrict ray,
     const float den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
     if (isclose(den, 0.0F)) {
-        return NULL;
+        return false;
     }
 
     const float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
