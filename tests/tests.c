@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "../src/math.h"
-#include "test.h"
+#include "runner.h"
 
 
 #define REPEATS 1e6F

@@ -2,7 +2,7 @@
 
 #include "../src/color.h"
 
-#include "test.h"
+#include "runner.h"
 
 
 int run_tests(struct test_t *const tests, const size_t ntests) {
