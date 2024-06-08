@@ -123,7 +123,7 @@ static void log_system_info(void) {
                   SDL2_GFXPRIMITIVES_MAJOR, SDL2_GFXPRIMITIVES_MINOR, SDL2_GFXPRIMITIVES_MICRO);
 
     logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
-    logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
+    logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MiB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
     logger_print(LOG_LEVEL_INFO, "initializing SDL...");
     logger_printf(LOG_LEVEL_DEBUG, "initialized video driver: %s\n", SDL_GetCurrentVideoDriver());
 
