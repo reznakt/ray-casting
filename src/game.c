@@ -398,7 +398,7 @@ int game_init(struct game_t *const game) {
         return -1;
     }
 
-    logger_printf(LOG_LEVEL_INFO, "created SDL window '%s' (%dx%d px)\n", SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+    logger_printf(LOG_LEVEL_INFO, "created SDL window '%s' (%d x %d px)\n", SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
     game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
 
     if (game->renderer == NULL) {

@@ -151,7 +151,7 @@ static void log_system_info(void) {
             continue;
         }
 
-        logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%dx%d px @ %dHz)\n",
+        logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%d x %d px @ %d Hz)\n",
                       i, name, mode.w, mode.h, mode.refresh_rate);
     }
 }
