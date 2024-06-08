@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include <SDL2/SDL.h>
@@ -88,6 +89,14 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
         logger_perror("fdopen");
         close(fd);
         return NULL;
+    }
+
+    struct stat st;
+
+    if (fstat(fd, &st) == 0) {
+        logger_printf(LOG_LEVEL_DEBUG, "%s [%s] (%lu bytes)\n", path, mode, st.st_size);
+    } else {
+        logger_perror("fstatat");
     }
 
     return stream;
