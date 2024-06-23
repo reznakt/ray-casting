@@ -84,8 +84,6 @@ else ()
     notice("Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
 endif ()
 
-add_link_options(-fopenmp)
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
                         -s USE_SDL=2 \
