@@ -72,11 +72,16 @@ if (CMAKE_C_COMPILER_ID MATCHES "TinyCC")
     add_compile_options(-DSDL_DISABLE_IMMINTRIN_H)
 endif ()
 
+function(notice message)
+    string(ASCII 27 ESCAPE)
+    message(NOTICE "-- ${ESCAPE}[36mNotice: ${message}${ESCAPE}[0m")
+endfunction()
+
 if (STRICT)
-    message("Note: Strict mode enabled, promoting warnings to errors.")
+    notice("Strict mode enabled, promoting warnings to errors.")
     add_compile_options(-Werror -pedantic-errors)
 else ()
-    message("-- WARNING: Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
+    notice("Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
 endif ()
 
 add_link_options(-fopenmp)
