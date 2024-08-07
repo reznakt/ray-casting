@@ -39,7 +39,7 @@ static inline void usage(const char *const argv0) {
                                    "\t-h, --help\t\tprint this help message and exit\n"
                                    "\t-p, --profile\t\tprint profiling information and exit\n";
 
-    printf(fmt, argv0);
+    fprintf(stderr, fmt, argv0);
 }
 
 static void set_main_menu(struct game_t *game);
