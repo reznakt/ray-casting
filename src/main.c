@@ -214,7 +214,7 @@ int main(const int argc, char **const argv) {
     }
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        logger_print(LOG_LEVEL_FATAL, "SDL: unable to initialize SDL_INIT_VIDEO");
+        logger_printf(LOG_LEVEL_FATAL, "SDL_Init: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
