@@ -99,7 +99,12 @@ static void render_3d(struct game_t *const game) {
             continue;
         }
 
-        const float height = map(1.0F / ray->intersection.dist, 0.0F, 0.005F, 0.0F, (float) WALL_SIZE);
+        static const float correction_factor = 0.36F; // set lower for less fisheye effect
+        static const float scaling_factor = 200000.0F;
+
+        const float angle = vangle(ray->dir, game->camera->dir);
+        const float dist = ray->intersection.dist * (correction_factor + (1 - correction_factor) * cosf(angle));
+        const float height = 1.0F / dist * scaling_factor;
         const float height_diff = game->camera->movement.crouch ? (float) CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
 
         const SDL_FRect stripe = {
