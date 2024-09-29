@@ -30,6 +30,7 @@ struct camera_t {
     size_t resmult; /**< The resolution multiplier for the camera. */
     size_t fov; /**< The field of view (in degrees) for the camera. */
     float lightmult; /**< The multiplier for the light intensity emitted by the camera/player. */
+    float fisheye; /**< The fish-eye correction factor for the camera. */
 };
 
 /**

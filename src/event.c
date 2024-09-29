@@ -120,6 +120,12 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                     game->fullscreen = !game->fullscreen;
                     SDL_SetWindowFullscreen(game->window, game->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
                     break;
+                case KEY_FISHEYE_INC:
+                    game->camera->fisheye += 0.01F;
+                    break;
+                case KEY_FISHEYE_DEC:
+                    game->camera->fisheye -= 0.01F;
+                    break;
             }
             break;
 

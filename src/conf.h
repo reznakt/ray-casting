@@ -108,6 +108,11 @@
 #define CAMERA_LIGHTMULT 1.0F
 
 /**
+ * @brief Default fish-eye correction factor for the camera.
+ */
+#define CAMERA_FISHEYE 0.36F
+
+/**
  * @brief Size of the walls in the game world.
  */
 #define WALL_SIZE 1000
@@ -146,6 +151,8 @@
 #define KEY_LIGHT_INC SDLK_HOME
 #define KEY_LIGHT_DEC SDLK_END
 #define KEY_FULLSCREEN SDLK_F11
+#define KEY_FISHEYE_INC SDLK_PAGEUP
+#define KEY_FISHEYE_DEC SDLK_PAGEDOWN
 
 
 #include "confvalidate.h"

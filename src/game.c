@@ -54,7 +54,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
     static const char *const fmt =
             "fps: %" PRIu64 " | ticks: %" PRIu64 " | frames: %" PRIu64 " | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
-            "| resmult: %zu | rays: %zu | px/ray: %.4f | light: %.1f";
+            "| resmult: %zu | rays: %zu | px/ray: %.4f | light: %.1f | fisheye: %.2f";
 
     const size_t nrays = game->camera->fov * game->camera->resmult;
 
@@ -70,7 +70,8 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
                       game->camera->resmult,
                       nrays,
                       (float) SCREEN_WIDTH / (float) nrays,
-                      game->camera->lightmult);
+                      game->camera->lightmult,
+                      game->camera->fisheye);
     });
 }
 
@@ -99,11 +100,10 @@ static void render_3d(struct game_t *const game) {
             continue;
         }
 
-        static const float correction_factor = 0.36F; // set lower for less fisheye effect
         static const float scaling_factor = 200000.0F;
 
         const float angle = vangle(ray->dir, game->camera->dir);
-        const float dist = ray->intersection.dist * (correction_factor + (1 - correction_factor) * cosf(angle));
+        const float dist = ray->intersection.dist * (game->camera->fisheye + (1 - game->camera->fisheye) * cosf(angle));
         const float height = 1.0F / dist * scaling_factor;
         const float height_diff = game->camera->movement.crouch ? (float) CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
 
@@ -376,6 +376,7 @@ struct game_t *game_create(void) {
     game.camera->rays = rays;
     game.camera->pos = game.center;
     game.camera->lightmult = CAMERA_LIGHTMULT;
+    game.camera->fisheye = CAMERA_FISHEYE;
 
     game.render_mode = RENDER_MODE_UNTEXTURED;
     game.ceil_color = (SDL_Color) CEIL_COLOR;
