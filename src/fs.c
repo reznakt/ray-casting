@@ -97,7 +97,7 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
     if (fstat(fd, &st) == 0) {
         logger_printf(LOG_LEVEL_DEBUG, "%s [%s] (%" PRIdMAX " bytes)\n", path, mode, (intmax_t) st.st_size);
     } else {
-        logger_perror("fstatat");
+        logger_perror("fstat");
     }
 
     return stream;
