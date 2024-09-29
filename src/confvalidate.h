@@ -11,14 +11,6 @@
 #define STATIC_ASSERT(cond) static_assert_inner2(cond, __LINE__)
 
 
-#if TEXTURE_SIZE < 1
-#error "TEXTURE_SIZE must be positive"
-#endif
-
-#if TEXTURE_ATLAS_WIDTH < 1
-#error "TEXTURE_ATLAS_WIDTH must be positive"
-#endif
-
 #if SCREEN_WIDTH < 1
 #error "SCREEN_WIDTH must be positive"
 #endif

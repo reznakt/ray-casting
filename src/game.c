@@ -336,7 +336,6 @@ void render(struct game_t *const game) {
             break;
 
         case RENDER_MODE_UNTEXTURED:
-        case RENDER_MODE_TEXTURED:
             render_floor_and_ceiling(game);
             render_3d(game);
             break;
@@ -378,7 +377,7 @@ struct game_t *game_create(void) {
     game.camera->pos = game.center;
     game.camera->lightmult = CAMERA_LIGHTMULT;
 
-    game.render_mode = RENDER_MODE_TEXTURED;
+    game.render_mode = RENDER_MODE_UNTEXTURED;
     game.ceil_color = (SDL_Color) CEIL_COLOR;
     game.floor_color = (SDL_Color) FLOOR_COLOR;
     game.objects = objects;

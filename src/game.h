@@ -49,7 +49,7 @@ struct game_t {
     SDL_Color ceil_color; /**< The color of the ceiling/sky. */
     SDL_Color floor_color; /**< The color of the floor/ground. */
     enum {
-        RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED, RENDER_MODE_TEXTURED
+        RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED
     } render_mode; /**< The current render mode. */
     bool quit; /**< Boolean flag indicating whether the game should quit. */
     bool paused; /**< Boolean flag indicating whether the game is paused. */

@@ -13,16 +13,6 @@
 #define WORLD_SPEC_FILE "assets/world.txt"
 
 /**
- * @brief The size of one texture in the texture atlas.
- */
-#define TEXTURE_SIZE 64
-
-/**
- * @brief The number of textures in one row of the texture atlas.
- */
-#define TEXTURE_ATLAS_WIDTH 6
-
-/**
  * @brief Width of the window in pixels.
  */
 #define SCREEN_WIDTH 1920
@@ -153,7 +143,6 @@
 #define KEY_VIEW_1 SDLK_F1
 #define KEY_VIEW_2 SDLK_F2
 #define KEY_VIEW_3 SDLK_F3
-#define KEY_VIEW_4 SDLK_F4
 #define KEY_LIGHT_INC SDLK_HOME
 #define KEY_LIGHT_DEC SDLK_END
 #define KEY_FULLSCREEN SDLK_F11

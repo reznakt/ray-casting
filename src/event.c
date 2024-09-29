@@ -110,9 +110,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_VIEW_3:
                     game->render_mode = RENDER_MODE_UNTEXTURED;
                     break;
-                case KEY_VIEW_4:
-                    game->render_mode = RENDER_MODE_TEXTURED;
-                    break;
                 case KEY_LIGHT_INC:
                     camera_set_lightmult(game, game->camera->lightmult + 0.1F);
                     break;
