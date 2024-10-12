@@ -68,7 +68,7 @@ void logger_log(const enum log_level_t level,
     }
 
     fprintf(stream,
-            c("%s:%u") "[" c("%s") "]" c("%s") ": ",
+            c("%s:%u") " [" c("%s") "] " c("%s") ": ",
             color(HGRN),
             basename(path),
             line,
