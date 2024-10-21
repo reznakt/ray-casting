@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "color.h"
+#include "util.h"
 
 #include "logger.h"
 
@@ -29,6 +30,10 @@ static const struct log_target_t LOG_TARGETS[] = {
         [LOG_LEVEL_DEBUG] = {HBLK, "debug", STDOUT}
 };
 
+#ifdef __EMSCRIPTEN__
+unused
+#endif
+
 static bool env_enabled(const char *const name) {
     const char *const value = getenv(name);
 
@@ -40,7 +45,7 @@ static bool env_enabled(const char *const name) {
 }
 
 static inline bool supports_color(void) {
-#if defined(__EMSCRIPTEN__)
+#ifdef __EMSCRIPTEN__
     return false;
 #else
     static int cache = -1;
