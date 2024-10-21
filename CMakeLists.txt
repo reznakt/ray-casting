@@ -96,6 +96,52 @@ else ()
     find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
 endif ()
 
+find_program(GIT_EXECUTABLE git)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" branch --show-current
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_BRANCH
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" describe --always --abbrev=40
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" describe --always
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_HASH_SHORT
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" log -1 --format=%cd --date=format:%Y-%m-%d\ %H:%M:%S\ UTC
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_TIME
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" log -1 --format=%s
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_MESSAGE
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        whoami
+        OUTPUT_VARIABLE BUILD_USER
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        hostname
+        OUTPUT_VARIABLE BUILD_HOST
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+string(TIMESTAMP BUILD_TIME "%Y-%m-%d %H:%M:%S UTC" UTC)
+
+configure_file("src/version.c.in" "${CMAKE_SOURCE_DIR}/src/.version.c" @ONLY)
+
 file(GLOB SOURCES "src/*.c")
 file(GLOB TEST_SOURCES "tests/*.c")
 list(REMOVE_ITEM SOURCES ${TEST_SOURCES})
