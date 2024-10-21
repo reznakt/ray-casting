@@ -34,7 +34,7 @@ in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun proje
 
 > [!TIP]
 > You can also download
-> a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/build/main/ray-casting.zip).
+> a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/linux/main/ray-casting.zip).
 
 To get a local copy up and running, follow these simple steps:
 
