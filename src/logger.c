@@ -40,6 +40,9 @@ static bool env_enabled(const char *const name) {
 }
 
 static inline bool supports_color(void) {
+#if defined(__EMSCRIPTEN__)
+    return false;
+#else
     static int cache = -1;
 
     if (cache == -1) {
@@ -47,6 +50,7 @@ static inline bool supports_color(void) {
     }
 
     return cache;
+#endif
 }
 
 static inline const char *color(const char *const code) {
