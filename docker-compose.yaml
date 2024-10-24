@@ -1,0 +1,18 @@
+services:
+  ray-casting:
+    build: .
+    container_name: ray-casting
+    tty: true
+    user: 1000:1000
+    environment:
+      XDG_RUNTIME_DIR: /tmp
+      WAYLAND_DISPLAY: $WAYLAND_DISPLAY
+      SDL_VIDEODRIVER: wayland,x11
+      DISPLAY: $DISPLAY
+    volumes:
+      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY
+      - /usr/share/wayland-sessions/:/usr/share/wayland-sessions/:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    devices:
+      - /dev/dri:/dev/dri
+
