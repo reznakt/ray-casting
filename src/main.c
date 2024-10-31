@@ -48,7 +48,7 @@ static inline void version(const char *const argv0) {
     putchar('\n');
     printf("commit: %s\nmessage: %.50s\nbranch: %s\ncreated at: %s\n\n",
            GIT_COMMIT_HASH, GIT_COMMIT_MESSAGE, GIT_BRANCH, GIT_COMMIT_TIME);
-    printf("built by: %s@%s\nbuilt on: %s\n", BUILD_USER, BUILD_HOST, BUILD_TIME);
+    printf("built by: %s@%s\nbuilt at: %s\n", BUILD_USER, BUILD_HOST, BUILD_TIME);
 }
 
 static void set_main_menu(struct game_t *game);
