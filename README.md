@@ -34,7 +34,7 @@ in C (it's ~2000 fps). I also really like C and ray casting, so it's a fun proje
 
 > [!TIP]
 > You can also download
-> a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/build/main/ray-casting.zip).
+> a [pre-built binary](https://nightly.link/reznakt/ray-casting/workflows/linux/main/ray-casting.zip).
 
 To get a local copy up and running, follow these simple steps:
 
@@ -42,6 +42,28 @@ To get a local copy up and running, follow these simple steps:
 git clone https://github.com/reznakt/ray-casting.git && cd ray-casting
 cmake -B build/
 cmake --build build/ -j$(nproc)
+```
+
+You can also run the app with Docker. Here's an example `docker-compose.yml` file:
+
+```yaml
+services:
+  ray-casting:
+    image: ghcr.io/reznakt/ray-casting:latest
+    container_name: ray-casting
+    tty: true
+    user: 1000:1000
+    environment:
+      XDG_RUNTIME_DIR: /tmp
+      WAYLAND_DISPLAY: $WAYLAND_DISPLAY
+      SDL_VIDEODRIVER: wayland,x11
+      DISPLAY: $DISPLAY
+    volumes:
+      - $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY
+      - /usr/share/wayland-sessions/:/usr/share/wayland-sessions/:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    devices:
+      - /dev/dri:/dev/dri
 ```
 
 ## 🎮 How to Play

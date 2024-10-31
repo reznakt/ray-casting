@@ -1,0 +1,8 @@
+const char *const GIT_BRANCH = "@GIT_BRANCH@";
+const char *const GIT_COMMIT_HASH = "@GIT_COMMIT_HASH@";
+const char *const GIT_COMMIT_HASH_SHORT = "@GIT_COMMIT_HASH_SHORT@";
+const char *const GIT_COMMIT_TIME = "@GIT_COMMIT_TIME@";
+const char *const GIT_COMMIT_MESSAGE = "@GIT_COMMIT_MESSAGE@";
+const char *const BUILD_USER = "@BUILD_USER@";
+const char *const BUILD_HOST = "@BUILD_HOST@";
+const char *const BUILD_TIME = "@BUILD_TIME@";

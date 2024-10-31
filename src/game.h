@@ -30,6 +30,7 @@ struct camera_t {
     size_t resmult; /**< The resolution multiplier for the camera. */
     size_t fov; /**< The field of view (in degrees) for the camera. */
     float lightmult; /**< The multiplier for the light intensity emitted by the camera/player. */
+    float fisheye; /**< The fish-eye correction factor for the camera. */
 };
 
 /**
@@ -49,7 +50,7 @@ struct game_t {
     SDL_Color ceil_color; /**< The color of the ceiling/sky. */
     SDL_Color floor_color; /**< The color of the floor/ground. */
     enum {
-        RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED, RENDER_MODE_TEXTURED
+        RENDER_MODE_FLAT, RENDER_MODE_WIREFRAME, RENDER_MODE_UNTEXTURED
     } render_mode; /**< The current render mode. */
     bool quit; /**< Boolean flag indicating whether the game should quit. */
     bool fullscreen; /**< Boolean flag indicating whether the game is in fullscreen mode. */

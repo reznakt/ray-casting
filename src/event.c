@@ -94,9 +94,6 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_VIEW_3:
                     game->render_mode = RENDER_MODE_UNTEXTURED;
                     break;
-                case KEY_VIEW_4:
-                    game->render_mode = RENDER_MODE_TEXTURED;
-                    break;
                 case KEY_LIGHT_INC:
                     camera_set_lightmult(game, game->camera->lightmult + 0.1F);
                     break;
@@ -106,6 +103,12 @@ void on_event(struct game_t *const restrict game, const SDL_Event *const restric
                 case KEY_FULLSCREEN:
                     game->fullscreen = !game->fullscreen;
                     SDL_SetWindowFullscreen(game->window, game->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+                    break;
+                case KEY_FISHEYE_INC:
+                    game->camera->fisheye += 0.01F;
+                    break;
+                case KEY_FISHEYE_DEC:
+                    game->camera->fisheye -= 0.01F;
                     break;
             }
             break;

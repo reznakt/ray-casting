@@ -54,7 +54,7 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
     static const struct vec_t pos = {.x = 10.0F, .y = 10.0F};
     static const char *const fmt =
             "fps: %" PRIu64 " | ticks: %" PRIu64 " | frames: %" PRIu64 " | pos: [%.2f, %.2f] | angle: %.0f | fov: %zu "
-            "| resmult: %zu | rays: %zu | px/ray: %.4f | light: %.1f";
+            "| resmult: %zu | rays: %zu | px/ray: %.4f | light: %.1f | fisheye: %.2f";
 
     const size_t nrays = game->camera->fov * game->camera->resmult;
 
@@ -70,7 +70,8 @@ static void render_hud(const struct game_t *const restrict game, const SDL_Color
                       game->camera->resmult,
                       nrays,
                       (float) SCREEN_WIDTH / (float) nrays,
-                      game->camera->lightmult);
+                      game->camera->lightmult,
+                      game->camera->fisheye);
     });
 }
 
@@ -99,7 +100,11 @@ static void render_3d(struct game_t *const game) {
             continue;
         }
 
-        const float height = map(1.0F / ray->intersection.dist, 0.0F, 0.005F, 0.0F, (float) WALL_SIZE);
+        static const float scaling_factor = 200000.0F;
+
+        const float angle = vangle(ray->dir, game->camera->dir);
+        const float dist = ray->intersection.dist * (game->camera->fisheye + (1 - game->camera->fisheye) * cosf(angle));
+        const float height = 1.0F / dist * scaling_factor;
         const float height_diff = game->camera->movement.crouch ? (float) CAMERA_CROUCH_HEIGHT_DELTA : 0.0F;
 
         const SDL_FRect stripe = {
@@ -331,7 +336,6 @@ void render(struct game_t *const game) {
             break;
 
         case RENDER_MODE_UNTEXTURED:
-        case RENDER_MODE_TEXTURED:
             render_floor_and_ceiling(game);
             render_3d(game);
             break;
@@ -370,8 +374,9 @@ struct game_t *game_create(void) {
     game.camera->rays = rays;
     game.camera->pos = game.center;
     game.camera->lightmult = CAMERA_LIGHTMULT;
+    game.camera->fisheye = CAMERA_FISHEYE;
 
-    game.render_mode = RENDER_MODE_TEXTURED;
+    game.render_mode = RENDER_MODE_UNTEXTURED;
     game.ceil_color = (SDL_Color) CEIL_COLOR;
     game.floor_color = (SDL_Color) FLOOR_COLOR;
     game.objects = objects;
@@ -396,7 +401,7 @@ int game_init(struct game_t *const game) {
         return -1;
     }
 
-    logger_printf(LOG_LEVEL_INFO, "created SDL window '%s' (%dx%d px)\n", SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+    logger_printf(LOG_LEVEL_INFO, "created SDL window '%s' (%d x %d px)\n", SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
     game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_ACCELERATED);
 
     if (game->renderer == NULL) {

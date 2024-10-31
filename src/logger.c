@@ -1,12 +1,19 @@
 #include <libgen.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "color.h"
+#include "util.h"
 
 #include "logger.h"
 
 
+#define c(fmt) "%s" fmt "%s"
+
+
 struct log_target_t {
+    const char *const color;
     const char *const prefix;
     const enum unused {
         STDOUT,
@@ -16,13 +23,44 @@ struct log_target_t {
 
 
 static const struct log_target_t LOG_TARGETS[] = {
-        [LOG_LEVEL_FATAL] = {BRED "fatal" CRESET, STDERR},
-        [LOG_LEVEL_ERROR] = {RED "error" CRESET, STDERR},
-        [LOG_LEVEL_WARN]  = {HYEL "warn" CRESET, STDOUT},
-        [LOG_LEVEL_INFO]  = {HBLU "info" CRESET, STDOUT},
-        [LOG_LEVEL_DEBUG] = {HBLK "debug" CRESET, STDOUT}
+        [LOG_LEVEL_FATAL] = {BRED, "fatal", STDERR},
+        [LOG_LEVEL_ERROR] = {RED, "error", STDERR},
+        [LOG_LEVEL_WARN]  = {HYEL, "warn", STDOUT},
+        [LOG_LEVEL_INFO]  = {HBLU, "info", STDOUT},
+        [LOG_LEVEL_DEBUG] = {HBLK, "debug", STDOUT}
 };
 
+#ifdef __EMSCRIPTEN__
+unused
+#endif
+
+static bool env_enabled(const char *const name) {
+    const char *const value = getenv(name);
+
+    if (value == NULL) {
+        return false;
+    }
+
+    return strcmp(value, "1") == 0 || strcasecmp(value, "true") == 0;
+}
+
+static inline bool supports_color(void) {
+#ifdef __EMSCRIPTEN__
+    return false;
+#else
+    static int cache = -1;
+
+    if (cache == -1) {
+        cache = isatty(STDOUT_FILENO) && isatty(STDERR_FILENO) && !env_enabled("NO_COLOR");
+    }
+
+    return cache;
+#endif
+}
+
+static inline const char *color(const char *const code) {
+    return supports_color() ? code : "";
+}
 
 void logger_log(const enum log_level_t level,
                 const char *const restrict file,
@@ -38,7 +76,18 @@ void logger_log(const enum log_level_t level,
         return;
     }
 
-    fprintf(stream, HGRN "%s:%u" CRESET " [%s] " BHMAG "%s" CRESET ": ", basename(path), line, target->prefix, func);
+    fprintf(stream,
+            c("%s:%u") " [" c("%s") "] " c("%s") ": ",
+            color(HGRN),
+            basename(path),
+            line,
+            color(CRESET),
+            color(target->color),
+            target->prefix,
+            color(CRESET),
+            color(BHMAG),
+            func,
+            color(CRESET));
     free(path);
 
     va_list args;

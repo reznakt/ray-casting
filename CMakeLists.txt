@@ -72,14 +72,17 @@ if (CMAKE_C_COMPILER_ID MATCHES "TinyCC")
     add_compile_options(-DSDL_DISABLE_IMMINTRIN_H)
 endif ()
 
+function(notice message)
+    string(ASCII 27 ESCAPE)
+    message(NOTICE "-- ${ESCAPE}[36mNotice: ${message}${ESCAPE}[0m")
+endfunction()
+
 if (STRICT)
-    message("Note: Strict mode enabled, promoting warnings to errors.")
+    notice("Strict mode enabled, promoting warnings to errors.")
     add_compile_options(-Werror -pedantic-errors)
 else ()
-    message("-- WARNING: Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
+    notice("Strict mode disabled. Use -DSTRICT=ON to promote warnings to errors.")
 endif ()
-
-add_link_options(-fopenmp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \
@@ -92,6 +95,52 @@ else ()
     find_package(SDL2 REQUIRED)
     find_library(SDL2_GFX NAMES SDL2_gfx REQUIRED)
 endif ()
+
+find_program(GIT_EXECUTABLE git)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" branch --show-current
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_BRANCH
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" describe --always --abbrev=40
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_HASH
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" describe --always
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_HASH_SHORT
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" log -1 --format=%cd --date=format:%Y-%m-%d\ %H:%M:%S\ UTC
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_TIME
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        "${GIT_EXECUTABLE}" log -1 --format=%s
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        OUTPUT_VARIABLE GIT_COMMIT_MESSAGE
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        whoami
+        OUTPUT_VARIABLE BUILD_USER
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND
+        hostname
+        OUTPUT_VARIABLE BUILD_HOST
+        ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+string(TIMESTAMP BUILD_TIME "%Y-%m-%d %H:%M:%S UTC" UTC)
+
+configure_file("src/version.c.in" "${CMAKE_SOURCE_DIR}/src/.version.c" @ONLY)
 
 file(GLOB SOURCES "src/*.c")
 file(GLOB TEST_SOURCES "tests/*.c")

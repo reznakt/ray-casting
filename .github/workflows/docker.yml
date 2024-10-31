@@ -1,0 +1,21 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push Docker image
+        uses: macbre/push-to-ghcr@v14
+        with:
+          image_name: ${{ github.repository }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+

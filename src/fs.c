@@ -1,6 +1,8 @@
 #include <fcntl.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include <SDL2/SDL.h>
@@ -88,6 +90,14 @@ FILE *open_file(const char *const restrict path, const char *const restrict mode
         logger_perror("fdopen");
         close(fd);
         return NULL;
+    }
+
+    struct stat st;
+
+    if (fstat(fd, &st) == 0) {
+        logger_printf(LOG_LEVEL_DEBUG, "%s [%s] (%" PRIdMAX " bytes)\n", path, mode, (intmax_t) st.st_size);
+    } else {
+        logger_perror("fstat");
     }
 
     return stream;

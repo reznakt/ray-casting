@@ -35,17 +35,17 @@ void render_puts(SDL_Renderer *const restrict renderer,
         switch (ch) {
             case '\t': // horizontal tab
                 x_off += (CHAR_HORIZONTAL_SPACING + CHAR_WIDTH) * TAB_WIDTH;
-                continue;
+                break;
             case '\n': // line feed (newline)
                 x_off = 0;
                 y_off += CHAR_VERTICAL_SPACING + CHAR_HEIGHT;
-                continue;
+                break;
             case '\r': // carriage return
                 x_off = 0;
-                continue;
+                break;
             case '\b': // backspace
                 x_off -= CHAR_HORIZONTAL_SPACING + CHAR_WIDTH;
-                continue;
+                break;
             default:
                 render_putchar(renderer, (struct vec_t) {pos.x + (float) x_off, pos.y + (float) y_off}, ch);
                 x_off += CHAR_HORIZONTAL_SPACING + CHAR_WIDTH;

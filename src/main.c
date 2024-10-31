@@ -15,6 +15,7 @@
 #include "logger.h"
 #include "menu.h"
 #include "ray.h"
+#include "version.h"
 
 
 static bool get_flag(const int argc,
@@ -39,7 +40,15 @@ static inline void usage(const char *const argv0) {
                                    "\t-h, --help\t\tprint this help message and exit\n"
                                    "\t-p, --profile\t\tprint profiling information and exit\n";
 
-    printf(fmt, argv0);
+    fprintf(stderr, fmt, argv0);
+}
+
+static inline void version(const char *const argv0) {
+    puts(argv0);
+    putchar('\n');
+    printf("commit: %s\nmessage: %.50s\nbranch: %s\ncreated at: %s\n\n",
+           GIT_COMMIT_HASH, GIT_COMMIT_MESSAGE, GIT_BRANCH, GIT_COMMIT_TIME);
+    printf("built by: %s@%s\nbuilt on: %s\n", BUILD_USER, BUILD_HOST, BUILD_TIME);
 }
 
 static void log_system_info(void) {
@@ -48,7 +57,7 @@ static void log_system_info(void) {
                   SDL2_GFXPRIMITIVES_MAJOR, SDL2_GFXPRIMITIVES_MINOR, SDL2_GFXPRIMITIVES_MICRO);
 
     logger_printf(LOG_LEVEL_DEBUG, "platform: %s\n", SDL_GetPlatform());
-    logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
+    logger_printf(LOG_LEVEL_DEBUG, "CPUs: %d, memory: %d MiB\n", SDL_GetCPUCount(), SDL_GetSystemRAM());
     logger_print(LOG_LEVEL_INFO, "initializing SDL...");
     logger_printf(LOG_LEVEL_DEBUG, "initialized video driver: %s\n", SDL_GetCurrentVideoDriver());
 
@@ -76,7 +85,7 @@ static void log_system_info(void) {
             continue;
         }
 
-        logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%dx%d px @ %dHz)\n",
+        logger_printf(LOG_LEVEL_DEBUG, "display %d: %s (%d x %d px @ %d Hz)\n",
                       i, name, mode.w, mode.h, mode.refresh_rate);
     }
 }
@@ -123,20 +132,24 @@ static void main_loop(struct game_t *const game) {
 }
 
 int main(const int argc, char **const argv) {
-    const bool help = get_flag(argc, argv, "-h", "--help");
-    const bool profile = get_flag(argc, argv, "-p", "--profile");
-
-    if (help) {
+    if (get_flag(argc, argv, "-h", "--help")) {
         usage(argv[0]);
         return EXIT_SUCCESS;
     }
+
+    if (get_flag(argc, argv, "-v", "--version")) {
+        version(argv[0]);
+        return EXIT_SUCCESS;
+    }
+
+    logger_printf(LOG_LEVEL_INFO, "built at %s from commit %s on branch %s\n", BUILD_TIME, GIT_COMMIT_HASH, GIT_BRANCH);
 
     for (int i = 0; i < argc; i++) {
         logger_printf(LOG_LEVEL_DEBUG, "argv[%d]: %s\n", i, argv[i]);
     }
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        logger_print(LOG_LEVEL_FATAL, "SDL: unable to initialize SDL_INIT_VIDEO");
+        logger_printf(LOG_LEVEL_FATAL, "SDL_Init: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
@@ -150,7 +163,7 @@ int main(const int argc, char **const argv) {
         return EXIT_FAILURE;
     }
 
-    if (profile) {
+    if (get_flag(argc, argv, "-p", "--profile")) {
         logger_printf(LOG_LEVEL_WARN, "profiling enabled, will quit after %d ticks\n", PROFILE_TICKS);
     }
 
