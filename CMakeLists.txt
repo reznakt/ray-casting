@@ -117,7 +117,7 @@ execute_process(COMMAND
         ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 execute_process(COMMAND
-        "${GIT_EXECUTABLE}" log -1 --format=%cd --date=format:%Y-%m-%d\ %H:%M:%S\ UTC
+        "${GIT_EXECUTABLE}" log -1 --format=%cd --date=iso
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         OUTPUT_VARIABLE GIT_COMMIT_TIME
         ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -138,7 +138,7 @@ execute_process(COMMAND
         OUTPUT_VARIABLE BUILD_HOST
         ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-string(TIMESTAMP BUILD_TIME "%Y-%m-%d %H:%M:%S UTC" UTC)
+string(TIMESTAMP BUILD_TIME "%Y-%m-%d %H:%M:%S %z")
 
 configure_file("src/version.c.in" "${CMAKE_SOURCE_DIR}/src/.version.c" @ONLY)
 
