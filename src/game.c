@@ -411,6 +411,14 @@ int game_init(struct game_t *const game) {
         return -1;
     }
 
+    SDL_RendererInfo info;
+
+    if (SDL_GetRendererInfo(game->renderer, &info) == 0) {
+        logger_printf(LOG_LEVEL_INFO, "using renderer '%s'\n", info.name);
+    } else {
+        logger_printf(LOG_LEVEL_ERROR, "SDL_GetRendererInfo: %s", SDL_GetError());
+    }
+
     SDL_SetRelativeMouseMode(SDL_TRUE);
     return 0;
 }
