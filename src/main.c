@@ -14,7 +14,6 @@
 #include "game.h"
 #include "logger.h"
 #include "menu.h"
-#include "ray.h"
 #include "version.h"
 
 
