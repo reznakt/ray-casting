@@ -35,9 +35,10 @@ static bool get_flag(const int argc,
 }
 
 static inline void usage(const char *const argv0) {
-    static const char *const fmt = "usage: %s [-h|--help] [-p|--profile]\n"
+    static const char *const fmt = "usage: %s [-h|--help] [-p|--profile] [-v|--version]\n"
                                    "\t-h, --help\t\tprint this help message and exit\n"
-                                   "\t-p, --profile\t\tprint profiling information and exit\n";
+                                   "\t-p, --profile\t\tprint profiling information and exit\n"
+                                   "\t-v, --version\t\tprint version information and exit\n";
 
     fprintf(stderr, fmt, argv0);
 }
